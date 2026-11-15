@@ -15,6 +15,10 @@ const P = {
   minus: 'M5 12h14',
   target: 'M12 3v3M12 18v3M3 12h3M18 12h3M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z',
   chev: 'M6 9l6 6 6-6',
+  speaker: 'M4 9.5v5h3.5l4.5 3.5v-12L7.5 9.5H4zM16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11',
+  mute: 'M4 9.5v5h3.5l4.5 3.5v-12L7.5 9.5H4zM16 9.5l5 5M21 9.5l-5 5',
+  flame: 'M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 .3 1.5 1 2 2 2 0-3-.5-5 1-8z',
+  quest: 'M7 3.5h10v17l-5-3.5-5 3.5v-17z',
 }
 export default function Icon({ name, size = 20, className }) {
   return (

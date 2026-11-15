@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useId, useState } from 'react'
+import { sfx } from '../sfx.js'
 
 const SPRITE_KEY = 'sustain-a-pet'
 const SpriteContext = createContext(null)
@@ -173,6 +174,7 @@ export function useSplash(ms = 1300) {
 
 /** Orange "N day streak" screen with the week row. */
 export function StreakScreen({ streak, onShare, onContinue }) {
+  useEffect(() => { sfx.streak() }, [])
   const today = (new Date().getDay() + 6) % 7 // Mon = 0
   const done = Math.min(streak, 7)
   return (
@@ -187,8 +189,8 @@ export function StreakScreen({ streak, onShare, onContinue }) {
         })}
       </div>
       <div className="streak-actions">
-        <button type="button" className="duo-btn white" onClick={onShare}>Share my streak</button>
-        <button type="button" className="duo-link" onClick={onContinue}>Continue</button>
+        <button type="button" className="duo-btn white" onClick={() => { sfx.tap(); onShare?.() }}>Share</button>
+        <button type="button" className="duo-link" onClick={() => { sfx.tap(); onContinue?.() }}>Continue</button>
       </div>
     </div>
   )
@@ -197,6 +199,8 @@ export function StreakScreen({ streak, onShare, onContinue }) {
 /** Bottom sheet: preview card + share targets. */
 export function ShareSheet({ title, headline, stats, text, onClose }) {
   const [note, setNote] = useState('')
+  useEffect(() => { sfx.open() }, [])
+  const close = () => { sfx.close(); onClose?.() }
   const share = async () => {
     try {
       if (navigator.share) { await navigator.share({ title, text }); return }
@@ -205,7 +209,7 @@ export function ShareSheet({ title, headline, stats, text, onClose }) {
   }
   const copy = async () => { try { await navigator.clipboard.writeText(text); setNote('Copied to clipboard') } catch { setNote('Copy is not available here') } }
   return (
-    <div className="share-backdrop" role="dialog" aria-modal="true" aria-label={title} onClick={onClose}>
+    <div className="share-backdrop" role="dialog" aria-modal="true" aria-label={title} onClick={close}>
       <div className="share-card-wrap" onClick={(e) => e.stopPropagation()}>
         <section className="share-card">
           <header><span className="share-logo">sustain-a-pet</span><small>{title}</small></header>
@@ -214,10 +218,10 @@ export function ShareSheet({ title, headline, stats, text, onClose }) {
           <div className="share-grid">{stats.map(([n, l]) => <div key={l}><b>{n}</b><span>{l}</span></div>)}</div>
         </section>
         <div className="share-sheet">
-          <div className="share-head"><button type="button" className="flow-icon" aria-label="Close" onClick={onClose}>
+          <div className="share-head"><button type="button" className="flow-icon" aria-label="Close" onClick={close}>
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" /></svg></button><b>SHARE {title.toUpperCase()}</b></div>
           <div className="share-targets">
-            <button type="button" onClick={share}><i className="t-green"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 15V4m-4 4 4-4 4 4M5 13v6h14v-6" /></svg></i><span>Share</span></button>
+            <button type="button" onClick={() => { sfx.tap(); share() }}><i className="t-green"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 15V4m-4 4 4-4 4 4M5 13v6h14v-6" /></svg></i><span>Share</span></button>
             <button type="button" onClick={copy}><i><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14" /></svg></i><span>Copy text</span></button>
             <button type="button" onClick={share}><i><b>•••</b></i><span>More</span></button>
           </div>
@@ -226,4 +230,55 @@ export function ShareSheet({ title, headline, stats, text, onClose }) {
       </div>
     </div>
   )
+}
+
+const TILE_ICON = {
+  gold: <path d="M13 2 5 13h6l-1 9 8-12h-6l1-8z" fill="currentColor" stroke="none" />,
+  green: <><circle cx="12" cy="12" r="8" /><circle cx="12" cy="12" r="3.5" /></>,
+  blue: <><circle cx="12" cy="12" r="8.5" /><path d="M12 7v5l3 2" /></>,
+}
+
+/** Flawless-style result: big mascot, gold headline, three outlined stat tiles, one CTA. */
+export function ResultScreen({ title, subtitle, tiles = [], cta = 'Claim XP', onClaim, mascotSize = 190 }) {
+  useEffect(() => { sfx.levelUp() }, [])
+  return (
+    <div className="result-screen" role="dialog" aria-modal="true" aria-label={title}>
+      <div className="result-hero">
+        <span className="sparkle s1" /><span className="sparkle s2" /><span className="sparkle s3" />
+        <Mascot size={mascotSize} className="complete-mascot" />
+      </div>
+      <h2 className="result-title">{title}</h2>
+      {subtitle && <p className="result-sub">{subtitle}</p>}
+      <div className="stat-row">
+        {tiles.map(({ tone, label, value }) => (
+          <div key={label} className={`stat-tile tone-${tone}`}>
+            <span>{label}</span>
+            <b>{TILE_ICON[tone] && <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{TILE_ICON[tone]}</svg>}{value}</b>
+          </div>
+        ))}
+      </div>
+      <button type="button" className="duo-btn blue" autoFocus onClick={() => { sfx.claim(); onClaim?.() }}>{cta}</button>
+    </div>
+  )
+}
+
+/** Green/red bottom sheet shown after an answer. */
+export function FeedbackSheet({ kind = 'good', title, body, onContinue }) {
+  const good = kind === 'good'
+  useEffect(() => { (good ? sfx.correct : sfx.wrong)() }, [good])
+  return (
+    <div className={`fb-sheet ${good ? 'good' : 'bad'}`} role="status">
+      <div className="fb-head">
+        <i aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3.6" strokeLinecap="round" strokeLinejoin="round"><path d={good ? 'M5 12.5l4.5 4.5L19 7.5' : 'M6 6l12 12M18 6 6 18'} /></svg></i>
+        <b>{title}</b>
+      </div>
+      {body && <p>{body}</p>}
+      <button type="button" className={`duo-btn ${good ? 'green' : 'red'}`} autoFocus onClick={() => { sfx.tap(); onContinue?.() }}>Continue</button>
+    </div>
+  )
+}
+
+/** Chunky orange outlined text pop. */
+export function PerfectBanner({ text = 'Perfect' }) {
+  return <div className="perfect-banner" role="status" aria-live="polite"><span>{text}</span></div>
 }

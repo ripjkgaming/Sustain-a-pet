@@ -15,8 +15,8 @@ export default function QuizCard({ today, result, onAnswer }) {
   return (
     <section className={`card quiz-ex ${answered ? (right ? 'is-right' : 'is-wrong') : ''}`} aria-labelledby={headingId}>
       <span className="quiz-kicker">DAILY QUIZ</span>
-      <h2 id={headingId}>Pick the right answer</h2>
-      <div className="say say-sm"><Mascot size={72} /><p className="bubble">{q.q}</p></div>
+      <h2 id={headingId}>{q.demand}</h2>
+      <div className="say say-sm"><Mascot size={72} /><p className="bubble">Pick the right answer.</p></div>
       <div className="opts" role="group" aria-label="Answers">
         {q.options.map((o, i) => (
           <button key={o} type="button" disabled={answered} aria-pressed={picked === i}

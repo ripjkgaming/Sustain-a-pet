@@ -33,18 +33,7 @@ svg { flex: none; }
 /* ---------- Header ---------- */
 .home header.top { display: grid; grid-template-columns: 1fr auto; align-items: center; padding: 20px 22px; min-height: 124px; }
 .top-l { min-width: 0; }
-.eyebrow { display: flex; align-items: center; gap: 8px; margin: 0 0 6px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-2); white-space: nowrap; }
-.eyebrow svg { color: var(--green); }
-.name-row { display: flex; align-items: center; gap: 12px; }
 .home h1 { font-size: 3rem; font-weight: 800; letter-spacing: -0.03em; }
-.top-r { display: grid; gap: 10px; justify-items: stretch; padding-left: 22px; margin-left: 18px; border-left: 1.5px solid #14381f26; position: relative; z-index: 1; min-width: 120px; }
-.stage-label { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.05rem; }
-.stage-label svg { color: var(--green-d); }
-.pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 99px; font-size: 0.95rem; font-weight: 700; }
-.pill.mood { background: #cfe8c3; color: #1c6a32; box-shadow: inset 0 1px 0 #fffa, inset 0 0 0 1px #ffffff80; }
-.pill.mood-okay { background: #e4eec0; color: #55701c; }
-.pill.mood-wilting { background: #f7dcbc; color: #9a5316; }
-.pill.mood-sick { background: #e3dac6; color: #6f5d3c; }
 
 /* ---------- 3D world card ---------- */
 .pet-stage {
@@ -78,12 +67,6 @@ svg { flex: none; }
 .mushroom-quiz-card .opts { gap: 5px; }
 .mushroom-quiz-card .opts button { min-height: 38px; padding: 7px 10px; border-radius: 12px; font-size: 0.8rem; }
 @keyframes mushroom-rise { from { opacity: 0; transform: translateY(14px) scale(0.82); } to { opacity: 1; transform: translateY(0) scale(1); } }
-.world-guide { position: absolute; z-index: 4; left: 50%; bottom: 12px; transform: translateX(-50%); display: flex; align-items: center; gap: 9px; width: max-content; max-width: calc(100% - 24px); padding: 9px 13px; border: 1px solid #d7ffd633; border-radius: 16px; color: #f3f9eb; background: linear-gradient(145deg, #1e3a2bd9, #0b1d14e8); box-shadow: 0 7px 22px #05150d70, inset 0 1px 0 #ffffff24; -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); pointer-events: none; }
-.world-guide-icon { color: #ffdb70; font-size: 1.35rem; text-shadow: 0 0 12px #ffc64a; }
-.world-guide > span:last-child { display: grid; gap: 2px; }
-.world-guide strong { font-size: 0.76rem; }
-.world-guide em { margin-left: 5px; color: #ffda6a; font-style: normal; font-size: 0.72rem; }
-.world-guide small { color: #c7dec8; font-size: 0.64rem; }
 .tutorial-backdrop { position: absolute; z-index: 30; inset: 0; display: grid; place-items: center; padding: 20px; background: #08170f75; -webkit-backdrop-filter: blur(5px); backdrop-filter: blur(5px); }
 .tutorial-card { width: min(100%, 330px); padding: 24px 22px 18px; border: 1px solid #fff; border-radius: 25px; color: var(--ink); background: linear-gradient(145deg, #fbfff1f7, #e1efd9f5); box-shadow: 0 20px 60px #061b0fa6, inset 0 1px 0 #fff; }
 .tutorial-kicker { color: var(--green-d); font-size: 0.62rem; font-weight: 900; letter-spacing: 0.13em; }
@@ -94,14 +77,6 @@ svg { flex: none; }
 .tutorial-skip { border: 0; padding: 10px 0; color: #567060; background: transparent; font-size: 0.8rem; cursor: pointer; }
 
 /* ---------- Vitals ---------- */
-.vitals { display: grid; grid-template-columns: repeat(3, 1fr); padding: 18px 8px; }
-.vital { display: grid; gap: 9px; padding: 0 16px; }
-.vital + .vital { border-left: 1.5px solid #14381f22; }
-.vital-label { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.98rem; }
-.vital-label svg { color: var(--green-d); }
-.vbar { height: 9px; border-radius: 99px; background: #ffffffb3; box-shadow: inset 0 1px 3px #14381f33; overflow: hidden; }
-.vfill { height: 100%; border-radius: 99px; background: linear-gradient(180deg, #5db062, #2d7d40); box-shadow: inset 0 1.5px 0 #ffffff80; transition: width 0.7s cubic-bezier(.2,1,.3,1); }
-.vital-num { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
 
 /* ---------- Habits, quiz ---------- */
 .habits { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
@@ -174,8 +149,6 @@ svg { flex: none; }
   background: #ffffffb3; border: 1px solid #fff; box-shadow: 0 2px 0 #14381f30, inset 0 1px 0 #fff; }
 @media (hover: hover) and (pointer: fine) { .key { display: inline-grid; } .habits .key { margin: 0 0 0 auto; } .habits .xp-tag { margin-left: 4px; } }
 .hint { margin: 0; text-align: center; font-size: 0.78rem; color: var(--ink-2); }
-.kbd-hint { display: none; }
-@media (hover: hover) and (pointer: fine) { .kbd-hint { display: block; } }
 button, label { transition: transform 0.18s cubic-bezier(.3,1.5,.5,1), box-shadow 0.2s, background 0.2s, border-color 0.2s, filter 0.2s; }
 .radios label:hover { transform: translateY(-2px); }
 .primary:hover { filter: brightness(1.06); transform: translateY(-1px); }
@@ -199,11 +172,7 @@ button, label { transition: transform 0.18s cubic-bezier(.3,1.5,.5,1), box-shado
   .home > .pet-stage { position: absolute; inset: 0; z-index: 0; height: auto; min-height: 0; border: 0; border-radius: 0; box-shadow: none; }
   .home > .top { position: absolute; z-index: 5; top: 54px; left: 12px; right: 12px; padding: 12px 14px; min-height: 84px; border-radius: 23px; }
   .home h1 { font-size: 2.3rem; }
-  .home .top-r { min-width: 0; padding-left: 12px; margin-left: 8px; }
-  .home .pill { font-size: 0.82rem; padding: 5px 9px; }
-  .home > .vitals { position: absolute; z-index: 5; bottom: 26px; left: 12px; right: 12px; padding: 11px 4px; }
   .home > .banner { position: absolute; z-index: 7; top: 257px; left: 12px; right: 12px; }
-  .world-guide { bottom: 130px; }
 }
 @media (max-width: 699px), (max-height: 519px) {
   .device, .screen { display: contents; }
@@ -213,18 +182,8 @@ button, label { transition: transform 0.18s cubic-bezier(.3,1.5,.5,1), box-shado
   .onboard { height: 100svh; min-height: 100svh; padding: calc(22px + env(safe-area-inset-top)) 14px 22px; }
   .home > .pet-stage { position: absolute; inset: 0; z-index: 0; height: auto; min-height: 0; border: 0; border-radius: 0; box-shadow: none; }
   .home > .top { position: absolute; z-index: 5; top: max(10px, env(safe-area-inset-top)); left: 10px; right: 10px; padding: 10px 12px; min-height: 0; border-radius: 20px; }
-  .home .eyebrow { font-size: 0.57rem; letter-spacing: 0.12em; }
   .home h1 { font-size: clamp(1.45rem, 7vw, 2rem); }
-  .home .top-r { min-width: 0; padding-left: 8px; margin-left: 4px; gap: 5px; }
-  .home .stage-label { font-size: 0.78rem; gap: 5px; }
-  .home .pill { font-size: 0.68rem; padding: 4px 7px; gap: 4px; }
-  .home > .vitals { position: absolute; z-index: 5; left: 10px; right: 10px; bottom: max(24px, calc(env(safe-area-inset-bottom) + 14px)); top: auto; padding: 8px 2px; border-radius: 18px; }
-  .home .vital { padding: 0 9px; gap: 4px; }
-  .home .vital-label { font-size: 0.72rem; gap: 4px; }
-  .home .vbar { height: 6px; }
-  .home .vital-num { font-size: 0.67rem; }
   .home > .banner { position: absolute; z-index: 7; top: 191px; left: 10px; right: 10px; padding: 9px 12px; font-size: 0.8rem; }
-  .world-guide { bottom: 130px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -233,11 +192,6 @@ button, label { transition: transform 0.18s cubic-bezier(.3,1.5,.5,1), box-shado
 
 /* The journal is a field notebook over the living garden. */
 :root { --motion-out: cubic-bezier(.23,1,.32,1); --motion-ui: 180ms; }
-.game-wallet { position: absolute; z-index: 5; top: 148px; right: 15px; display: flex; gap: 13px; align-items: center; padding: 8px 12px; border: 1px solid #f3edcf70; border-radius: 15px; background: #163422e8; color: #ffedb3; box-shadow: 0 3px 12px #09201533; }
-.game-wallet > span { display: flex; gap: 5px; align-items: center; font-size: .84rem; font-weight: 800; }
-.game-wallet b { color: #f4c34c; }
-.game-wallet small { color: #d3dfc5; font-size: .62rem; font-weight: 500; }
-.game-wallet > span + span { color: #d1e5bd; }
 .garden-dock { position: absolute; z-index: 16; left: 12px; right: 12px; bottom: 24px; display: grid; grid-template-columns: repeat(4, 1fr); border-radius: 23px; padding: 6px; border: 1px solid #ecf5dca1; background: #eff5e9f5; box-shadow: 0 6px 24px #061a1355, inset 0 1px 0 #fff; }
 .garden-dock button { position: relative; display: grid; justify-items: center; align-content: center; gap: 4px; min-height: 54px; border: 0; border-radius: 17px; background: transparent; color: #4c6951; font-size: .67rem; font-weight: 750; }
 .garden-dock button.selected { background: #244d33; color: #fff4cc; box-shadow: 0 2px 7px #0e2b2029; }
@@ -289,17 +243,10 @@ button, label { transition: transform 0.18s cubic-bezier(.3,1.5,.5,1), box-shado
 .quest-row .game-small { flex: none; min-width: 70px; }
 .quest-track { height: 4px; overflow: hidden; border-radius: 8px; background: #dfe5d2; margin: 8px 0 6px; }
 .quest-track > span { display: block; height: 100%; border-radius: inherit; background: #80a061; width: 100%; transform-origin: left center; transition: transform 250ms var(--motion-out); }
-.home > .vitals { bottom: 102px; }
-.home .world-guide { bottom: 192px; }
-.home .kbd-hint { position: absolute; z-index: 4; bottom: 5px; left: 0; right: 0; color: #e6efd9; font-size: .55rem; }
 @keyframes journal-open { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 @media (max-width: 699px), (max-height: 519px) {
-  .game-wallet { top: 104px; right: 12px; padding: 7px 10px; }
   .garden-dock { left: 10px; right: 10px; bottom: max(13px, env(safe-area-inset-bottom)); }
   .garden-journal { left: 10px; right: 10px; bottom: calc(90px + env(safe-area-inset-bottom)); max-height: calc(100% - 239px - env(safe-area-inset-bottom)); }
-  .home > .vitals { bottom: calc(89px + env(safe-area-inset-bottom)); }
-  .home .world-guide { bottom: calc(165px + env(safe-area-inset-bottom)); }
-  .home .kbd-hint { display: none; }
 }
 @media (max-height: 620px) { .garden-journal { max-height: calc(100% - 185px); } .daily-days { margin-top: 10px; } }
 @media (hover: hover) and (pointer: fine) {
@@ -310,22 +257,9 @@ button, label { transition: transform 0.18s cubic-bezier(.3,1.5,.5,1), box-shado
 button, label { transition: transform var(--motion-ui) var(--motion-out), box-shadow var(--motion-ui) var(--motion-out), background var(--motion-ui) var(--motion-out), border-color var(--motion-ui) var(--motion-out), filter var(--motion-ui) var(--motion-out); }
 @media (prefers-reduced-motion: reduce) { .garden-journal { animation: none; } .quest-track > span { transition: none; } }
 
-.journal-habits { margin-top: 18px; border-top: 1px solid #30492b20; padding-top: 16px; }
-.journal-habits summary { cursor: pointer; font-size: .85rem; font-weight: 800; padding: 4px 0 12px; }
-.journal-habits summary span { float: right; color: #6a785f; font-size: .7rem; }
-.journal-habit { display: flex; align-items: center; gap: 10px; padding: 11px 0; font-size: .78rem; cursor: pointer; }
-.journal-habit input { width: 20px; height: 20px; accent-color: #356739; flex: none; }
-.journal-habit small { display: block; margin-top: 3px; font-size: .62rem; color: #69785e; }
-.journal-habit.complete { color: #617454; }
-.journal-habits .card { padding: 12px; margin-top: 12px; border-radius: 15px; background: #e9ecd9; box-shadow: none; }
-.journal-habits .q { font-size: .83rem; }
-.journal-habits .opts button { font-size: .78rem; padding: 10px; min-height: 40px; }
 .home .name-row h1 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .home .name-row { min-width: 0; }
 
-.world-tools { position: absolute; z-index: 5; left: 14px; top: 148px; display: flex; gap: 4px; }
-.world-tools button { width: 30px; height: 32px; display: grid; place-items: center; padding: 0; border: 1px solid #f3edcf70; border-radius: 10px; background: #163422db; color: #f6edcb; font-size: 1.1rem; }
-@media (max-width: 699px), (max-height: 519px) { .world-tools { left: 12px; top: 104px; } }
 /* Match the compact in-game header, including its stronger shared selector. */
 .home header.top { padding: 12px 14px; min-height: 84px; }
 @media (max-width: 699px), (max-height: 519px) { .home header.top { padding: 10px 12px; min-height: 76px; } }

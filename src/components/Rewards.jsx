@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { STAGES } from '../engine.js'
-import { Mascot, StatTile } from './Duo.jsx'
+import { ResultScreen } from './Duo.jsx'
 import accessories from '../data/accessories.json'
 
 /** Floating "+XP" chips over the pet, toasts for unlocks/streaks, and the stage-up cutscene. */
@@ -18,20 +18,9 @@ export default function Rewards({ floats, toasts, evolve, onCloseEvolve, petName
 }
 
 function EvolveCutscene({ stage, name, xp, doneCount, total, onClose }) {
-  const first = useRef(null)
-  useEffect(() => { first.current?.focus() }, [])
   return createPortal(
-    <div className="evolve complete-screen" role="dialog" aria-modal="true" aria-label="Your pet evolved">
-      <div className="complete-hero"><span className="sparkle s1" /><span className="sparkle s2" /><span className="sparkle s3" /><Mascot size={200} className="complete-mascot" /></div>
-      <h2 className="complete-title">{STAGES[stage]}!</h2>
-      <p className="complete-sub">{name} evolved. All that small care is paying off.</p>
-      <div className="stat-row">
-        <StatTile tone="gold" label="TOTAL XP">⚡ {xp}</StatTile>
-        <StatTile tone="green" label="STAGE">{STAGES[stage]}</StatTile>
-        <StatTile tone="blue" label="HABITS">{doneCount}/{total}</StatTile>
-      </div>
-      <button ref={first} type="button" className="duo-btn blue" onClick={onClose}>Claim XP</button>
-    </div>,
+    <ResultScreen title={`${STAGES[stage]}!`} subtitle={`${name} evolved.`} cta="Claim XP" onClaim={onClose} mascotSize={200}
+      tiles={[{ tone: 'gold', label: 'TOTAL XP', value: xp }, { tone: 'green', label: 'STAGE', value: STAGES[stage] }, { tone: 'blue', label: 'HABITS', value: `${doneCount}/${total}` }]} />,
     document.body,
   )
 }

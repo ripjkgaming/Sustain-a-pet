@@ -19,3 +19,6 @@ createRoot(document.getElementById('root')).render(
 
 import './motion.css'
 import './duo.css'
+import './quest.css'
+import './home.css'
+import './screens.css'

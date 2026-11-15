@@ -1,8 +1,7 @@
-import { Suspense, useMemo, useRef, useState } from 'react'
+import { Suspense, useEffect, useMemo, useRef } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
-import { Html, Sparkles, useGLTF } from '@react-three/drei'
+import { Sparkles, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
-import QuizCard from '../QuizCard.jsx'
 import { canvasTexture, damp, radialTexture, rng, stepSpring } from './shared.js'
 
 export const ISLAND = 3.4 // pet wander radius
@@ -56,14 +55,10 @@ const SHROOMS = [
   { x: -2.6, z: 2.6, s: 0.9 }, { x: -3.4, z: 0.2, s: 0.8 },
   { x: -1.2, z: -1.4, s: 0.95 }, { x: 1.5, z: 0.7, s: 0.78 },
 ]
-function Mushroom({ spot, habit, done, quizResult, today, petPos, reduced, selected, onComplete, onQuizAnswer, onPick }) {
+function Mushroom({ spot, habit, done, reduced, onPick }) {
   const g = useRef(), sp = useRef({ y: 0, v: 0 })
-  const [near, setNear] = useState(false)
   const isQuiz = habit.id === 'quiz'
   useFrame((_, dt) => {
-    const distance = Math.hypot(petPos.x - spot.x, petPos.z - spot.z)
-    const nextNear = near ? distance < 1.8 : distance < 1.3
-    if (nextNear !== near) setNear(nextNear)
     const s = sp.current
     if (reduced) { s.y = 0; s.v = 0 }
     else stepSpring(s, 'y', 'v', 90, 5, dt)
@@ -75,19 +70,6 @@ function Mushroom({ spot, habit, done, quizResult, today, petPos, reduced, selec
         onPointerOver={() => (document.body.style.cursor = 'pointer')} onPointerOut={() => (document.body.style.cursor = '')}>
         <Suspense fallback={null}><AuthoredAsset name={`quest-mushroom-${isQuiz ? 'gold' : done ? 'complete' : 'red'}`} /></Suspense>
       </group>
-      {near && selected && <Html position={[0, 1.02, 0]} center zIndexRange={[20, 0]}>
-        <div className="mushroom-prompt" onPointerDown={(e) => e.stopPropagation()}>
-          {isQuiz ? (
-            <div className="mushroom-quiz-card"><span className="mushroom-kicker">GOLDEN QUEST · +{habit.xp} XP</span><QuizCard today={today} result={quizResult} onAnswer={onQuizAnswer} /></div>
-          ) : (
-            <label className={`mushroom-habit ${done ? 'is-done' : ''}`}>
-              <input type="checkbox" checked={done} disabled={done} onChange={onComplete} aria-label={`Complete: ${habit.label}`} />
-              <span className="mushroom-check" aria-hidden="true">{done ? '✓' : ''}</span>
-              <span className="mushroom-copy"><span className="mushroom-kicker">{done ? 'GREAT WORK' : 'DAILY QUEST'}</span><strong>{habit.label}</strong><small>{done ? 'Completed today' : `Tap to complete · +${habit.xp} XP`}</small></span>
-            </label>
-          )}
-        </div>
-      </Html>}
       {isQuiz && <>
         <pointLight position={[0, 0.9, 0]} color="#ffd05a" intensity={1.8} distance={3.4} decay={2} />
         {!reduced && <Sparkles count={9} scale={[1.5, 1.25, 1.5]} position={[0, 0.8, 0]} size={2.4} speed={0.45} color="#ffe49a" />}
@@ -148,9 +130,10 @@ function Atmosphere({ reduced }) {
   )
 }
 
-/** The pet's world. Tap the ground to walk; a habit card rises when the pet reaches its mushroom. */
-export default function World({ ctl, garden = 3, area = 'meadow', decorations = [], projects = [], reduced, habits = [], done = [], today, quizResult, onHabit, onQuizAnswer, onFlower, onShroom }) {
-  const [selectedId, setSelectedId] = useState(null)
+/** The pet's world. Tap the ground to walk; tapping a mushroom walks the pet over, then opens its quest. */
+export default function World({ ctl, garden = 3, area = 'meadow', decorations = [], projects = [], reduced, habits = [], done = [], onFlower, onShroom, onOpenQuest }) {
+  const questTimer = useRef(0)
+  useEffect(() => () => clearTimeout(questTimer.current), [])
   const go = (x, z) => {
     const r = Math.hypot(x, z)
     const k = r > ISLAND ? ISLAND / r : 1
@@ -159,17 +142,16 @@ export default function World({ ctl, garden = 3, area = 'meadow', decorations = 
   return (
     <>
       <Atmosphere reduced={reduced} />
-      <Ground onGo={(x, z) => { setSelectedId(null); go(x, z) }} />
+      <Ground onGo={(x, z) => { go(x, z) }} />
       <AuthoredHabitat area={area} decorations={decorations} projects={projects} />
       {FLOWER_SPOTS.map((f, i) => (
-        <Flower key={i} spot={f} show={i < garden} reduced={reduced} onPick={(s) => { setSelectedId(null); go(s.x * 0.82, s.z * 0.82); onFlower?.(s) }} />
+        <Flower key={i} spot={f} show={i < garden} reduced={reduced} onPick={(s) => { go(s.x * 0.82, s.z * 0.82); onFlower?.(s) }} />
       ))}
       {SHROOMS.map((m, i) => {
         const habit = habits[i]
         if (!habit) return null
-        return <Mushroom key={habit.id} spot={m} habit={habit} done={done.includes(habit.id)} quizResult={quizResult} today={today} reduced={reduced} petPos={ctl.current.pos} selected={selectedId === habit.id}
-          onComplete={() => onHabit?.(habit.id)} onQuizAnswer={onQuizAnswer}
-          onPick={(s) => { setSelectedId(habit.id); go(s.x * 0.8, s.z * 0.8); onShroom?.(s) }} />
+        return <Mushroom key={habit.id} spot={m} habit={habit} done={done.includes(habit.id)} reduced={reduced}
+          onPick={(s) => { go(s.x * 0.8, s.z * 0.8); onShroom?.(s); clearTimeout(questTimer.current); questTimer.current = setTimeout(() => onOpenQuest?.(habit.id), 700) }} />
       })}
     </>
   )
