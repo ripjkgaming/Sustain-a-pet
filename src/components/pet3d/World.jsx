@@ -1,18 +1,22 @@
-import { Suspense, useEffect, useMemo, useRef } from 'react'
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { Sparkles, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { canvasTexture, damp, radialTexture, rng, stepSpring } from './shared.js'
+import { ISLAND_R, SPACING, clampToWalkable, islandCenter } from './islands.js'
+import { AREAS } from '../../game.js'
+import River from './River.jsx'
+import Footbridge from './Footbridge.jsx'
 
-export const ISLAND = 3.4 // pet wander radius
-
+export const ISLAND = ISLAND_R // pet wander radius
 
 /* ---------- ground: soft mossy disc fading into the mist ---------- */
-function Ground({ onGo }) {
-  // Invisible input plane only; the visible terrain is the authored Blender habitat.
-  return <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, .015, 0]}
+function Ground({ onGo, count }) {
+  // Invisible input plane only; the visible terrain is the authored Blender habitat. Covers the whole chain.
+  const len = (count + 1) * SPACING + 20
+  return <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, .015, -((count - 1) * SPACING) / 2]}
     onClick={(e) => { if (e.delta < 6) { e.stopPropagation(); onGo(e.point.x, e.point.z) } }}>
-    <circleGeometry args={[6.8, 48]} />
+    <planeGeometry args={[40, len]} />
     <meshBasicMaterial transparent opacity={0} depthWrite={false} />
   </mesh>
 }
@@ -79,7 +83,7 @@ function Mushroom({ spot, habit, done, reduced, onPick }) {
 }
 
 /* ---------- atmosphere: hazy trees, bokeh, sun shafts, fireflies ---------- */
-function Atmosphere({ reduced }) {
+function Atmosphere({ reduced, count = 1 }) {
   const blob = useMemo(() => radialTexture([[0, 'rgba(255,255,255,1)'], [0.45, 'rgba(255,255,255,0.55)'], [1, 'rgba(255,255,255,0)']], 128), [])
   const ray = useMemo(() => canvasTexture(128, (ctx, n) => {
     const g = ctx.createLinearGradient(0, 0, 0, n)
@@ -125,35 +129,89 @@ function Atmosphere({ reduced }) {
           <spriteMaterial map={blob} color={b.c} transparent opacity={b.o} depthWrite={false} blending={THREE.AdditiveBlending} toneMapped={false} />
         </sprite>
       ))}
-      {!reduced && <Sparkles count={34} scale={[9, 2.8, 9]} position={[0, 1.5, 0]} size={4.5} speed={0.3} opacity={0.95} color="#fff7a8" />}
+      {!reduced && <Sparkles count={34 + (count - 1) * 20} scale={[9, 2.8, 9 + (count - 1) * SPACING]} position={[0, 1.5, -((count - 1) * SPACING) / 2]} size={4.5} speed={0.3} opacity={0.95} color="#fff7a8" />}
     </>
   )
 }
 
 /** The pet's world. Tap the ground to walk; tapping a mushroom walks the pet over, then opens its quest. */
-export default function World({ ctl, garden = 3, area = 'meadow', decorations = [], projects = [], reduced, habits = [], done = [], onFlower, onShroom, onOpenQuest }) {
+export default function World({ ctl, garden = 3, area = 'meadow', unlocked = ['meadow'], decorations = [], projects = [], reduced, habits = [], done = [], onFlower, onShroom, onOpenQuest }) {
   const questTimer = useRef(0)
+  const [initialCount] = useState(unlocked.length)
   useEffect(() => () => clearTimeout(questTimer.current), [])
+  const count = Math.max(1, unlocked.length)
+  const activeIdx = Math.max(0, unlocked.indexOf(area))
+  const ac = islandCenter(activeIdx)
   const go = (x, z) => {
-    const r = Math.hypot(x, z)
-    const k = r > ISLAND ? ISLAND / r : 1
-    ctl.current.goTo?.(x * k, z * k)
+    const p = clampToWalkable(x, z, count)
+    ctl.current.goTo?.(p.x, p.z)
   }
+  const next = AREAS[unlocked.length]
   return (
     <>
-      <Atmosphere reduced={reduced} />
-      <Ground onGo={(x, z) => { go(x, z) }} />
-      <AuthoredHabitat area={area} decorations={decorations} projects={projects} />
-      {FLOWER_SPOTS.map((f, i) => (
-        <Flower key={i} spot={f} show={i < garden} reduced={reduced} onPick={(s) => { go(s.x * 0.82, s.z * 0.82); onFlower?.(s) }} />
-      ))}
-      {SHROOMS.map((m, i) => {
-        const habit = habits[i]
-        if (!habit) return null
-        return <Mushroom key={habit.id} spot={m} habit={habit} done={done.includes(habit.id)} reduced={reduced}
-          onPick={(s) => { go(s.x * 0.8, s.z * 0.8); onShroom?.(s); clearTimeout(questTimer.current); questTimer.current = setTimeout(() => onOpenQuest?.(habit.id), 700) }} />
+      <Atmosphere reduced={reduced} count={count} />
+      <River count={count} reduced={reduced} />
+      <Ground count={count} onGo={(x, z) => { go(x, z) }} />
+      {unlocked.map((id, i) => {
+        const c = islandCenter(i)
+        return <group key={id} position={[c.x, 0, c.z]}><AuthoredHabitat area={id} decorations={decorations} projects={projects} /></group>
       })}
+      {unlocked.slice(1).map((id, i) => <Footbridge key={id} index={i} animate={!reduced && i >= initialCount - 1} />)}
+      {next && <DistantIsland area={next.id} index={unlocked.length} reduced={reduced} />}
+      <group position={[ac.x, 0, ac.z]}>
+        {FLOWER_SPOTS.map((f, i) => (
+          <Flower key={i} spot={f} show={i < garden} reduced={reduced} onPick={(s) => { go(ac.x + s.x * 0.82, ac.z + s.z * 0.82); onFlower?.(s) }} />
+        ))}
+        {SHROOMS.map((m, i) => {
+          const habit = habits[i]
+          if (!habit) return null
+          return <Mushroom key={habit.id} spot={m} habit={habit} done={done.includes(habit.id)} reduced={reduced}
+            onPick={(s) => { go(ac.x + s.x * 0.8, ac.z + s.z * 0.8); onShroom?.(s); clearTimeout(questTimer.current); questTimer.current = setTimeout(() => onOpenQuest?.(habit.id), 700) }} />
+        })}
+      </group>
     </>
+  )
+}
+
+/* ---------- the next locked island: far away, faded into the mist, not interactive ---------- */
+const MIST = new THREE.Color('#dfeee8')
+function GhostIsland({ name }) {
+  const { scene } = useGLTF(`/models/${name}.glb`)
+  const copy = useMemo(() => {
+    const c = scene.clone(true)
+    c.traverse((o) => {
+      if (!o.isMesh) return
+      o.raycast = () => {}
+      const fade = (m) => {
+        const n = m.clone()
+        n.transparent = true; n.opacity = 0.35; n.depthWrite = false; n.toneMapped = true
+        if (n.color) n.color.lerp(MIST, 0.55)
+        if (n.emissive) n.emissive.lerp(MIST, 0.4)
+        return n
+      }
+      o.material = Array.isArray(o.material) ? o.material.map(fade) : fade(o.material)
+    })
+    return c
+  }, [scene])
+  return <primitive object={copy} />
+}
+function DistantIsland({ area, index, reduced }) {
+  const c = islandCenter(index)
+  const blob = useMemo(() => radialTexture([[0, 'rgba(235,248,242,0.9)'], [0.5, 'rgba(235,248,242,0.4)'], [1, 'rgba(235,248,242,0)']], 128), [])
+  const mist = useRef([])
+  useFrame((s) => {
+    const t = reduced ? 0 : s.clock.elapsedTime
+    mist.current.forEach((m, i) => { if (m) m.position.x = Math.sin(t * 0.12 + i * 2.1) * 1.4 + (i - 1) * 1.8 })
+  })
+  return (
+    <group position={[c.x, 0, c.z]}>
+      <Suspense fallback={null}><GhostIsland name={`habitat-${area}`} /></Suspense>
+      {[0, 1, 2].map((i) => (
+        <sprite key={i} ref={(el) => (mist.current[i] = el)} position={[(i - 1) * 1.8, 0.7 + i * 0.25, 0.8 - i * 0.6]} scale={[5.5, 2.4, 1]}>
+          <spriteMaterial map={blob} transparent opacity={0.45} depthWrite={false} toneMapped={false} />
+        </sprite>
+      ))}
+    </group>
   )
 }
 

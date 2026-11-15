@@ -126,6 +126,7 @@ export default function App() {
   const petTapRef = useRef(() => {})
   // Keyboard: 1-7 tick habits, A/B/C answer the quiz, P pats the pet, Esc closes the cutscene.
   const kb = useRef()
+  useLayoutEffect(() => { petCtl.current.layout = { count: pet.game.areas.length, home: pet.game.areas.indexOf(pet.game.activeArea) } }, [pet.game.areas, pet.game.activeArea])
   useLayoutEffect(() => { kb.current = { pet, today, app, tutorial, evolve } })
   useEffect(() => {
     const onKey = (e) => {
@@ -200,7 +201,7 @@ export default function App() {
       <section className={`pet-stage mood-${mood.toLowerCase()}`} aria-label={`${pet.pet.name}'s world`}>
         <SceneBoundary><Suspense fallback={<div className="loading">Waking up {pet.pet.name}…</div>}>
           <PetCanvas orbit api={camApi} follow={{ get current() { return petCtl.current.pos } }} stage={stage} camera={{ position: [0, 7.7, 8.4], fov: 48 }} target={[0, 0.7, 0]}>
-            <World key={pet.game.activeArea} ctl={petCtl} area={pet.game.activeArea} decorations={pet.game.decorations} projects={pet.game.projects} garden={garden} reduced={reduced} habits={habitList} done={done} today={today} quizResult={pet.days[today]?.quiz}
+            <World ctl={petCtl} area={pet.game.activeArea} unlocked={pet.game.areas} decorations={pet.game.decorations} projects={pet.game.projects} garden={garden} reduced={reduced} habits={habitList} done={done} today={today} quizResult={pet.days[today]?.quiz}
               onHabit={(id) => dispatch({ type: 'tick', id })} onQuizAnswer={(choice, correct) => dispatch({ type: 'quiz', choice, correct })}
               onOpenQuest={(id) => { sfx.open(); setQuestId(id) }} onFlower={() => { bump('leaves'); powerUp(3.5) }} onShroom={() => bump('bounce')} />
             <PetModel sprite={pet.pet.sprite} stage={stage} mood={mood} fx={fx} reduced={reduced} ctl={petCtl} onPat={petTap} />

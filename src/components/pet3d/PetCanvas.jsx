@@ -89,7 +89,7 @@ export default function PetCanvas({ children, camera = { position: [0, 1.7, 7.2]
         <Lightformer form="rect" intensity={1.2} position={[-5, 1, 2]} scale={[3, 5, 1]} color="#cdeed8" />
         <Lightformer form="rect" intensity={1.4} position={[5, 3, -2]} scale={[3, 5, 1]} color="#fff0c0" />
       </Environment>
-      {orbit && <fog attach="fog" args={['#9cc79d', 10, 21]} />}
+      {orbit && <fog attach="fog" args={['#9cc79d', 11, 27]} />}
       {orbit && <CameraRig api={api} follow={follow} stage={stage} reduced={reduced} />}
       {children}
       <ContactShadows position={[0, 0.01, 0]} opacity={0.45} scale={10} blur={2.2} far={2} resolution={256} color="#173a22" />

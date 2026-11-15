@@ -4,7 +4,7 @@ import * as THREE from 'three'
 import PetRig from './PetRig.jsx'
 import Burst from './Burst.jsx'
 import BotanicalModel from './BotanicalModel.jsx'
-import { ISLAND } from './World.jsx'
+import { islandAt, isWalkable, islandCenter, clampToWalkable, routeTo, randomSpot } from './islands.js'
 
 const SPEED = { Thriving: 1.1, Okay: 0.8, Wilting: 0.45, Sick: 0 }
 
@@ -14,34 +14,66 @@ const SPEED = { Thriving: 1.1, Okay: 0.8, Wilting: 0.45, Sick: 0 }
  */
 function Wanderer({ ctl, mood, reduced, motion, children }) {
   const g = useRef()
-  const st = useRef({ x: 0, z: 0.4, heading: 0, goal: null, idle: 2.5, speed: 0, hold: 0, parked: false, manual: false })
+  const st = useRef({ x: 0, z: 0.4, heading: 0, goal: null, queue: [], idle: 2.5, speed: 0, hold: 0, parked: false, held: false, manual: false, count: null, away: 0, arrive: 0 })
   const { camera } = useThree()
 
   useEffect(() => {
     const c = ctl.current
-    c.goTo = (x, z) => { st.current.goal = { x, z }; st.current.hold = 0; st.current.parked = false; st.current.manual = true }
-    c.hold = (s) => { st.current.goal = null; st.current.hold = s; st.current.parked = true; st.current.manual = false }
+    const layoutNow = () => c.layout ?? { count: 1, home: 0 }
+    const follow = (path, manual) => { const s = st.current; s.goal = path[0] ?? null; s.queue = path.slice(1); s.manual = manual }
+    c.goTo = (x, z) => {
+      const s = st.current, { count } = layoutNow()
+      const t = clampToWalkable(x, z, count)
+      follow(routeTo(s, t, count), true)
+      s.hold = 0; s.parked = false; s.held = false
+    }
+    c.hold = (sec) => { const s = st.current; s.goal = null; s.queue = []; s.hold = sec; s.parked = true; s.held = true; s.manual = false }
   }, [ctl, mood])
 
   useFrame((_, dt) => {
     dt = Math.min(dt, 0.05)
     const s = st.current, max = SPEED[mood]
-    if (reduced && !s.manual) s.goal = null
+    const { count = 1, home = 0 } = ctl.current.layout ?? {}
+    const goHome = () => {
+      const t = randomSpot(home)
+      const path = routeTo(s, t, count)
+      s.goal = path[0]; s.queue = path.slice(1); s.manual = false
+    }
+    if (s.count === null) { // first frame: start on the home island
+      const c = islandCenter(home)
+      s.x = c.x; s.z = c.z + 0.4; s.count = count
+    }
+    if (count > s.count) s.arrive = 1.5 // new island unlocked: cross the new bridge shortly
+    if (count !== s.count) s.count = count
+    if (!reduced && s.arrive > 0) { s.arrive -= dt; if (s.arrive <= 0 && max > 0) { s.parked = false; s.held = false; goHome() } }
+    if (reduced && s.arrive > 0) { s.arrive = 0; const t = randomSpot(home); s.x = t.x; s.z = t.z; s.goal = null; s.queue = [] }
+    if (!isWalkable(s.x, s.z, count)) { // layout shrank: never stand in water
+      const c = clampToWalkable(s.x, s.z, count)
+      s.x = c.x; s.z = c.z; s.goal = null; s.queue = []
+    }
+    if (reduced && !s.manual) { s.goal = null; s.queue = [] }
     if (s.hold > 0) s.hold -= dt
+    const here = islandAt(s.x, s.z, count)
+    if (here >= 0 && here !== home) s.away += dt
+    else if (here === home) s.away = 0
+    if (!s.goal && s.hold <= 0 && !reduced && max > 0 && s.away > 10 && !s.held) { s.away = 0; s.parked = false; goHome() }
     if (!s.goal && s.hold <= 0 && !s.parked && max > 0 && !reduced) {
       s.idle -= dt
       if (s.idle <= 0) {
-        const a = Math.random() * 6.283, d = 1 + Math.random() * (ISLAND - 1.2)
-        s.goal = { x: Math.cos(a) * d, z: Math.sin(a) * d }; s.manual = false
+        const spot = randomSpot(here >= 0 ? here : home)
+        s.goal = spot; s.queue = []; s.manual = false
       }
     }
     let target = s.heading
     if (s.goal) {
       const dx = s.goal.x - s.x, dz = s.goal.z - s.z, dist = Math.hypot(dx, dz)
-      if (dist < 0.1) { const wasManual = s.manual; s.goal = null; s.idle = 2 + Math.random() * 4; s.speed = 0; s.parked = wasManual; s.manual = false }
-      else {
+      if (dist < 0.1) {
+        if (s.queue.length) s.goal = s.queue.shift()
+        else { const wasManual = s.manual; s.goal = null; s.idle = 2 + Math.random() * 4; s.speed = 0; s.parked = wasManual; s.manual = false }
+      } else {
         target = Math.atan2(dx, dz)
-        const want = Math.max(max, s.manual ? 0.5 : 0) * Math.min(1, dist / 0.6 + 0.35)
+        const last = !s.queue.length
+        const want = Math.max(max, s.manual ? 0.5 : 0) * (last ? Math.min(1, dist / 0.6 + 0.35) : 1)
         s.speed = damp(s.speed, want, 6, dt)
         s.x += (dx / dist) * s.speed * dt
         s.z += (dz / dist) * s.speed * dt

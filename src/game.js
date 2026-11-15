@@ -15,13 +15,13 @@ export const PET_CATALOG = [
 ]
 export const AREAS = [
   { id: 'meadow', name: 'Fernlight Meadow', description: 'Your first little patch of green. Restore its forgotten corners.', cost: 0, leaves: 0, xp: 0, icon: '🌿' },
-  { id: 'pond', name: 'Willow Pond', description: 'A peaceful waterside garden with lilies and stepping stones.', cost: 120, leaves: 6, xp: 60, requires: 'meadow-bed', icon: '🪷' },
-  { id: 'grove', name: 'Amber Grove', description: 'A golden woodland clearing waiting for a new beginning.', cost: 220, leaves: 12, xp: 150, requires: 'pond-bridge', icon: '🍂' },
+  { id: 'pond', name: 'Willow Pond', description: 'A quiet island across the river, glimpsed through the mist. Build a footbridge to reach it.', cost: 120, leaves: 6, xp: 60, requires: 'meadow-bed', icon: '🪷' },
+  { id: 'grove', name: 'Amber Grove', description: 'A golden grove beyond the next river. Build a footbridge to reach it.', cost: 220, leaves: 12, xp: 150, requires: 'pond-bridge', icon: '🍂' },
 ]
 export const PROJECTS = [
   { id: 'meadow-bed', area: 'meadow', name: 'Replant the flower bed', description: 'Bring wildflowers back to the meadow.', cost: 40, leaves: 3, reward: 20, icon: '🌷' },
   { id: 'meadow-fountain', area: 'meadow', name: 'Restore the stone birdbath', description: 'Bring fresh water back for the meadow birds.', cost: 70, leaves: 5, reward: 30, requires: 'meadow-bed', icon: '⛲' },
-  { id: 'pond-bridge', area: 'pond', name: 'Mend the footbridge', description: 'Connect the banks with a tiny wooden crossing.', cost: 80, leaves: 5, reward: 35, icon: '🌉' },
+  { id: 'pond-bridge', area: 'pond', name: 'Mend the bridge rails', description: 'Fix the old railings so the crossing feels safe.', cost: 80, leaves: 5, reward: 35, icon: '🌉' },
   { id: 'pond-lilies', area: 'pond', name: 'Welcome the water lilies', description: 'Let blossoms settle on the quiet water.', cost: 100, leaves: 7, reward: 40, requires: 'pond-bridge', icon: '🪷' },
   { id: 'grove-tree', area: 'grove', name: 'Nurture the wishing tree', description: 'Help a young tree take root in the grove.', cost: 120, leaves: 8, reward: 50, icon: '🌳' },
   { id: 'grove-picnic', area: 'grove', name: 'Make a woodland gathering', description: 'Finish a welcoming home for your whole companion family.', cost: 160, leaves: 10, reward: 60, requires: 'grove-tree', icon: '🧺' },
