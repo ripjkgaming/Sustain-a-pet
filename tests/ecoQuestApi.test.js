@@ -44,6 +44,7 @@ function mockRes() {
 
 afterEach(() => {
   vi.unstubAllGlobals()
+  vi.restoreAllMocks()
 })
 
 describe('generateQuest', () => {
@@ -52,6 +53,7 @@ describe('generateQuest', () => {
     const out = await generateQuest({ image: IMG, text: 'my bottle', fetchImpl, env: KEY_ENV })
     expect(out.status).toBe(200)
     expect(out.body.quest.id).toMatch(/^ai-[0-9a-f]{8}$/)
+    expect(out.body.model).toBe(PRIMARY)
     expect(out.body.quest.xp).toBeGreaterThanOrEqual(5)
     expect(out.body.quest.xp).toBeLessThanOrEqual(15)
     expect(fetchImpl).toHaveBeenCalledTimes(1)
@@ -165,10 +167,39 @@ describe('generateQuest', () => {
         ? jsonResponse({ error: 'not found' }, false, 404)
         : jsonResponse(chatOk(JSON.stringify(validRaw)))
     ))
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
     const out = await generateQuest({ text: 'bottle', fetchImpl, env: KEY_ENV })
     expect(out.status).toBe(200)
     expect(fetchImpl).toHaveBeenCalledTimes(2)
     expect(modelOf(fetchImpl, 1)).toBe(FALLBACK_1)
+    expect(out.body.model).toBe(FALLBACK_1)
+    const lines = logSpy.mock.calls.map((args) => args.join(' '))
+    expect(lines).toEqual([
+      `[eco-quest] model=${PRIMARY} failed status=404`,
+      `[eco-quest] model=${FALLBACK_1} answered, responded as ${FALLBACK_1}`,
+    ])
+    expect(lines.join('\n')).not.toContain('test-key')
+  })
+
+  it('reports the model id from the OpenRouter response when present', async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse({ ...chatOk(JSON.stringify(validRaw)), model: 'vendor/actual:free' }))
+    const out = await generateQuest({ text: 'bottle', fetchImpl, env: KEY_ENV })
+    expect(out.status).toBe(200)
+    expect(out.body.model).toBe('vendor/actual:free')
+  })
+
+  it('logs each failed fallback with its status code and never logs the key', async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse({ error: 'boom' }, false, 500))
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
+    const out = await generateQuest({ text: 'bottle', fetchImpl, env: KEY_ENV })
+    expect(out.status).toBe(502)
+    const lines = logSpy.mock.calls.map((args) => args.join(' '))
+    expect(lines).toEqual([
+      `[eco-quest] model=${PRIMARY} failed status=500`,
+      `[eco-quest] model=${FALLBACK_1} failed status=500`,
+      `[eco-quest] model=${FALLBACK_2} failed status=500`,
+    ])
+    expect(lines.join('\n')).not.toContain('test-key')
   })
 
   it('falls back on 429 and 5xx, in fallback order', async () => {

@@ -150,8 +150,11 @@ export async function generateQuest({ image, text, fetchImpl = globalThis.fetch,
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), UPSTREAM_TIMEOUT_MS)
   let data = null
+  let answeredBy = null
+  let tried = null
   try {
     for (const model of modelChain(env)) {
+      tried = model
       const upstream = await fetchImpl(OPENROUTER_URL, {
         method: 'POST',
         headers: {
@@ -165,11 +168,15 @@ export async function generateQuest({ image, text, fetchImpl = globalThis.fetch,
       })
       if (upstream.ok) {
         data = await upstream.json()
+        answeredBy = (typeof data?.model === 'string' && data.model) || model
+        console.log(`[eco-quest] model=${model} answered, responded as ${answeredBy}`)
         break
       }
+      console.log(`[eco-quest] model=${model} failed status=${upstream.status}`)
       if (!isRetryableStatus(upstream.status)) return { status: 502, body: { error: 'upstream_failed' } }
     }
-  } catch {
+  } catch (err) {
+    console.log(`[eco-quest] model=${tried} failed error=${err?.name || 'Error'}`)
     return { status: 502, body: { error: 'upstream_failed' } }
   } finally {
     clearTimeout(timer)
@@ -181,7 +188,7 @@ export async function generateQuest({ image, text, fetchImpl = globalThis.fetch,
 
   const checked = validateQuest(modelJson)
   if (!checked.ok) return { status: 422, body: { error: 'invalid_model_output', message: checked.error } }
-  return { status: 200, body: { quest: checked.quest } }
+  return { status: 200, body: { quest: checked.quest, model: answeredBy } }
 }
 
 export default async function handler(req, res, env = process.env) {
