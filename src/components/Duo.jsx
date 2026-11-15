@@ -1,22 +1,73 @@
-import { useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
-/** Leaf-sprite mascot, drawn to match the reference splash: lighter face mask, big eyes, little beak. */
-export function Mascot({ size = 96, className = '', body = true, shades = false }) {
+const SPRITE_KEY = 'sustain-a-pet'
+const SpriteContext = createContext(null)
+export const SpriteProvider = SpriteContext.Provider
+/** Chosen sprite id: context first, then the saved pet, then leafling. */
+export function useSprite() {
+  const ctx = useContext(SpriteContext)
+  if (ctx) return ctx
+  try { return JSON.parse(localStorage.getItem(SPRITE_KEY))?.pet?.sprite || 'leafling' } catch { return 'leafling' }
+}
+
+function Face({ y = 68, gap = 13, blush = true, shades = false }) {
+  return <g>
+    <ellipse cx={60 - gap} cy={y} rx="5" ry="7" fill="#2b2b2b" />
+    <ellipse cx={60 + gap} cy={y} rx="5" ry="7" fill="#2b2b2b" />
+    <circle cx={60 - gap + 1.8} cy={y - 2.6} r="2" fill="#fff" />
+    <circle cx={60 + gap + 1.8} cy={y - 2.6} r="2" fill="#fff" />
+    {blush && <><ellipse cx={60 - gap - 9} cy={y + 8} rx="5" ry="3" fill="#ff8fa3" opacity=".7" /><ellipse cx={60 + gap + 9} cy={y + 8} rx="5" ry="3" fill="#ff8fa3" opacity=".7" /></>}
+    <path d={`M${54} ${y + 9}q6 6 12 0`} fill="none" stroke="#2b2b2b" strokeWidth="2.6" strokeLinecap="round" />
+    {shades && <path d={`M${60 - gap - 14} ${y - 8}h${2 * gap + 28}l-6 18H${60 - gap - 8}z`} fill="#3a2a1a" opacity=".92" />}
+  </g>
+}
+
+function Leafling({ shades }) {
+  return <>
+    <ellipse cx="60" cy="72" rx="40" ry="35" fill="#3f9e3a" />
+    <ellipse cx="60" cy="82" rx="30" ry="22" fill="#86d35f" />
+    <path d="M60 40c0-8 1-14 3-18" stroke="#2f7d32" strokeWidth="4" strokeLinecap="round" fill="none" />
+    <path d="M63 24c10-10 24-8 28-4-2 12-14 18-28 4z" fill="#2f7d32" />
+    <path d="M63 24c8-2 16-1 24-1" stroke="#7bd05a" strokeWidth="1.6" fill="none" strokeLinecap="round" />
+    <path d="M58 34c-9-8-22-7-26-3 2 11 14 17 26 3z" fill="#4caf3a" />
+    <Face shades={shades} />
+  </>
+}
+
+function Mossy({ shades }) {
+  return <>
+    <ellipse cx="60" cy="74" rx="42" ry="33" fill="#6c8f3c" />
+    {[[30,70],[44,92],[78,90],[92,72],[56,98],[72,56],[36,58]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r="5" fill="#8fb54e" />)}
+    <path d="M26 44a22 18 0 0144 0z" fill="#d9573b" />
+    <circle cx="38" cy="38" r="3.4" fill="#fff" /><circle cx="52" cy="34" r="2.6" fill="#fff" /><circle cx="60" cy="42" r="2.2" fill="#fff" />
+    <rect x="42" y="44" width="8" height="8" rx="3" fill="#f4e6cf" />
+    <path d="M70 44a15 12 0 0130 0z" fill="#e8825f" />
+    <circle cx="80" cy="38" r="2.4" fill="#fff" /><circle cx="91" cy="40" r="1.8" fill="#fff" />
+    <rect x="80" y="44" width="6" height="7" rx="2.5" fill="#f4e6cf" />
+    <Face y={74} shades={shades} />
+  </>
+}
+
+function Sunbud({ shades }) {
+  return <>
+    {Array.from({ length: 12 }, (_, i) => <ellipse key={i} cx="60" cy="22" rx="9" ry="17" fill={i % 2 ? '#ffb703' : '#ff9f1c'} transform={`rotate(${i * 30} 60 62)`} />)}
+    <circle cx="60" cy="62" r="29" fill="#d96a1c" />
+    <circle cx="60" cy="62" r="25" fill="#f08a24" />
+    <Face y={62} gap={10} shades={shades} />
+  </>
+}
+
+const ART = { leafling: Leafling, mossy: Mossy, sunbud: Sunbud }
+
+/** Mascot for the sprite the player picked. `body={false}` adds a white plate so it reads on a green screen. */
+export function Mascot({ size = 96, className = '', body = true, shades = false, sprite }) {
+  const chosen = useSprite()
+  const Art = ART[sprite || chosen] || Leafling
   return (
     <svg className={`mascot ${className}`} width={size} height={size} viewBox="0 0 120 120" aria-hidden="true" focusable="false">
       <ellipse cx="60" cy="112" rx="34" ry="6" fill="#0000001a" />
-      {body && <path d="M26 58c0-24 14-40 34-40s34 16 34 40v30c0 12-10 20-34 20S26 100 26 88z" fill="#58cc02" />}
-      <path d="M44 22c-3-9 2-15 10-16-1 8-3 13-10 16zM76 22c3-9-2-15-10-16 1 8 3 13 10 16z" fill="#89e219" />
-      <path d="M26 62c0-14 8-26 20-26h28c12 0 20 12 20 26 0 16-9 26-22 26H48c-13 0-22-10-22-26z" fill="#89e219" />
-      <ellipse cx="46" cy="62" rx="14" ry="17" fill="#fff" />
-      <ellipse cx="74" cy="62" rx="14" ry="17" fill="#fff" />
-      <ellipse cx="49" cy="64" rx="7" ry="10" fill="#4b4b4b" />
-      <ellipse cx="71" cy="64" rx="7" ry="10" fill="#4b4b4b" />
-      <circle cx="51" cy="59" r="2.6" fill="#fff" />
-      <circle cx="73" cy="59" r="2.6" fill="#fff" />
-      <path d="M52 76c0-5 4-8 8-8s8 3 8 8c0 4-4 7-8 7s-8-3-8-7z" fill="#ff9600" />
-      <path d="M53 75c1-4 4-6 7-6s6 2 7 6z" fill="#ffc800" />
-      {shades && <path d="M30 56h60l-8 20H38z" fill="#7a2d00" opacity=".9" />}
+      {!body && <circle cx="60" cy="62" r="56" fill="#fff" />}
+      <Art shades={shades} />
     </svg>
   )
 }

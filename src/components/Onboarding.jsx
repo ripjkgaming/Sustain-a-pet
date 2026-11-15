@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
 import SceneBoundary from './SceneBoundary.jsx'
 import { SPRITES } from './pet3d/shared.js'
-import { FlowBar, Say } from './Duo.jsx'
+import { FlowBar, Say, SpriteProvider } from './Duo.jsx'
 
 const PetCanvas = lazy(() => import('./pet3d/PetCanvas.jsx'))
 const PetModel = lazy(() => import('./pet3d/PetModel.jsx'))
@@ -47,6 +47,7 @@ export default function Onboarding({ reduced, onHatch }) {
   }
 
   return (
+    <SpriteProvider value={sprite}>
     <main className={`onboard duo-screen ${hatching ? 'is-hatching' : ''}`}>
       <FlowBar value={PROGRESS[step]} onBack={step > 0 ? () => setStep(step - 1) : undefined} />
       <div className="duo-body" key={step}>
@@ -96,5 +97,6 @@ export default function Onboarding({ reduced, onHatch }) {
         <button type="button" className="duo-btn green" disabled={hatching || (step === 1 && empty)} onClick={next}>{step === 2 ? `Hatch ${SPRITES[sprite].label}` : 'Continue'}</button>
       </footer>
     </main>
+    </SpriteProvider>
   )
 }

@@ -7,7 +7,7 @@ import { questionFor } from './components/QuizCard.jsx'
 import Vitals from './components/Vitals.jsx'
 import Icon from './components/Icons.jsx'
 import DemoDrawer from './components/DemoDrawer.jsx'
-import { Splash } from './components/Duo.jsx'
+import { Splash, SpriteProvider } from './components/Duo.jsx'
 import Onboarding from './components/Onboarding.jsx'
 import Rewards, { unlockText } from './components/Rewards.jsx'
 import { usePrefersReducedMotion } from './components/pet3d/shared.js'
@@ -150,6 +150,7 @@ export default function App() {
   const garden = Math.min(15, 3 + Object.values(pet.counts).reduce((a, b) => a + b, 0))
 
   return (
+    <SpriteProvider value={pet.pet.sprite}>
     <main className="home">
       <header className="glass top">
         <div className="top-l">
@@ -207,5 +208,6 @@ export default function App() {
           onXp={(amount) => dispatch({ type: 'addXp', amount })} onReset={() => dispatch({ type: 'resetDemo' })} onExit={() => dispatch({ type: 'exitDemo' })} />
       )}
     </main>
+    </SpriteProvider>
   )
 }

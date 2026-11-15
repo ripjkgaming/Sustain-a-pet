@@ -177,7 +177,9 @@ export default function World({ ctl, garden = 3, area = 'meadow', decorations = 
 
 const PROP_ALIASES = { flowers: 'wildflowers', 'meadow-bed': 'wildflowers', 'meadow-fountain': 'birdbath', 'pond-bridge': 'bridge', 'pond-lilies': 'lilies', 'grove-tree': 'wishing-tree', 'grove-picnic': 'picnic' }
 const PROJECT_AREA = { 'meadow-bed': 'meadow', 'meadow-fountain': 'meadow', 'pond-bridge': 'pond', 'pond-lilies': 'pond', 'grove-tree': 'grove', 'grove-picnic': 'grove' }
-const PROJECT_POSITION = { 'meadow-bed': [-3.5, 0, 3.8], 'meadow-fountain': [3.5, 0, 3.8], 'pond-bridge': [0, 0, -4.3], 'pond-lilies': [1, 0, -4.3], 'grove-tree': [-3.5, 0, 3.8], 'grove-picnic': [3.5, 0, 3.8] }
+// Keep purchased/restored landmarks within the default camera's open garden, above the dock.
+const PROJECT_POSITION = { 'meadow-bed': [-2.2, 0, -3], 'meadow-fountain': [3, 0, -.4], 'pond-bridge': [0, 0, -4.3], 'pond-lilies': [1, 0, -4.3], 'grove-tree': [-2.8, 0, -2.9], 'grove-picnic': [2.8, 0, -2.3] }
+const DECORATION_POSITION = { lantern: [2.9, 0, 0], flowers: [-2.6, 0, -.3], bench: [.2, 0, -2.8] }
 const PROPS = new Set(['wildflowers', 'birdbath', 'lantern', 'compost', 'pond-cleanup', 'tree-nursery', 'pollinator-garden', 'bench', 'bridge', 'lilies', 'wishing-tree', 'picnic'])
 function AuthoredAsset({ name, position = [0, 0, 0] }) {
   const { scene } = useGLTF(`/models/${name}.glb`)
@@ -189,6 +191,6 @@ function AuthoredHabitat({ area, decorations, projects }) {
   const ids = [...decorations, ...projects].map((item) => typeof item === 'string' ? item : item.id).filter((id) => !PROJECT_AREA[id] || PROJECT_AREA[id] === key)
   return <group>
     <Suspense fallback={null}><AuthoredAsset name={`habitat-${key}`} /></Suspense>
-    {ids.map((id, i) => { const asset = PROP_ALIASES[id] || id; return PROPS.has(asset) ? <Suspense key={`${id}-${i}`} fallback={null}><AuthoredAsset name={`prop-${asset}`} position={PROJECT_POSITION[id] || [-3.5 + (i % 4) * 2.3, 0, 4.2 + Math.floor(i / 4)]} /></Suspense> : null })}
+    {ids.map((id, i) => { const asset = PROP_ALIASES[id] || id; return PROPS.has(asset) ? <Suspense key={`${id}-${i}`} fallback={null}><AuthoredAsset name={`prop-${asset}`} position={PROJECT_POSITION[id] || DECORATION_POSITION[id] || [0, 0, -2.8]} /></Suspense> : null })}
   </group>
 }
