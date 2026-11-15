@@ -6,6 +6,21 @@ A virtual pet that grows with small green habits in real life. Pick a companion,
 
 Everything stays on your device (localStorage). No accounts, no tracking.
 
+## Screenshots
+
+<p align="center">
+  <img src="docs/screenshots/garden.webp" alt="Starter garden with the Leafling companion" width="200">
+  <img src="docs/screenshots/meadow-restored.webp" alt="Garden after restoring the meadow" width="200">
+  <img src="docs/screenshots/pond-restored.webp" alt="Restored pond area with the Mossy companion" width="200">
+  <img src="docs/screenshots/daily-quiz.webp" alt="Garden journal with daily habits and quiz" width="200">
+</p>
+
+## Offline
+
+- No backend. Game state is saved in `localStorage`, with an in-memory fallback if storage is blocked (`src/store.js`).
+- The Nunito font is self-hosted through `@fontsource/nunito` (`src/main.jsx`). No Google Fonts request.
+- Audio and 3D models ship with the app in `public/`.
+
 ## Run it
 
 ```bash
