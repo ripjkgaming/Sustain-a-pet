@@ -36,7 +36,7 @@ export default function GardenJournal({ state, today, dispatch, inDemo }) {
   const costFor = (item) => ({ coins: item.cost ?? 0, leaves: item.leaves ?? 0 })
   const prerequisite = (item) => item.requires && !game.projects.includes(item.requires) ? `First: ${PROJECTS.find(project => project.id === item.requires)?.name}` : ''
   return <>
-    <div className="game-wallet" aria-label={`${game.coins} coins and ${game.leaves} leaves`}><span><b aria-hidden="true">◉</b> {game.coins}<small>coins</small></span><span><Icon name="leaf" size={15} /> {game.leaves}<small>leaves</small></span></div>
+    <div className="game-wallet" aria-label={`${game.coins} coins and ${game.leaves} leaves`}><span><b aria-hidden="true">◉</b> {game.coins}<small>coins</small></span><span><Icon name="leaf" size={15} /> {game.leaves}<small>{game.leaves === 1 ? 'leaf' : 'leaves'}</small></span></div>
     {tab && <section className="garden-journal" role="dialog" aria-modal="false" aria-labelledby="journal-title" onKeyDown={(event) => { if (event.key === 'Escape') close(); event.stopPropagation() }}>
       <header className="journal-head"><div><span className="journal-kicker">YOUR GARDEN JOURNAL</span><h2 id="journal-title">{tab === 'today' ? 'A little care, every day' : tab === 'shop' ? 'The garden shop' : tab === 'pets' ? 'A growing family' : 'Beyond the meadow'}</h2></div><button ref={closeRef} className="journal-close" aria-label="Close garden journal" onClick={close}>×</button></header>
       <div className="journal-body" key={tab}>

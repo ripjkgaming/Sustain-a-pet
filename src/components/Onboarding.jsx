@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
+import SceneBoundary from './SceneBoundary.jsx'
 import { SPRITES } from './pet3d/shared.js'
 
 const PetCanvas = lazy(() => import('./pet3d/PetCanvas.jsx'))
@@ -36,7 +37,7 @@ export default function Onboarding({ reduced, onHatch }) {
       <p className="onboard-keys">Choose with 1–3 · press Enter to hatch</p>
       <p className="onboard-step">01 · Choose your companion</p>
       <div className="stage-pick" aria-label="Preview your three companions">
-        <Suspense fallback={<div className="loading">Loading…</div>}>
+        <SceneBoundary><Suspense fallback={<div className="loading">Loading…</div>}>
           <PetCanvas camera={{ position: [0, 1.6, 9.4], fov: 34 }} target={[0, 1.1, 0]}>
             {KEYS.map((k, i) => (
               <group key={k} onClick={() => pick(k)} onPointerOver={() => (document.body.style.cursor = 'pointer')} onPointerOut={() => (document.body.style.cursor = '')}>
@@ -45,7 +46,7 @@ export default function Onboarding({ reduced, onHatch }) {
               </group>
             ))}
           </PetCanvas>
-        </Suspense>
+        </Suspense></SceneBoundary>
       </div>
       <div className="radios" role="radiogroup" aria-label="Choose your pet">
         {KEYS.map((k, i) => (

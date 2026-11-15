@@ -73,7 +73,7 @@ function diffEvents(before, after, today) {
   if (moodFor(after.health) !== moodFor(before.health)) ev.push({ type: 'mood', mood: moodFor(after.health), from: moodFor(before.health) })
   if (after.game !== before.game && after.game && before.game) {
     const gain = after.game.coins - before.game.coins
-    if (gain > 0) ev.push({ type: 'game', text: `+${gain} coins · ${after.game.leaves - before.game.leaves > 0 ? `+${after.game.leaves - before.game.leaves} leaves` : 'Garden reward'}` })
+    if (gain > 0) ev.push({ type: 'game', text: `+${gain} coins · ${after.game.leaves - before.game.leaves > 0 ? `+${after.game.leaves - before.game.leaves} ${after.game.leaves - before.game.leaves === 1 ? 'leaf' : 'leaves'}` : 'Garden reward'}` })
     else if (after.game.projects.length > before.game.projects.length) ev.push({ type: 'game', text: 'Restoration complete! Your garden is growing.' })
     else if (after.game.pets.length > before.game.pets.length) ev.push({ type: 'game', text: 'A new companion has joined your garden!' })
     else if (after.game.inventory !== before.game.inventory) ev.push({ type: 'game', text: 'Your garden supplies are ready.' })

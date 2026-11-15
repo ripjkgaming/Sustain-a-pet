@@ -46,7 +46,7 @@ export function questProgress(state, today) {
   const done = (day?.habits.length ?? 0) + (day?.quiz && !day.habits.includes('quiz') ? 1 : 0)
   const claimed = state.game.tasks[today] ?? []
   return [
-    { id: 'three', name: 'Small steps, greener world', description: 'Complete 3 real-life habits today.', progress: Math.min(done, 3), target: 3, coins: 30, leaves: 2 },
+    { id: 'three', name: 'Small steps, greener world', description: 'Complete any 3 daily actions.', progress: Math.min(done, 3), target: 3, coins: 30, leaves: 2 },
     { id: 'all', name: 'A garden full of good', description: 'Complete 7 habits and try today’s quiz. Learning counts too.', progress: done, target: 8, coins: 60, leaves: 4 },
   ].map(q => ({ ...q, claimed: claimed.includes(q.id), complete: q.progress >= q.target }))
 }
