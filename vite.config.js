@@ -36,4 +36,18 @@ function pwa() {
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), pwa()],
+  build: {
+    rolldownOptions: {
+      output: {
+        // Keep module execution order across chunks; split chunks form import cycles.
+        strictExecutionOrder: true,
+        codeSplitting: {
+          groups: [
+            // three.js + react-three packages (~1.3 MB min) split into chunks under 450 kB.
+            { name: 'three', test: /node_modules[\\/](three|@react-three)[\\/]/, priority: 20, maxSize: 450_000 },
+          ],
+        },
+      },
+    },
+  },
 })
