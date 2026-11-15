@@ -67,7 +67,7 @@ export default function App() {
   const powerUp = useCallback((secs) => setFx((f) => ({ ...f, power: f.power + 1, powerSecs: secs, sparkle: f.sparkle + 1 })), [])
   const pushToast = useCallback((text) => {
     const id = ++uid
-    setToasts((t) => [...t, { id, text }])
+    setToasts((t) => [...t, { id, text }].slice(-3))
     setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 3200)
   }, [])
 

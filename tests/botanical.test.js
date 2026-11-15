@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import * as THREE from 'three'
 import { readFileSync } from 'node:fs'
+import { stepSpring } from '../src/components/pet3d/shared.js'
 import { createBotanicalInstance, updateBotanicalInstance } from '../src/components/pet3d/botanical.js'
 
 const sceneForTest = () => {
@@ -74,4 +75,19 @@ describe('exported Blender assets', () => {
       expect(json.meshes.every((m) => m.primitives.every((p) => p.attributes.NORMAL !== undefined && p.attributes.TEXCOORD_0 !== undefined))).toBe(true)
     })
   }
+})
+
+
+describe('garden spring stability', () => {
+  it('converges after repeated long-frame stalls without NaN or runaway scaling', () => {
+    const state = { y: 0, v: -6 }
+    let peak = 0
+    for (let i = 0; i < 400; i++) {
+      stepSpring(state, 'y', 'v', 90, 5, i % 7 === 0 ? 30 : 1 / 60)
+      expect(Number.isFinite(state.y) && Number.isFinite(state.v)).toBe(true)
+      peak = Math.max(peak, Math.abs(state.y))
+    }
+    expect(peak).toBeLessThan(.6)
+    expect(Math.abs(state.y)).toBeLessThan(.001)
+  })
 })
