@@ -34,7 +34,13 @@ try:
     scene.render.film_transparent=True
     scene.render.image_settings.file_format='PNG'; scene.render.image_settings.color_mode='RGBA'
     scene.view_settings.view_transform='Standard'
+    scene.view_settings.exposure=-4
     scene.render.filepath=str(ROOT/'phone-front.png')
+    bpy.ops.render.render(write_still=True)
+    camera.location=(.16,.35,.08)
+    camera.rotation_euler=(-camera.location).to_track_quat('-Z','Y').to_euler()
+    camera_data.ortho_scale=.18
+    scene.render.filepath=str(ROOT/'phone-rear.png')
     bpy.ops.render.render(write_still=True)
     (ROOT/'screen-mapping.json').write_text(json.dumps({'image':[800,1600],'camera':'orthographic front, original model +Z up, front -Y','ortho_height_m':.17,'screen_rect_px':[82.164,114.55,635.672,1370.90],'screen_bounds_m':[-.03377008,.03377008,-.07282908,.07282908],'reflection_map_used':False,'note':'Rectangle encloses Display bounds; rounded screen outline must be checked against rendered model.'},indent=2))
     print('Rendered supplied phone plate without EXR; original scene restored after render.')

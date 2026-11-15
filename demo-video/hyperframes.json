@@ -9,12 +9,5 @@
   "media": {
     "autoProxy": true
   },
-  "authoringSkill": "hyperframes",
-  "registryItems": [
-    {
-      "name": "vfx-iphone-device",
-      "type": "hyperframes:block",
-      "target": "compositions/vfx-iphone-device.html"
-    }
-  ]
+  "authoringSkill": "hyperframes"
 }
