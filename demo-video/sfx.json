@@ -1,0 +1,104 @@
+[
+ {
+  "at": 6.05,
+  "file": "whoosh-short.mp3",
+  "vol": 0.3,
+  "dur": 0.57
+ },
+ {
+  "at": 18.45,
+  "file": "pop.mp3",
+  "vol": 0.25,
+  "dur": 0.5
+ },
+ {
+  "at": 18.98,
+  "file": "pop.mp3",
+  "vol": 0.25,
+  "dur": 0.5
+ },
+ {
+  "at": 19.7,
+  "file": "pop.mp3",
+  "vol": 0.25,
+  "dur": 0.5
+ },
+ {
+  "at": 25.2,
+  "file": "whoosh.mp3",
+  "vol": 0.28,
+  "dur": 0.57
+ },
+ {
+  "at": 41.9,
+  "file": "whoosh-short.mp3",
+  "vol": 0.28,
+  "dur": 0.57
+ },
+ {
+  "at": 55.2,
+  "file": "sparkle.mp3",
+  "vol": 0.25,
+  "dur": 1.5
+ },
+ {
+  "at": 60.55,
+  "file": "whoosh.mp3",
+  "vol": 0.3,
+  "dur": 0.57
+ },
+ {
+  "at": 64.95,
+  "file": "whoosh-short.mp3",
+  "vol": 0.28,
+  "dur": 0.57
+ },
+ {
+  "at": 72.4,
+  "file": "sparkle.mp3",
+  "vol": 0.28,
+  "dur": 1.5
+ },
+ {
+  "at": 80.6,
+  "file": "whoosh-short.mp3",
+  "vol": 0.28,
+  "dur": 0.57
+ },
+ {
+  "at": 95.2,
+  "file": "whoosh.mp3",
+  "vol": 0.26,
+  "dur": 0.57
+ },
+ {
+  "at": 105.5,
+  "file": "whoosh-short.mp3",
+  "vol": 0.28,
+  "dur": 0.57
+ },
+ {
+  "at": 125.05,
+  "file": "whoosh.mp3",
+  "vol": 0.3,
+  "dur": 0.57
+ },
+ {
+  "at": 133.3,
+  "file": "whoosh-short.mp3",
+  "vol": 0.28,
+  "dur": 0.57
+ },
+ {
+  "at": 152.6,
+  "file": "riser.mp3",
+  "vol": 0.22,
+  "dur": 2.0
+ },
+ {
+  "at": 154.65,
+  "file": "whoosh-cinematic.mp3",
+  "vol": 0.3,
+  "dur": 2.0
+ }
+]

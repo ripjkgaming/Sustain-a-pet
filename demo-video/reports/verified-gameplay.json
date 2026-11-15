@@ -1,0 +1,5522 @@
+{
+  "main_capture": {
+    "source": "actual running local game; fresh isolated browser context",
+    "url": "http://localhost:5173/?demo=1",
+    "viewport": [
+      636,
+      1371
+    ],
+    "events": [
+      {
+        "name": "garden-establish",
+        "start": 14.072682141000001,
+        "end": 18.581045007999997,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 0,
+            "health": 80,
+            "lastOpenDate": "2026-11-15",
+            "days": {},
+            "counts": {},
+            "unlocked": [],
+            "game": {
+              "coins": 80,
+              "leaves": 0,
+              "inventory": {},
+              "decorations": [],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": null,
+                "streak": 0,
+                "total": 0
+              },
+              "tasks": {},
+              "lifetimeXp": 0
+            }
+          },
+          "offset": 0
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 0,
+            "health": 80,
+            "lastOpenDate": "2026-11-15",
+            "days": {},
+            "counts": {},
+            "unlocked": [],
+            "game": {
+              "coins": 80,
+              "leaves": 0,
+              "inventory": {},
+              "decorations": [],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": null,
+                "streak": 0,
+                "total": 0
+              },
+              "tasks": {},
+              "lifetimeXp": 0
+            }
+          },
+          "offset": 0
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "daily-gift",
+        "start": 20.151065061999997,
+        "end": 26.295107288,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 0,
+            "health": 80,
+            "lastOpenDate": "2026-11-15",
+            "days": {},
+            "counts": {},
+            "unlocked": [],
+            "game": {
+              "coins": 80,
+              "leaves": 0,
+              "inventory": {},
+              "decorations": [],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": null,
+                "streak": 0,
+                "total": 0
+              },
+              "tasks": {},
+              "lifetimeXp": 0
+            }
+          },
+          "offset": 0
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 0,
+            "health": 80,
+            "lastOpenDate": "2026-11-15",
+            "days": {},
+            "counts": {},
+            "unlocked": [],
+            "game": {
+              "coins": 110,
+              "leaves": 1,
+              "inventory": {},
+              "decorations": [],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {},
+              "lifetimeXp": 0
+            }
+          },
+          "offset": 0
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "walk-to-quest",
+        "start": 29.71707373,
+        "end": 34.260398175999995,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 0,
+            "health": 80,
+            "lastOpenDate": "2026-11-15",
+            "days": {},
+            "counts": {},
+            "unlocked": [],
+            "game": {
+              "coins": 110,
+              "leaves": 1,
+              "inventory": {},
+              "decorations": [],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {},
+              "lifetimeXp": 0
+            }
+          },
+          "offset": 0
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 0,
+            "health": 80,
+            "lastOpenDate": "2026-11-15",
+            "days": {},
+            "counts": {},
+            "unlocked": [],
+            "game": {
+              "coins": 110,
+              "leaves": 1,
+              "inventory": {},
+              "decorations": [],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {},
+              "lifetimeXp": 0
+            }
+          },
+          "offset": 0
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "first-habit",
+        "start": 36.113050919,
+        "end": 42.382816293,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 0,
+            "health": 80,
+            "lastOpenDate": "2026-11-15",
+            "days": {},
+            "counts": {},
+            "unlocked": [],
+            "game": {
+              "coins": 110,
+              "leaves": 1,
+              "inventory": {},
+              "decorations": [],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {},
+              "lifetimeXp": 0
+            }
+          },
+          "offset": 0
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 15,
+            "health": 89,
+            "lastOpenDate": "2026-11-15",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk"
+                ],
+                "xp": 15,
+                "quiz": null
+              }
+            },
+            "counts": {
+              "walk": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 130,
+              "leaves": 2,
+              "inventory": {},
+              "decorations": [],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {},
+              "lifetimeXp": 15
+            }
+          },
+          "offset": 0
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "complete-day-one",
+        "start": 47.34027339599999,
+        "end": 89.352798422,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 15,
+            "health": 89,
+            "lastOpenDate": "2026-11-15",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk"
+                ],
+                "xp": 15,
+                "quiz": null
+              }
+            },
+            "counts": {
+              "walk": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 130,
+              "leaves": 2,
+              "inventory": {},
+              "decorations": [],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {},
+              "lifetimeXp": 15
+            }
+          },
+          "offset": 0
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 60,
+            "health": 100,
+            "lastOpenDate": "2026-11-15",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 300,
+              "leaves": 15,
+              "inventory": {},
+              "decorations": [],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 60
+            }
+          },
+          "offset": 0
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "shop-wildflowers",
+        "start": 95.713015243,
+        "end": 105.348869787,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 60,
+            "health": 100,
+            "lastOpenDate": "2026-11-15",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 300,
+              "leaves": 15,
+              "inventory": {},
+              "decorations": [],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 60
+            }
+          },
+          "offset": 0
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 60,
+            "health": 100,
+            "lastOpenDate": "2026-11-15",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 255,
+              "leaves": 15,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 60
+            }
+          },
+          "offset": 0
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "placed-wildflowers",
+        "start": 114.56780147,
+        "end": 118.18714740700001,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 60,
+            "health": 100,
+            "lastOpenDate": "2026-11-15",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 255,
+              "leaves": 15,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 60
+            }
+          },
+          "offset": 0
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 60,
+            "health": 100,
+            "lastOpenDate": "2026-11-15",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 255,
+              "leaves": 15,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 60
+            }
+          },
+          "offset": 0
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "adopt-mossy",
+        "start": 121.25670434700001,
+        "end": 128.928598849,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 60,
+            "health": 100,
+            "lastOpenDate": "2026-11-15",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 255,
+              "leaves": 15,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 60
+            }
+          },
+          "offset": 0
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 60,
+            "health": 100,
+            "lastOpenDate": "2026-11-15",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 155,
+              "leaves": 15,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 80
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 60
+            }
+          },
+          "offset": 0
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "switch-to-mossy",
+        "start": 135.566081519,
+        "end": 142.034201631,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 60,
+            "health": 100,
+            "lastOpenDate": "2026-11-15",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 155,
+              "leaves": 15,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 80
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 60
+            }
+          },
+          "offset": 0
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 0,
+            "health": 80,
+            "lastOpenDate": "2026-11-15",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 155,
+              "leaves": 15,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 100
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 80
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 60
+            }
+          },
+          "offset": 0
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "mossy-in-garden",
+        "start": 145.83855635900002,
+        "end": 149.876031357,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 0,
+            "health": 80,
+            "lastOpenDate": "2026-11-15",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 155,
+              "leaves": 15,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 100
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 80
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 60
+            }
+          },
+          "offset": 0
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 0,
+            "health": 80,
+            "lastOpenDate": "2026-11-15",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 155,
+              "leaves": 15,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 100
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 80
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 60
+            }
+          },
+          "offset": 0
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "restore-meadow",
+        "start": 153.046887437,
+        "end": 157.732172837,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 0,
+            "health": 80,
+            "lastOpenDate": "2026-11-15",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 155,
+              "leaves": 15,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 100
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 80
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 60
+            }
+          },
+          "offset": 0
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 20,
+            "health": 80,
+            "lastOpenDate": "2026-11-15",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 115,
+              "leaves": 12,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 100
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 80
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [
+                "meadow-bed"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 80
+            }
+          },
+          "offset": 0
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "restored-meadow-result",
+        "start": 161.776993748,
+        "end": 165.395078501,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 20,
+            "health": 80,
+            "lastOpenDate": "2026-11-15",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 115,
+              "leaves": 12,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 100
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 80
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [
+                "meadow-bed"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 80
+            }
+          },
+          "offset": 0
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 20,
+            "health": 80,
+            "lastOpenDate": "2026-11-15",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 115,
+              "leaves": 12,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 100
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 80
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [
+                "meadow-bed"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 80
+            }
+          },
+          "offset": 0
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "simulated-day-two",
+        "start": 167.704320018,
+        "end": 174.593623547,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 20,
+            "health": 80,
+            "lastOpenDate": "2026-11-15",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 115,
+              "leaves": 12,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 100
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 80
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [
+                "meadow-bed"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 80
+            }
+          },
+          "offset": 0
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 20,
+            "health": 70,
+            "lastOpenDate": "2026-11-16",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 115,
+              "leaves": 12,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 90
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 70
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [
+                "meadow-bed"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 80
+            }
+          },
+          "offset": 1
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "day-two-gift",
+        "start": 176.719730924,
+        "end": 181.202018762,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 20,
+            "health": 70,
+            "lastOpenDate": "2026-11-16",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 115,
+              "leaves": 12,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 90
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 70
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [
+                "meadow-bed"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-15",
+                "streak": 1,
+                "total": 1
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 80
+            }
+          },
+          "offset": 1
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 20,
+            "health": 70,
+            "lastOpenDate": "2026-11-16",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 150,
+              "leaves": 13,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 90
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 70
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [
+                "meadow-bed"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-16",
+                "streak": 2,
+                "total": 2
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 80
+            }
+          },
+          "offset": 1
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "unlock-pond",
+        "start": 186.262784192,
+        "end": 191.29775219500002,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 20,
+            "health": 70,
+            "lastOpenDate": "2026-11-16",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 150,
+              "leaves": 13,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 90
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 70
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [
+                "meadow-bed"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-16",
+                "streak": 2,
+                "total": 2
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 80
+            }
+          },
+          "offset": 1
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 20,
+            "health": 70,
+            "lastOpenDate": "2026-11-16",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 30,
+              "leaves": 7,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 90
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 70
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond"
+              ],
+              "activeArea": "pond",
+              "projects": [
+                "meadow-bed"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-16",
+                "streak": 2,
+                "total": 2
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 80
+            }
+          },
+          "offset": 1
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "visit-pond",
+        "start": 193.00826933000002,
+        "end": 194.215999677,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 20,
+            "health": 70,
+            "lastOpenDate": "2026-11-16",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 30,
+              "leaves": 7,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 90
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 70
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond"
+              ],
+              "activeArea": "pond",
+              "projects": [
+                "meadow-bed"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-16",
+                "streak": 2,
+                "total": 2
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 80
+            }
+          },
+          "offset": 1
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 20,
+            "health": 70,
+            "lastOpenDate": "2026-11-16",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 30,
+              "leaves": 7,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 90
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 70
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond"
+              ],
+              "activeArea": "pond",
+              "projects": [
+                "meadow-bed"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-16",
+                "streak": 2,
+                "total": 2
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 80
+            }
+          },
+          "offset": 1
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "pond-exploration",
+        "start": 197.969856684,
+        "end": 201.99255392400002,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 20,
+            "health": 70,
+            "lastOpenDate": "2026-11-16",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 30,
+              "leaves": 7,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 90
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 70
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond"
+              ],
+              "activeArea": "pond",
+              "projects": [
+                "meadow-bed"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-16",
+                "streak": 2,
+                "total": 2
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 80
+            }
+          },
+          "offset": 1
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 20,
+            "health": 70,
+            "lastOpenDate": "2026-11-16",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 30,
+              "leaves": 7,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 90
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 70
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond"
+              ],
+              "activeArea": "pond",
+              "projects": [
+                "meadow-bed"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-16",
+                "streak": 2,
+                "total": 2
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 80
+            }
+          },
+          "offset": 1
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "day-two-habits-and-quests",
+        "start": 204.35167128100002,
+        "end": 241.196407542,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 20,
+            "health": 70,
+            "lastOpenDate": "2026-11-16",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 1,
+              "meat_free": 1,
+              "bottle": 1,
+              "lights": 1,
+              "shower": 1,
+              "sort": 1,
+              "plate": 1,
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 30,
+              "leaves": 7,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 90
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 70
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond"
+              ],
+              "activeArea": "pond",
+              "projects": [
+                "meadow-bed"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-16",
+                "streak": 2,
+                "total": 2
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 80
+            }
+          },
+          "offset": 1
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 80,
+            "health": 100,
+            "lastOpenDate": "2026-11-16",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 2,
+              "meat_free": 2,
+              "bottle": 2,
+              "lights": 2,
+              "shower": 2,
+              "sort": 2,
+              "plate": 2,
+              "quiz": 2
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 220,
+              "leaves": 21,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 90
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 70
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond"
+              ],
+              "activeArea": "pond",
+              "projects": [
+                "meadow-bed"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-16",
+                "streak": 2,
+                "total": 2
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 140
+            }
+          },
+          "offset": 1
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "restore-bridge",
+        "start": 245.918465743,
+        "end": 250.14782313,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 80,
+            "health": 100,
+            "lastOpenDate": "2026-11-16",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 2,
+              "meat_free": 2,
+              "bottle": 2,
+              "lights": 2,
+              "shower": 2,
+              "sort": 2,
+              "plate": 2,
+              "quiz": 2
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 220,
+              "leaves": 21,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 90
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 70
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond"
+              ],
+              "activeArea": "pond",
+              "projects": [
+                "meadow-bed"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-16",
+                "streak": 2,
+                "total": 2
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 140
+            }
+          },
+          "offset": 1
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 115,
+            "health": 100,
+            "lastOpenDate": "2026-11-16",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 2,
+              "meat_free": 2,
+              "bottle": 2,
+              "lights": 2,
+              "shower": 2,
+              "sort": 2,
+              "plate": 2,
+              "quiz": 2
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 140,
+              "leaves": 16,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 90
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 70
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond"
+              ],
+              "activeArea": "pond",
+              "projects": [
+                "meadow-bed",
+                "pond-bridge"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-16",
+                "streak": 2,
+                "total": 2
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 175
+            }
+          },
+          "offset": 1
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "restored-pond-result",
+        "start": 256.348704503,
+        "end": 260.357870256,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 115,
+            "health": 100,
+            "lastOpenDate": "2026-11-16",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 2,
+              "meat_free": 2,
+              "bottle": 2,
+              "lights": 2,
+              "shower": 2,
+              "sort": 2,
+              "plate": 2,
+              "quiz": 2
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 140,
+              "leaves": 16,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 90
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 70
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond"
+              ],
+              "activeArea": "pond",
+              "projects": [
+                "meadow-bed",
+                "pond-bridge"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-16",
+                "streak": 2,
+                "total": 2
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 175
+            }
+          },
+          "offset": 1
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 115,
+            "health": 100,
+            "lastOpenDate": "2026-11-16",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 2,
+              "meat_free": 2,
+              "bottle": 2,
+              "lights": 2,
+              "shower": 2,
+              "sort": 2,
+              "plate": 2,
+              "quiz": 2
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 140,
+              "leaves": 16,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 90
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 70
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond"
+              ],
+              "activeArea": "pond",
+              "projects": [
+                "meadow-bed",
+                "pond-bridge"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-16",
+                "streak": 2,
+                "total": 2
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 175
+            }
+          },
+          "offset": 1
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "simulated-day-three",
+        "start": 262.608093714,
+        "end": 267.96575049300003,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 115,
+            "health": 100,
+            "lastOpenDate": "2026-11-16",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 2,
+              "meat_free": 2,
+              "bottle": 2,
+              "lights": 2,
+              "shower": 2,
+              "sort": 2,
+              "plate": 2,
+              "quiz": 2
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 140,
+              "leaves": 16,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 90
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 70
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond"
+              ],
+              "activeArea": "pond",
+              "projects": [
+                "meadow-bed",
+                "pond-bridge"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-16",
+                "streak": 2,
+                "total": 2
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 175
+            }
+          },
+          "offset": 1
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 115,
+            "health": 90,
+            "lastOpenDate": "2026-11-17",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 2,
+              "meat_free": 2,
+              "bottle": 2,
+              "lights": 2,
+              "shower": 2,
+              "sort": 2,
+              "plate": 2,
+              "quiz": 2
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 140,
+              "leaves": 16,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 80
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 90
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond"
+              ],
+              "activeArea": "pond",
+              "projects": [
+                "meadow-bed",
+                "pond-bridge"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-16",
+                "streak": 2,
+                "total": 2
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 175
+            }
+          },
+          "offset": 2
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "day-three-gift",
+        "start": 270.46920744600004,
+        "end": 275.30200468000004,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 115,
+            "health": 90,
+            "lastOpenDate": "2026-11-17",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 2,
+              "meat_free": 2,
+              "bottle": 2,
+              "lights": 2,
+              "shower": 2,
+              "sort": 2,
+              "plate": 2,
+              "quiz": 2
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 140,
+              "leaves": 16,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 80
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 90
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond"
+              ],
+              "activeArea": "pond",
+              "projects": [
+                "meadow-bed",
+                "pond-bridge"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-16",
+                "streak": 2,
+                "total": 2
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 175
+            }
+          },
+          "offset": 2
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 115,
+            "health": 90,
+            "lastOpenDate": "2026-11-17",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 2,
+              "meat_free": 2,
+              "bottle": 2,
+              "lights": 2,
+              "shower": 2,
+              "sort": 2,
+              "plate": 2,
+              "quiz": 2
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 180,
+              "leaves": 17,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 80
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 90
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond"
+              ],
+              "activeArea": "pond",
+              "projects": [
+                "meadow-bed",
+                "pond-bridge"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-17",
+                "streak": 3,
+                "total": 3
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 175
+            }
+          },
+          "offset": 2
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "day-three-habits-and-quests",
+        "start": 280.519029958,
+        "end": 318.618995859,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 115,
+            "health": 90,
+            "lastOpenDate": "2026-11-17",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 2,
+              "meat_free": 2,
+              "bottle": 2,
+              "lights": 2,
+              "shower": 2,
+              "sort": 2,
+              "plate": 2,
+              "quiz": 2
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 180,
+              "leaves": 17,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 80
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 90
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond"
+              ],
+              "activeArea": "pond",
+              "projects": [
+                "meadow-bed",
+                "pond-bridge"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-17",
+                "streak": 3,
+                "total": 3
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 175
+            }
+          },
+          "offset": 2
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 175,
+            "health": 100,
+            "lastOpenDate": "2026-11-17",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-17": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 3,
+              "meat_free": 3,
+              "bottle": 3,
+              "lights": 3,
+              "shower": 3,
+              "sort": 3,
+              "plate": 3,
+              "quiz": 3
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 370,
+              "leaves": 31,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 80
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 90
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond"
+              ],
+              "activeArea": "pond",
+              "projects": [
+                "meadow-bed",
+                "pond-bridge"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-17",
+                "streak": 3,
+                "total": 3
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-17": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 235
+            }
+          },
+          "offset": 2
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "unlock-grove",
+        "start": 321.500345961,
+        "end": 326.188151188,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 175,
+            "health": 100,
+            "lastOpenDate": "2026-11-17",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-17": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 3,
+              "meat_free": 3,
+              "bottle": 3,
+              "lights": 3,
+              "shower": 3,
+              "sort": 3,
+              "plate": 3,
+              "quiz": 3
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 370,
+              "leaves": 31,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 80
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 90
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond"
+              ],
+              "activeArea": "pond",
+              "projects": [
+                "meadow-bed",
+                "pond-bridge"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-17",
+                "streak": 3,
+                "total": 3
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-17": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 235
+            }
+          },
+          "offset": 2
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 175,
+            "health": 100,
+            "lastOpenDate": "2026-11-17",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-17": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 3,
+              "meat_free": 3,
+              "bottle": 3,
+              "lights": 3,
+              "shower": 3,
+              "sort": 3,
+              "plate": 3,
+              "quiz": 3
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 150,
+              "leaves": 19,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 80
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 90
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond",
+                "grove"
+              ],
+              "activeArea": "grove",
+              "projects": [
+                "meadow-bed",
+                "pond-bridge"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-17",
+                "streak": 3,
+                "total": 3
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-17": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 235
+            }
+          },
+          "offset": 2
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "visit-grove",
+        "start": 328.008617426,
+        "end": 329.214716959,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 175,
+            "health": 100,
+            "lastOpenDate": "2026-11-17",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-17": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 3,
+              "meat_free": 3,
+              "bottle": 3,
+              "lights": 3,
+              "shower": 3,
+              "sort": 3,
+              "plate": 3,
+              "quiz": 3
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 150,
+              "leaves": 19,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 80
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 90
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond",
+                "grove"
+              ],
+              "activeArea": "grove",
+              "projects": [
+                "meadow-bed",
+                "pond-bridge"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-17",
+                "streak": 3,
+                "total": 3
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-17": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 235
+            }
+          },
+          "offset": 2
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 175,
+            "health": 100,
+            "lastOpenDate": "2026-11-17",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-17": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 3,
+              "meat_free": 3,
+              "bottle": 3,
+              "lights": 3,
+              "shower": 3,
+              "sort": 3,
+              "plate": 3,
+              "quiz": 3
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 150,
+              "leaves": 19,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 80
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 90
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond",
+                "grove"
+              ],
+              "activeArea": "grove",
+              "projects": [
+                "meadow-bed",
+                "pond-bridge"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-17",
+                "streak": 3,
+                "total": 3
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-17": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 235
+            }
+          },
+          "offset": 2
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "grove-exploration",
+        "start": 332.802126442,
+        "end": 336.821487848,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 175,
+            "health": 100,
+            "lastOpenDate": "2026-11-17",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-17": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 3,
+              "meat_free": 3,
+              "bottle": 3,
+              "lights": 3,
+              "shower": 3,
+              "sort": 3,
+              "plate": 3,
+              "quiz": 3
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 150,
+              "leaves": 19,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 80
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 90
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond",
+                "grove"
+              ],
+              "activeArea": "grove",
+              "projects": [
+                "meadow-bed",
+                "pond-bridge"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-17",
+                "streak": 3,
+                "total": 3
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-17": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 235
+            }
+          },
+          "offset": 2
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 175,
+            "health": 100,
+            "lastOpenDate": "2026-11-17",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-17": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 3,
+              "meat_free": 3,
+              "bottle": 3,
+              "lights": 3,
+              "shower": 3,
+              "sort": 3,
+              "plate": 3,
+              "quiz": 3
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 150,
+              "leaves": 19,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 80
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 90
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond",
+                "grove"
+              ],
+              "activeArea": "grove",
+              "projects": [
+                "meadow-bed",
+                "pond-bridge"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-17",
+                "streak": 3,
+                "total": 3
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-17": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 235
+            }
+          },
+          "offset": 2
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "restore-tree",
+        "start": 339.24347785199996,
+        "end": 342.720329504,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 175,
+            "health": 100,
+            "lastOpenDate": "2026-11-17",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-17": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 3,
+              "meat_free": 3,
+              "bottle": 3,
+              "lights": 3,
+              "shower": 3,
+              "sort": 3,
+              "plate": 3,
+              "quiz": 3
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 150,
+              "leaves": 19,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 80
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 90
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond",
+                "grove"
+              ],
+              "activeArea": "grove",
+              "projects": [
+                "meadow-bed",
+                "pond-bridge"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-17",
+                "streak": 3,
+                "total": 3
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-17": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 235
+            }
+          },
+          "offset": 2
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 225,
+            "health": 100,
+            "lastOpenDate": "2026-11-17",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-17": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 3,
+              "meat_free": 3,
+              "bottle": 3,
+              "lights": 3,
+              "shower": 3,
+              "sort": 3,
+              "plate": 3,
+              "quiz": 3
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 30,
+              "leaves": 11,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 80
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 90
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond",
+                "grove"
+              ],
+              "activeArea": "grove",
+              "projects": [
+                "meadow-bed",
+                "pond-bridge",
+                "grove-tree"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-17",
+                "streak": 3,
+                "total": 3
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-17": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 285
+            }
+          },
+          "offset": 2
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      },
+      {
+        "name": "restored-grove-result",
+        "start": 348.07439948100006,
+        "end": 353.079087916,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 225,
+            "health": 100,
+            "lastOpenDate": "2026-11-17",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-17": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 3,
+              "meat_free": 3,
+              "bottle": 3,
+              "lights": 3,
+              "shower": 3,
+              "sort": 3,
+              "plate": 3,
+              "quiz": 3
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 30,
+              "leaves": 11,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 80
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 90
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond",
+                "grove"
+              ],
+              "activeArea": "grove",
+              "projects": [
+                "meadow-bed",
+                "pond-bridge",
+                "grove-tree"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-17",
+                "streak": 3,
+                "total": 3
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-17": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 285
+            }
+          },
+          "offset": 2
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Mossy",
+              "sprite": "mossy",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 225,
+            "health": 100,
+            "lastOpenDate": "2026-11-17",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-16": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              },
+              "2026-11-17": {
+                "habits": [
+                  "walk",
+                  "meat_free",
+                  "bottle",
+                  "lights",
+                  "shower",
+                  "sort",
+                  "plate",
+                  "quiz"
+                ],
+                "xp": 60,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "walk": 3,
+              "meat_free": 3,
+              "bottle": 3,
+              "lights": 3,
+              "shower": 3,
+              "sort": 3,
+              "plate": 3,
+              "quiz": 3
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 30,
+              "leaves": 11,
+              "inventory": {
+                "flowers": 1
+              },
+              "decorations": [
+                "flowers"
+              ],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling",
+                  "xp": 60,
+                  "health": 80
+                },
+                {
+                  "id": "mossy",
+                  "name": "Mossy",
+                  "sprite": "mossy",
+                  "xp": 0,
+                  "health": 90
+                }
+              ],
+              "activePet": "mossy",
+              "areas": [
+                "meadow",
+                "pond",
+                "grove"
+              ],
+              "activeArea": "grove",
+              "projects": [
+                "meadow-bed",
+                "pond-bridge",
+                "grove-tree"
+              ],
+              "daily": {
+                "lastClaim": "2026-11-17",
+                "streak": 3,
+                "total": 3
+              },
+              "tasks": {
+                "2026-11-15": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-16": [
+                  "three",
+                  "all"
+                ],
+                "2026-11-17": [
+                  "three",
+                  "all"
+                ]
+              },
+              "lifetimeXp": 285
+            }
+          },
+          "offset": 2
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/2026-11-15T10-51-03.630Z/gameplay-source.webm"
+      }
+    ],
+    "errors": []
+  },
+  "detail_capture": {
+    "source": "separate fresh practice garden, actual UI close-ups, no save injection",
+    "events": [
+      {
+        "name": "buy-care",
+        "start": 19.572420331,
+        "end": 26.336397997,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 0,
+            "health": 80,
+            "lastOpenDate": "2026-11-15",
+            "days": {},
+            "counts": {},
+            "unlocked": [],
+            "game": {
+              "coins": 80,
+              "leaves": 0,
+              "inventory": {},
+              "decorations": [],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": null,
+                "streak": 0,
+                "total": 0
+              },
+              "tasks": {},
+              "lifetimeXp": 0
+            }
+          },
+          "offset": 0
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 0,
+            "health": 80,
+            "lastOpenDate": "2026-11-15",
+            "days": {},
+            "counts": {},
+            "unlocked": [],
+            "game": {
+              "coins": 55,
+              "leaves": 0,
+              "inventory": {
+                "dew": 1
+              },
+              "decorations": [],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": null,
+                "streak": 0,
+                "total": 0
+              },
+              "tasks": {},
+              "lifetimeXp": 0
+            }
+          },
+          "offset": 0
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/details/details-source.webm"
+      },
+      {
+        "name": "use-care",
+        "start": 34.512539917000005,
+        "end": 39.070126452,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 0,
+            "health": 80,
+            "lastOpenDate": "2026-11-15",
+            "days": {},
+            "counts": {},
+            "unlocked": [],
+            "game": {
+              "coins": 55,
+              "leaves": 0,
+              "inventory": {
+                "dew": 1
+              },
+              "decorations": [],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": null,
+                "streak": 0,
+                "total": 0
+              },
+              "tasks": {},
+              "lifetimeXp": 0
+            }
+          },
+          "offset": 0
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 0,
+            "health": 98,
+            "lastOpenDate": "2026-11-15",
+            "days": {},
+            "counts": {},
+            "unlocked": [],
+            "game": {
+              "coins": 55,
+              "leaves": 0,
+              "inventory": {
+                "dew": 0
+              },
+              "decorations": [],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": null,
+                "streak": 0,
+                "total": 0
+              },
+              "tasks": {},
+              "lifetimeXp": 0
+            }
+          },
+          "offset": 0
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/details/details-source.webm"
+      },
+      {
+        "name": "daily-quiz",
+        "start": 56.313045105,
+        "end": 68.20329936600001,
+        "before": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 0,
+            "health": 98,
+            "lastOpenDate": "2026-11-15",
+            "days": {},
+            "counts": {},
+            "unlocked": [],
+            "game": {
+              "coins": 55,
+              "leaves": 0,
+              "inventory": {
+                "dew": 0
+              },
+              "decorations": [],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": null,
+                "streak": 0,
+                "total": 0
+              },
+              "tasks": {},
+              "lifetimeXp": 0
+            }
+          },
+          "offset": 0
+        },
+        "after": {
+          "state": {
+            "version": 1,
+            "pet": {
+              "name": "Pip",
+              "sprite": "leafling",
+              "createdOn": "2026-11-15"
+            },
+            "xp": 10,
+            "health": 100,
+            "lastOpenDate": "2026-11-15",
+            "days": {
+              "2026-11-15": {
+                "habits": [
+                  "quiz"
+                ],
+                "xp": 10,
+                "quiz": "correct"
+              }
+            },
+            "counts": {
+              "quiz": 1
+            },
+            "unlocked": [],
+            "game": {
+              "coins": 70,
+              "leaves": 1,
+              "inventory": {
+                "dew": 0
+              },
+              "decorations": [],
+              "pets": [
+                {
+                  "id": "leafling",
+                  "name": "Pip",
+                  "sprite": "leafling"
+                }
+              ],
+              "activePet": "leafling",
+              "areas": [
+                "meadow"
+              ],
+              "activeArea": "meadow",
+              "projects": [],
+              "daily": {
+                "lastClaim": null,
+                "streak": 0,
+                "total": 0
+              },
+              "tasks": {},
+              "lifetimeXp": 10
+            }
+          },
+          "offset": 0
+        },
+        "source_file": "/home/ripjk/sustain-a-pet/demo-video/captures/details/details-source.webm"
+      }
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; color: #0f3a22; font-family: Nunito, sans-serif; }
+    .kick { font: 800 28px/1 Nunito, sans-serif; letter-spacing: .14em; }
+    #fl-banner { position: absolute; left: 150px; top: 150px; width: 800px; padding: 26px 30px; border-radius: 26px; background: #2a1f12; color: #fff; }
+    #fl-banner .kick { color: #f6b93b; }
+    #fl-banner p { margin-top: 12px; font: 800 34px/1.25 Nunito, sans-serif; }
+    #fl-banner small { display: block; margin-top: 10px; font: 600 28px/1.3 Nunito, sans-serif; color: #e8d9bf; }
+    #fl-label { position: absolute; left: 150px; top: 480px; width: 800px; }
+    #fl-label h2 { margin-top: 18px; font: 900 60px/1.05 Nunito, sans-serif; letter-spacing: -0.025em; }
+    #fl-chip { margin-top: 26px; display: inline-flex; align-items: center; gap: 14px; padding: 18px 26px; border-radius: 18px; background: #fffaf0; border: 3px dashed #d9a13a; font: 800 32px/1.2 Nunito, sans-serif; color: #7a5200; }
+    #fl-ok { position: absolute; left: 150px; top: 480px; width: 800px; }
+    #fl-ok h2 { margin-top: 18px; font: 900 60px/1.05 Nunito, sans-serif; letter-spacing: -0.025em; }
+    #fl-ok ul { margin-top: 26px; list-style: none; display: flex; flex-direction: column; gap: 14px; }
+    #fl-ok li { display: flex; align-items: center; gap: 16px; font: 800 32px/1.2 Nunito, sans-serif; color: #1f3d2a; }
+    #fl-ok li i { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: #58c643; color: #fff; font-style: normal; font-size: 28px; }
+  </style>
+  <div id="root" data-composition-id="mg-fail" data-width="1920" data-height="1080" data-layout-allow-overlap>
+    <div id="fl-banner" class="clip" data-start="0.3" data-duration="19.4" data-track-index="1">
+      <p class="kick">FAILURE DEMO · TEST SERVER</p>
+      <p>AI provider made unavailable on purpose.</p>
+      <small>Same app build, with an invalid OpenRouter key, so every model call fails.</small>
+    </div>
+    <div id="fl-label" class="clip" data-start="5.9" data-duration="6.0" data-track-index="2">
+      <p class="kick" style="color:#2f8a43">WHAT THE PLAYER SEES</p>
+      <h2>A clearly labelled fallback.</h2>
+      <div id="fl-chip">↻ Prerecorded tip, not a live AI result</div>
+    </div>
+    <div id="fl-ok" class="clip" data-start="12.0" data-duration="7.7" data-track-index="2">
+      <p class="kick" style="color:#2f8a43">AND THE GARDEN?</p>
+      <h2>Still works.</h2>
+      <ul><li><i>✓</i>Habits and rewards</li><li><i>✓</i>Your companion</li><li><i>✓</i>Saved progress</li></ul>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo('#fl-banner', { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 0.55, ease: 'expo.out' }, 0.35);
+      tl.fromTo('#fl-label > *', { opacity: 0, y: 18, filter: 'blur(6px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.45, stagger: 0.18, ease: 'expo.out' }, 5.95);
+      tl.to('#fl-label', { opacity: 0, x: -40, filter: 'blur(8px)', duration: 0.25, ease: 'power3.in' }, 11.6);
+      tl.fromTo('#fl-ok > p, #fl-ok > h2', { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.45, stagger: 0.15, ease: 'expo.out' }, 12.05);
+      tl.fromTo('#fl-ok li', { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.4, stagger: 0.12, ease: 'expo.out' }, 12.6);
+      tl.to(['#fl-ok', '#fl-banner'], { opacity: 0, x: -50, filter: 'blur(8px)', duration: 0.3, ease: 'power3.in' }, 19.4);
+      window.__timelines['mg-fail'] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,44 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; color: #0f3a22; font-family: Nunito, sans-serif; }
+    #idea-copy { position: absolute; left: 150px; top: 250px; width: 820px; }
+    #idea-kicker { font: 800 28px/1 Nunito, sans-serif; letter-spacing: .14em; color: #2f8a43; }
+    #idea-h { margin-top: 22px; font-weight: 900; font-size: 74px; line-height: 1.04; letter-spacing: -0.025em; }
+    #idea-h .dim { color: #7d9886; }
+    #idea-loop { position: absolute; left: 150px; top: 600px; width: 860px; height: 120px; }
+    .idea-pill { position: absolute; top: 0; height: 104px; display: flex; align-items: center; gap: 16px; padding: 0 30px 0 22px; border-radius: 30px; background: #fff; box-shadow: 0 10px 30px rgba(15,58,34,.12); font: 900 38px/1 Nunito, sans-serif; }
+    .idea-pill i { width: 60px; height: 60px; border-radius: 18px; display: grid; place-items: center; font-style: normal; font-size: 34px; }
+    #idea-care { left: 0; } #idea-care i { background: #ffe1e1; }
+    #idea-growth { left: 270px; } #idea-growth i { background: #dcf5c9; }
+    #idea-rest { left: 570px; } #idea-rest i { background: #fff0c9; }
+    .idea-arrow { position: absolute; top: 40px; width: 26px; height: 26px; border-top: 5px solid #9bb5a2; border-right: 5px solid #9bb5a2; transform: rotate(45deg); }
+    #idea-a1 { left: 236px; } #idea-a2 { left: 536px; }
+  </style>
+  <div id="root" data-composition-id="mg-idea" data-width="1920" data-height="1080">
+    <div id="idea-copy" class="clip" data-start="0.3" data-duration="12.4" data-track-index="1">
+      <p id="idea-kicker">THE IDEA</p>
+      <h2 id="idea-h"><span class="dim">Green habits feel</span><br><span class="dim">far from results.</span><br><span id="idea-turn">So we built a garden.</span></h2>
+    </div>
+    <div id="idea-loop" class="clip" data-start="6.3" data-duration="6.4" data-track-index="2">
+      <div id="idea-care" class="idea-pill"><i>♥</i>Care</div>
+      <span id="idea-a1" class="idea-arrow"></span>
+      <div id="idea-growth" class="idea-pill"><i>🌱</i>Growth</div>
+      <span id="idea-a2" class="idea-arrow"></span>
+      <div id="idea-rest" class="idea-pill"><i>✿</i>Restoration</div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo('#idea-kicker', { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0.35);
+      tl.fromTo('#idea-h .dim', { opacity: 0, filter: 'blur(8px)' }, { opacity: 1, filter: 'blur(0px)', duration: 0.18, stagger: 0.25 }, 0.5);
+      tl.fromTo('#idea-turn', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out' }, 3.9);
+      tl.to('#idea-h .dim', { opacity: 0.35, duration: 0.4 }, 3.9);
+      const pills = ['#idea-care', '#idea-growth', '#idea-rest'], at = [6.45, 7.0, 7.7];
+      pills.forEach((p, i) => tl.fromTo(p, { opacity: 0, y: 30, scale: 0.9 }, { opacity: 1, y: 0, scale: 1, duration: 0.55, ease: 'back.out(1.6)' }, at[i]));
+      tl.fromTo(['#idea-a1', '#idea-a2'], { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.6 }, 6.8);
+      tl.to(['#idea-copy', '#idea-loop'], { opacity: 0, x: -50, filter: 'blur(8px)', duration: 0.3, ease: 'power3.in' }, 12.4);
+      window.__timelines['mg-idea'] = tl;
+    })();
+  </script>
+</template>

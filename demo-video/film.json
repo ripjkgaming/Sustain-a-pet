@@ -1,0 +1,517 @@
+{
+  "note": "Edit decision list for the GreenLens film. Times are film seconds. Rebuild with: python3 scripts/build_gl.py",
+  "duration": 160,
+  "scenes": [
+    {
+      "id": "hook",
+      "start": 0,
+      "end": 12
+    },
+    {
+      "id": "idea",
+      "start": 12,
+      "end": 25
+    },
+    {
+      "id": "lens",
+      "start": 25,
+      "end": 60
+    },
+    {
+      "id": "reward",
+      "start": 60,
+      "end": 80
+    },
+    {
+      "id": "useful",
+      "start": 80,
+      "end": 105
+    },
+    {
+      "id": "fail",
+      "start": 105,
+      "end": 125
+    },
+    {
+      "id": "ship",
+      "start": 125,
+      "end": 148
+    },
+    {
+      "id": "close",
+      "start": 148,
+      "end": 160
+    }
+  ],
+  "vo": [
+    {
+      "id": "hook",
+      "at": 0.6
+    },
+    {
+      "id": "idea",
+      "at": 12.5
+    },
+    {
+      "id": "lens-a",
+      "at": 25.6
+    },
+    {
+      "id": "lens-b",
+      "at": 37.0
+    },
+    {
+      "id": "lens-c",
+      "at": 45.2
+    },
+    {
+      "id": "reward",
+      "at": 64.4
+    },
+    {
+      "id": "useful-a",
+      "at": 80.4
+    },
+    {
+      "id": "useful-b",
+      "at": 91.6
+    },
+    {
+      "id": "useful-c",
+      "at": 95.5
+    },
+    {
+      "id": "fail",
+      "at": 106.4
+    },
+    {
+      "id": "ship",
+      "at": 126.0
+    },
+    {
+      "id": "close",
+      "at": 148.8
+    }
+  ],
+  "screen": [
+    {
+      "clip": "garden",
+      "start": 0,
+      "end": 5.5,
+      "ms": 0.0
+    },
+    {
+      "clip": "lens-jar",
+      "start": 5.5,
+      "end": 12,
+      "ms": 0.6
+    },
+    {
+      "clip": "garden",
+      "start": 12,
+      "end": 22,
+      "ms": 5.0
+    },
+    {
+      "clip": "garden",
+      "start": 22,
+      "end": 25,
+      "ms": 21.2
+    },
+    {
+      "clip": "lens-jar",
+      "start": 25,
+      "end": 33.6,
+      "ms": 0.0
+    },
+    {
+      "clip": "lens-jar",
+      "start": 33.6,
+      "end": 38.6,
+      "ms": 8.6,
+      "rate": 2.3,
+      "label": "Typing sped up"
+    },
+    {
+      "clip": "lens-jar",
+      "start": 38.6,
+      "end": 41.6,
+      "ms": 20.1,
+      "label": "Live model call \u00b7 20 s wait shortened"
+    },
+    {
+      "clip": "lens-jar",
+      "start": 41.6,
+      "end": 60,
+      "ms": 40.2
+    },
+    {
+      "clip": "lens-confirm",
+      "start": 60,
+      "end": 80,
+      "ms": 0.0
+    },
+    {
+      "clip": "lens-second",
+      "start": 80,
+      "end": 84,
+      "ms": 0.6,
+      "rate": 2.75,
+      "label": "Typing sped up"
+    },
+    {
+      "clip": "lens-second",
+      "start": 84,
+      "end": 85.6,
+      "ms": 11.6,
+      "label": "Live model call \u00b7 wait shortened"
+    },
+    {
+      "clip": "lens-second",
+      "start": 85.6,
+      "end": 91.2,
+      "ms": 24.1
+    },
+    {
+      "clip": "lens-second",
+      "start": 91.2,
+      "end": 93.2,
+      "ms": 29.7,
+      "rate": 2.2,
+      "label": "Typing sped up"
+    },
+    {
+      "clip": "lens-second",
+      "start": 93.2,
+      "end": 94.4,
+      "ms": 34.1,
+      "label": "Live model call \u00b7 wait shortened"
+    },
+    {
+      "clip": "lens-second",
+      "start": 94.4,
+      "end": 105,
+      "ms": 49.2
+    },
+    {
+      "clip": "lens-fail",
+      "start": 105,
+      "end": 108,
+      "ms": 0.0
+    },
+    {
+      "clip": "lens-fail",
+      "start": 108,
+      "end": 110.6,
+      "ms": 3.0,
+      "rate": 2.9,
+      "label": "Typing sped up"
+    },
+    {
+      "clip": "lens-fail",
+      "start": 110.6,
+      "end": 116.6,
+      "ms": 10.6
+    },
+    {
+      "clip": "lens-fail",
+      "start": 116.6,
+      "end": 125,
+      "ms": 19.6
+    },
+    {
+      "clip": "live-phone",
+      "start": 133,
+      "end": 141,
+      "ms": 18.0,
+      "rate": 1.75
+    },
+    {
+      "clip": "live-phone",
+      "start": 141,
+      "end": 148,
+      "ms": 41.6,
+      "rate": 1.85
+    },
+    {
+      "clip": "lens-confirm",
+      "start": 148,
+      "end": 154.3,
+      "ms": 16.5
+    },
+    {
+      "clip": "garden",
+      "start": 154.3,
+      "end": 160,
+      "ms": 25.9
+    }
+  ],
+  "desktop": {
+    "clip": "live-desktop",
+    "start": 125,
+    "end": 133.4,
+    "ms": 0.4,
+    "rate": 2.0
+  },
+  "pose": [
+    {
+      "t": 0,
+      "x": 0.085,
+      "y": -0.012,
+      "z": -0.05,
+      "rx": 6,
+      "ry": -24,
+      "rz": 2
+    },
+    {
+      "t": 5.2,
+      "x": 0.085,
+      "y": 0.0,
+      "z": 0.0,
+      "rx": 2,
+      "ry": -14,
+      "rz": 0,
+      "ease": "inOut"
+    },
+    {
+      "t": 12,
+      "x": 0.075,
+      "y": 0.0,
+      "z": 0.02,
+      "rx": 0,
+      "ry": -8,
+      "rz": 0,
+      "ease": "inOut"
+    },
+    {
+      "t": 24.6,
+      "x": 0.07,
+      "y": 0.0,
+      "z": 0.03,
+      "rx": 0,
+      "ry": -6,
+      "rz": 0,
+      "ease": "inOut"
+    },
+    {
+      "t": 26.2,
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.08,
+      "rx": 0,
+      "ry": 0,
+      "rz": 0,
+      "ease": "inOut"
+    },
+    {
+      "t": 40.5,
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.08,
+      "rx": 0,
+      "ry": 0,
+      "rz": 0,
+      "ease": "linear"
+    },
+    {
+      "t": 42.0,
+      "x": -0.07,
+      "y": 0.0,
+      "z": 0.12,
+      "rx": 0,
+      "ry": 8,
+      "rz": 0,
+      "ease": "inOut"
+    },
+    {
+      "t": 59.2,
+      "x": -0.07,
+      "y": 0.0,
+      "z": 0.12,
+      "rx": 0,
+      "ry": 8,
+      "rz": 0,
+      "ease": "linear"
+    },
+    {
+      "t": 60.6,
+      "x": -0.33,
+      "y": 0.0,
+      "z": 0.0,
+      "rx": 0,
+      "ry": 30,
+      "rz": -6,
+      "ease": "in"
+    },
+    {
+      "t": 64.0,
+      "x": -0.33,
+      "y": 0.0,
+      "z": 0.0,
+      "rx": 0,
+      "ry": 30,
+      "rz": -6,
+      "ease": "linear"
+    },
+    {
+      "t": 65.2,
+      "x": 0.07,
+      "y": 0.0,
+      "z": 0.1,
+      "rx": 0,
+      "ry": -6,
+      "rz": 0,
+      "ease": "out"
+    },
+    {
+      "t": 79.4,
+      "x": 0.07,
+      "y": 0.0,
+      "z": 0.1,
+      "rx": 0,
+      "ry": -6,
+      "rz": 0,
+      "ease": "linear"
+    },
+    {
+      "t": 80.6,
+      "x": -0.07,
+      "y": 0.0,
+      "z": 0.1,
+      "rx": 0,
+      "ry": 8,
+      "rz": 0,
+      "ease": "inOut"
+    },
+    {
+      "t": 94.0,
+      "x": -0.07,
+      "y": 0.0,
+      "z": 0.1,
+      "rx": 0,
+      "ry": 8,
+      "rz": 0,
+      "ease": "linear"
+    },
+    {
+      "t": 95.4,
+      "x": -0.13,
+      "y": 0.0,
+      "z": 0.04,
+      "rx": 0,
+      "ry": 12,
+      "rz": 0,
+      "ease": "inOut"
+    },
+    {
+      "t": 104.2,
+      "x": -0.13,
+      "y": 0.0,
+      "z": 0.04,
+      "rx": 0,
+      "ry": 12,
+      "rz": 0,
+      "ease": "linear"
+    },
+    {
+      "t": 105.6,
+      "x": 0.07,
+      "y": 0.0,
+      "z": 0.1,
+      "rx": 0,
+      "ry": -8,
+      "rz": 0,
+      "ease": "inOut"
+    },
+    {
+      "t": 124.2,
+      "x": 0.07,
+      "y": 0.0,
+      "z": 0.1,
+      "rx": 0,
+      "ry": -8,
+      "rz": 0,
+      "ease": "linear"
+    },
+    {
+      "t": 125.2,
+      "x": 0.4,
+      "y": -0.02,
+      "z": 0.0,
+      "rx": 0,
+      "ry": -34,
+      "rz": 6,
+      "ease": "in"
+    },
+    {
+      "t": 132.4,
+      "x": 0.4,
+      "y": -0.02,
+      "z": 0.0,
+      "rx": 0,
+      "ry": -34,
+      "rz": 6,
+      "ease": "linear"
+    },
+    {
+      "t": 133.6,
+      "x": 0.075,
+      "y": 0.0,
+      "z": 0.1,
+      "rx": 0,
+      "ry": -8,
+      "rz": 0,
+      "ease": "out"
+    },
+    {
+      "t": 147.2,
+      "x": 0.075,
+      "y": 0.0,
+      "z": 0.1,
+      "rx": 0,
+      "ry": -8,
+      "rz": 0,
+      "ease": "linear"
+    },
+    {
+      "t": 148.6,
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.1,
+      "rx": 0,
+      "ry": 0,
+      "rz": 0,
+      "ease": "inOut"
+    },
+    {
+      "t": 153.4,
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.1,
+      "rx": 0,
+      "ry": 0,
+      "rz": 0,
+      "ease": "linear"
+    },
+    {
+      "t": 155.0,
+      "x": 0.115,
+      "y": 0.0,
+      "z": 0.0,
+      "rx": 3,
+      "ry": -16,
+      "rz": 0,
+      "ease": "inOut"
+    },
+    {
+      "t": 160,
+      "x": 0.115,
+      "y": 0.0,
+      "z": 0.0,
+      "rx": 3,
+      "ry": -20,
+      "rz": 0,
+      "ease": "linear"
+    }
+  ]
+}

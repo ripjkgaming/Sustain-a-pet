@@ -1,0 +1,524 @@
+{
+  "source": "gl-2026-11-15T16-28-44.955Z",
+  "segments": {
+    "onboarding": {
+      "file": "assets/footage/onboarding.mp4",
+      "duration": 18.333,
+      "viewport": [
+        440,
+        956
+      ],
+      "note": "fresh browser context: onboarding to garden, no account",
+      "taps": [
+        {
+          "t": 3.427,
+          "x": 220,
+          "y": 909
+        },
+        {
+          "t": 5.86,
+          "x": 220,
+          "y": 276
+        },
+        {
+          "t": 7.449,
+          "x": 220,
+          "y": 909
+        },
+        {
+          "t": 9.876,
+          "x": 220,
+          "y": 909
+        },
+        {
+          "t": 12.654,
+          "x": 115.2,
+          "y": 550.8
+        }
+      ],
+      "marks": []
+    },
+    "garden": {
+      "file": "assets/footage/garden.mp4",
+      "duration": 29.867,
+      "viewport": [
+        440,
+        956
+      ],
+      "note": "companion walks to a habit mushroom, habit completed, Today checklist",
+      "taps": [
+        {
+          "t": 6.287,
+          "x": 376,
+          "y": 564
+        },
+        {
+          "t": 10.162,
+          "x": 220,
+          "y": 909
+        },
+        {
+          "t": 15.689,
+          "x": 220,
+          "y": 907
+        },
+        {
+          "t": 21.136,
+          "x": 220,
+          "y": 841
+        },
+        {
+          "t": 26.004,
+          "x": 220,
+          "y": 909
+        }
+      ],
+      "marks": [
+        {
+          "name": "tap-mushroom",
+          "x": 376,
+          "y": 560,
+          "n": 127,
+          "t": 6.282
+        },
+        {
+          "name": "habit-screen",
+          "t": 7.619
+        },
+        {
+          "name": "habit-done",
+          "t": 10.635
+        },
+        {
+          "name": "checklist",
+          "t": 21.851
+        }
+      ]
+    },
+    "lens-jar": {
+      "file": "assets/footage/lens-jar.mp4",
+      "duration": 60.267,
+      "viewport": [
+        440,
+        956
+      ],
+      "note": "GreenLens: privacy notice, describe the jar, live AI quest, add to quests",
+      "taps": [
+        {
+          "t": 2.082,
+          "x": 69.8,
+          "y": 130
+        },
+        {
+          "t": 7.134,
+          "x": 220,
+          "y": 287.5
+        },
+        {
+          "t": 9.879,
+          "x": 220,
+          "y": 650.9
+        },
+        {
+          "t": 19.318,
+          "x": 220,
+          "y": 750.3
+        },
+        {
+          "t": 55.638,
+          "x": 220,
+          "y": 563.4
+        }
+      ],
+      "marks": [
+        {
+          "name": "privacy",
+          "t": 2.389
+        },
+        {
+          "name": "loading",
+          "t": 20.278
+        },
+        {
+          "name": "result",
+          "t": 40.61
+        },
+        {
+          "name": "added",
+          "t": 56.135
+        }
+      ]
+    },
+    "lens-confirm": {
+      "file": "assets/footage/lens-confirm.mp4",
+      "duration": 22.867,
+      "viewport": [
+        440,
+        956
+      ],
+      "note": "Confirm the real-life action: I did it, honest confirm, server reward, back to garden",
+      "taps": [
+        {
+          "t": 3.6,
+          "x": 364.3,
+          "y": 812.2
+        },
+        {
+          "t": 8.283,
+          "x": 299.8,
+          "y": 926.3
+        },
+        {
+          "t": 13.745,
+          "x": 220,
+          "y": 657.7
+        }
+      ],
+      "marks": [
+        {
+          "name": "really-done",
+          "t": 3.884
+        },
+        {
+          "name": "quest-complete",
+          "t": 8.839
+        },
+        {
+          "name": "garden-celebrate",
+          "t": 13.985
+        }
+      ]
+    },
+    "lens-second": {
+      "file": "assets/footage/lens-second.mp4",
+      "duration": 65.667,
+      "viewport": [
+        440,
+        956
+      ],
+      "note": "Second, different input: vague note -> one clarifying question -> different quest with curated links",
+      "taps": [
+        {
+          "t": 1.666,
+          "x": 69.8,
+          "y": 130
+        },
+        {
+          "t": 3.741,
+          "x": 220,
+          "y": 838.3
+        },
+        {
+          "t": 6.747,
+          "x": 220,
+          "y": 650.9
+        },
+        {
+          "t": 11.339,
+          "x": 220,
+          "y": 750.3
+        },
+        {
+          "t": 28.756,
+          "x": 220,
+          "y": 285.8
+        },
+        {
+          "t": 33.692,
+          "x": 220,
+          "y": 359.2
+        }
+      ],
+      "marks": [
+        {
+          "name": "loading",
+          "t": 11.639
+        },
+        {
+          "name": "clarify",
+          "t": 24.375
+        },
+        {
+          "name": "loading2",
+          "t": 33.974
+        },
+        {
+          "name": "result",
+          "t": 49.503
+        },
+        {
+          "name": "sources",
+          "t": 60.192
+        }
+      ]
+    },
+    "reload": {
+      "file": "assets/footage/reload.mp4",
+      "duration": 20.033,
+      "viewport": [
+        440,
+        956
+      ],
+      "note": "Progress saved in this browser survives a reload",
+      "taps": [
+        {
+          "t": 0.763,
+          "x": 38,
+          "y": 36
+        },
+        {
+          "t": 12.266,
+          "x": 69.8,
+          "y": 130
+        }
+      ],
+      "marks": [
+        {
+          "name": "before-reload",
+          "chips": [
+            "0",
+            "\u25c9\n101",
+            "2"
+          ],
+          "t": 3.861
+        },
+        {
+          "name": "reloaded",
+          "t": 5.647
+        },
+        {
+          "name": "after-reload",
+          "chips": [
+            "0",
+            "\u25c9\n101",
+            "2"
+          ],
+          "t": 11.337
+        },
+        {
+          "name": "done-tag",
+          "t": 15.813
+        }
+      ]
+    },
+    "lens-fail": {
+      "file": "assets/footage/lens-fail.mp4",
+      "duration": 35.967,
+      "viewport": [
+        440,
+        956
+      ],
+      "note": "Provider fails (invalid key on this server): labelled prerecorded tip, then normal garden play",
+      "taps": [
+        {
+          "t": 1.817,
+          "x": 69.8,
+          "y": 130
+        },
+        {
+          "t": 3.779,
+          "x": 220,
+          "y": 287.5
+        },
+        {
+          "t": 5.939,
+          "x": 220,
+          "y": 650.9
+        },
+        {
+          "t": 10.226,
+          "x": 220,
+          "y": 750.3
+        },
+        {
+          "t": 17.101,
+          "x": 38,
+          "y": 36
+        },
+        {
+          "t": 20.455,
+          "x": 351,
+          "y": 641
+        },
+        {
+          "t": 24.894,
+          "x": 220,
+          "y": 909
+        },
+        {
+          "t": 30.412,
+          "x": 220,
+          "y": 907
+        }
+      ],
+      "marks": [
+        {
+          "name": "loading",
+          "t": 10.703
+        },
+        {
+          "name": "fallback",
+          "t": 11.424
+        },
+        {
+          "name": "garden",
+          "t": 17.732
+        },
+        {
+          "name": "tap-mushroom",
+          "x": 351,
+          "y": 637,
+          "n": 149,
+          "t": 20.455
+        },
+        {
+          "name": "habit-screen",
+          "t": 22.023
+        },
+        {
+          "name": "habit-done",
+          "t": 25.708
+        }
+      ]
+    },
+    "live-desktop": {
+      "file": "assets/footage/live-desktop.mp4",
+      "duration": 28.2,
+      "viewport": [
+        1440,
+        900
+      ],
+      "note": "Public deployment https://sustain-a-pet.deployxa.online, desktop browser, fresh session: onboarding then garden",
+      "taps": [
+        {
+          "t": 3.287,
+          "x": 720,
+          "y": 844
+        },
+        {
+          "t": 5.663,
+          "x": 720,
+          "y": 267
+        },
+        {
+          "t": 7.655,
+          "x": 720,
+          "y": 844
+        },
+        {
+          "t": 10.554,
+          "x": 720,
+          "y": 844
+        },
+        {
+          "t": 18.013,
+          "x": 615.2,
+          "y": 522.8
+        }
+      ],
+      "marks": []
+    },
+    "live-phone": {
+      "file": "assets/footage/live-phone.mp4",
+      "duration": 59.733,
+      "viewport": [
+        440,
+        956
+      ],
+      "note": "Public deployment https://sustain-a-pet.deployxa.online, phone viewport, fresh session: onboarding, one habit, reload keeps progress",
+      "taps": [
+        {
+          "t": 3.652,
+          "x": 220,
+          "y": 909
+        },
+        {
+          "t": 5.639,
+          "x": 220,
+          "y": 276
+        },
+        {
+          "t": 7.22,
+          "x": 220,
+          "y": 909
+        },
+        {
+          "t": 10.271,
+          "x": 220,
+          "y": 909
+        },
+        {
+          "t": 17.262,
+          "x": 115.2,
+          "y": 550.8
+        },
+        {
+          "t": 25.008,
+          "x": 271,
+          "y": 584
+        },
+        {
+          "t": 30.469,
+          "x": 220,
+          "y": 909
+        },
+        {
+          "t": 37.68,
+          "x": 220,
+          "y": 907
+        },
+        {
+          "t": 53.901,
+          "x": 220,
+          "y": 841
+        }
+      ],
+      "marks": [
+        {
+          "name": "tap-mushroom",
+          "x": 271,
+          "y": 580,
+          "n": 108,
+          "t": 25.008
+        },
+        {
+          "name": "habit-screen",
+          "t": 27.315
+        },
+        {
+          "name": "habit-done",
+          "t": 31.589
+        },
+        {
+          "name": "before-reload",
+          "chips": [
+            "0",
+            "\u25c9\n90",
+            "1"
+          ],
+          "t": 42.525
+        },
+        {
+          "name": "reloaded",
+          "t": 44.122
+        },
+        {
+          "name": "after-reload",
+          "chips": [
+            "0",
+            "\u25c9\n90",
+            "1"
+          ],
+          "t": 50.831
+        },
+        {
+          "name": "checklist",
+          "t": 54.917
+        }
+      ]
+    }
+  },
+  "jarQuest": "I SPOTTED\nempty rinsed glass pasta sauce jar with lid on\nPretty sure\n(high confidence)\n\nHigh confidence: the photo and note looked clear.\n\nReuse the sauce jar\n\nUse the rinsed jar with its lid to store dry pantry items such as rice or pasta instead of a new disposable container.\n\nWHY THIS HELPS\n\nReusing the jar extends its life and reduces demand for single-use packaging and waste.\n\n+6 XP\n\u25c9\n+11\ncoins\n+1\nleaf",
+  "clarifyQuestion": "What object from your kitchen drawer is shown in the photo?",
+  "secondQuest": "I SPOTTED\nDead AA batteries\nPretty sure\n(high confidence)\n\nHigh confidence: the photo and note looked clear.\n\nRecycle dead batteries\n\nTake the dead AA batteries to a battery drop-off point instead of the trash, and check your local authority guidance for where to accept them.\n\nWHY THIS HELPS\n\nBatteries contain metals and chemicals that should be kept out of landfills and can be recovered when recycled properly.\n\nCHECK LOCAL RULES\nRecycling Council of Ontario\n(opens in a new tab)\n+6 XP\n\u25c9\n+11\ncoins\n+1\nleaf"
+}

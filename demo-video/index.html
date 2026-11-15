@@ -1,61 +1,63 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-composition-variables='[{"id":"siteUrl","type":"string","label":"Public URL","default":"sustain-a-pet.deployxa.online"},{"id":"brand","type":"string","label":"Product name","default":"Sustain-a-Pet"}]'>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1920, height=1080" />
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+    <script src="lib/gsap.min.js"></script>
+    <script src="lib/three-kit.js"></script>
+    <script src="lib/phone-stage.js"></script>
     <style>
-      /* Placeholders: replace all three with the film's own palette and display face. */
-      :root {
-        --ground: #e1ebd7;
-        --ink: #203f30;
-        --font-display: Nunito;
-      }
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        margin: 0;
-        width: 1920px;
-        height: 1080px;
-        overflow: hidden;
-        background: var(--ground);
-      }
-      #root {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: var(--font-display);
-      }
-      #title {
-        color: var(--ink);
-        font-size: 72px;
-        font-weight: 600;
-        letter-spacing: -0.03em;
-      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1920px; height: 1080px; overflow: hidden; background: #e6eee0; }
+      #ground { position: absolute; inset: 0; background: radial-gradient(120% 90% at 62% 38%, #f4f8ef 0%, #e3ecdc 55%, #d2e0c8 100%); }
     </style>
   </head>
   <body>
-    <div
-      id="root"
-      data-composition-id="main"
-      data-start="0"
-      data-duration="120"
-      data-width="1920"
-      data-height="1080"
-    >
-      <h1 id="title" class="clip" data-start="0" data-duration="120" data-track-index="0">Sustain-a-Pet</h1>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="160" data-width="1920" data-height="1080">
+      <div id="ground"></div>
+      <div id="stage" data-composition-id="stage" data-composition-src="compositions/stage.html" data-start="0" data-duration="160" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:3"></div>
+      <div id="mg-hook" data-composition-id="mg-hook" data-composition-src="compositions/mg-hook.html" data-start="0" data-duration="12" data-track-index="5" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:4"></div>
+      <div id="mg-idea" data-composition-id="mg-idea" data-composition-src="compositions/mg-idea.html" data-start="12" data-duration="13" data-track-index="5" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:4"></div>
+      <div id="mg-lens" data-composition-id="mg-lens" data-composition-src="compositions/mg-lens.html" data-start="25" data-duration="35" data-track-index="5" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:4"></div>
+      <div id="mg-reward" data-composition-id="mg-reward" data-composition-src="compositions/mg-reward.html" data-start="60" data-duration="20" data-track-index="5" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:4"></div>
+      <div id="mg-useful" data-composition-id="mg-useful" data-composition-src="compositions/mg-useful.html" data-start="80" data-duration="25" data-track-index="5" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:4"></div>
+      <div id="mg-fail" data-composition-id="mg-fail" data-composition-src="compositions/mg-fail.html" data-start="105" data-duration="20" data-track-index="5" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:4"></div>
+      <div id="mg-ship" data-composition-id="mg-ship" data-composition-src="compositions/mg-ship.html" data-start="125" data-duration="23" data-track-index="5" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:4"></div>
+      <div id="mg-close" data-composition-id="mg-close" data-composition-src="compositions/mg-close.html" data-start="148" data-duration="12" data-track-index="5" data-track-kind="graphics" data-width="1920" data-height="1080" style="z-index:4"></div>
+      <div id="captions" data-composition-id="captions" data-composition-src="compositions/captions.html" data-start="0" data-duration="160" data-track-index="6" data-track-kind="captions" data-width="1920" data-height="1080" style="z-index:9"></div>
+      <audio id="vo-hook" class="clip" data-start="0.6" data-duration="10.048" data-track-index="10" src="assets/vo/hook.wav" data-volume="1"></audio>
+      <audio id="vo-idea" class="clip" data-start="12.5" data-duration="8.057" data-track-index="10" src="assets/vo/idea.wav" data-volume="1"></audio>
+      <audio id="vo-lens-a" class="clip" data-start="25.6" data-duration="8.792" data-track-index="10" src="assets/vo/lens-a.wav" data-volume="1"></audio>
+      <audio id="vo-lens-b" class="clip" data-start="37" data-duration="3.373" data-track-index="10" src="assets/vo/lens-b.wav" data-volume="1"></audio>
+      <audio id="vo-lens-c" class="clip" data-start="45.2" data-duration="10.029" data-track-index="10" src="assets/vo/lens-c.wav" data-volume="1"></audio>
+      <audio id="vo-reward" class="clip" data-start="64.4" data-duration="7.874" data-track-index="10" src="assets/vo/reward.wav" data-volume="1"></audio>
+      <audio id="vo-useful-a" class="clip" data-start="80.4" data-duration="5.891" data-track-index="10" src="assets/vo/useful-a.wav" data-volume="1"></audio>
+      <audio id="vo-useful-b" class="clip" data-start="91.6" data-duration="3.831" data-track-index="10" src="assets/vo/useful-b.wav" data-volume="1"></audio>
+      <audio id="vo-useful-c" class="clip" data-start="95.5" data-duration="9.901" data-track-index="10" src="assets/vo/useful-c.wav" data-volume="1"></audio>
+      <audio id="vo-fail" class="clip" data-start="106.4" data-duration="10.306" data-track-index="10" src="assets/vo/fail.wav" data-volume="1"></audio>
+      <audio id="vo-ship" class="clip" data-start="126" data-duration="10.21" data-track-index="10" src="assets/vo/ship.wav" data-volume="1"></audio>
+      <audio id="vo-close" class="clip" data-start="148.8" data-duration="6.063" data-track-index="10" src="assets/vo/close.wav" data-volume="1"></audio>
+      <audio id="sfx-00" class="clip" data-start="6.05" data-duration="0.57" data-track-index="11" src="assets/sfx/whoosh-short.mp3" data-volume="0.3"></audio>
+      <audio id="sfx-01" class="clip" data-start="18.45" data-duration="0.5" data-track-index="11" src="assets/sfx/pop.mp3" data-volume="0.25"></audio>
+      <audio id="sfx-02" class="clip" data-start="18.98" data-duration="0.5" data-track-index="11" src="assets/sfx/pop.mp3" data-volume="0.25"></audio>
+      <audio id="sfx-03" class="clip" data-start="19.7" data-duration="0.5" data-track-index="11" src="assets/sfx/pop.mp3" data-volume="0.25"></audio>
+      <audio id="sfx-04" class="clip" data-start="25.2" data-duration="0.57" data-track-index="11" src="assets/sfx/whoosh.mp3" data-volume="0.28"></audio>
+      <audio id="sfx-05" class="clip" data-start="41.9" data-duration="0.57" data-track-index="11" src="assets/sfx/whoosh-short.mp3" data-volume="0.28"></audio>
+      <audio id="sfx-06" class="clip" data-start="55.2" data-duration="1.5" data-track-index="11" src="assets/sfx/sparkle.mp3" data-volume="0.25"></audio>
+      <audio id="sfx-07" class="clip" data-start="60.55" data-duration="0.57" data-track-index="11" src="assets/sfx/whoosh.mp3" data-volume="0.3"></audio>
+      <audio id="sfx-08" class="clip" data-start="64.95" data-duration="0.57" data-track-index="11" src="assets/sfx/whoosh-short.mp3" data-volume="0.28"></audio>
+      <audio id="sfx-09" class="clip" data-start="72.4" data-duration="1.5" data-track-index="11" src="assets/sfx/sparkle.mp3" data-volume="0.28"></audio>
+      <audio id="sfx-10" class="clip" data-start="80.6" data-duration="0.57" data-track-index="11" src="assets/sfx/whoosh-short.mp3" data-volume="0.28"></audio>
+      <audio id="sfx-11" class="clip" data-start="95.2" data-duration="0.57" data-track-index="11" src="assets/sfx/whoosh.mp3" data-volume="0.26"></audio>
+      <audio id="sfx-12" class="clip" data-start="105.5" data-duration="0.57" data-track-index="11" src="assets/sfx/whoosh-short.mp3" data-volume="0.28"></audio>
+      <audio id="sfx-13" class="clip" data-start="125.05" data-duration="0.57" data-track-index="11" src="assets/sfx/whoosh.mp3" data-volume="0.3"></audio>
+      <audio id="sfx-14" class="clip" data-start="133.3" data-duration="0.57" data-track-index="11" src="assets/sfx/whoosh-short.mp3" data-volume="0.28"></audio>
+      <audio id="sfx-15" class="clip" data-start="152.6" data-duration="2" data-track-index="11" src="assets/sfx/riser.mp3" data-volume="0.22"></audio>
+      <audio id="sfx-16" class="clip" data-start="154.65" data-duration="2" data-track-index="11" src="assets/sfx/whoosh-cinematic.mp3" data-volume="0.3"></audio>
     </div>
     <script>
-      const tl = gsap.timeline({ paused: true });
-      // Example: tl.fromTo("#title", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out" }, 0);
-      window.__timelines["main"] = tl;
-      tl.seek(0);
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
     </script>
   </body>
 </html>

@@ -1,0 +1,1362 @@
+{
+  "hook": {
+    "file": "assets/vo/hook.wav",
+    "scene": "hook",
+    "at": 0.6,
+    "duration": 10.048,
+    "text": "You've finished this jar. What's one useful thing you could do with it? Sustain-a-Pet turns that everyday decision into a small action that helps your virtual companion grow.",
+    "timing": "asr",
+    "words": [
+      {
+        "text": "You've",
+        "start": 0,
+        "end": 0.16
+      },
+      {
+        "text": "finished",
+        "start": 0.32,
+        "end": 0.64
+      },
+      {
+        "text": "this",
+        "start": 0.64,
+        "end": 0.8
+      },
+      {
+        "text": "jar.",
+        "start": 0.8,
+        "end": 1.44
+      },
+      {
+        "text": "What's",
+        "start": 1.44,
+        "end": 1.84
+      },
+      {
+        "text": "one",
+        "start": 1.84,
+        "end": 2
+      },
+      {
+        "text": "useful",
+        "start": 2,
+        "end": 2.4
+      },
+      {
+        "text": "thing",
+        "start": 2.4,
+        "end": 2.64
+      },
+      {
+        "text": "you",
+        "start": 2.64,
+        "end": 2.8
+      },
+      {
+        "text": "could",
+        "start": 2.8,
+        "end": 2.96
+      },
+      {
+        "text": "do",
+        "start": 2.96,
+        "end": 3.12
+      },
+      {
+        "text": "with",
+        "start": 3.12,
+        "end": 3.36
+      },
+      {
+        "text": "it?",
+        "start": 3.36,
+        "end": 3.6
+      },
+      {
+        "text": "Sustain-a-Pet",
+        "start": 3.84,
+        "end": 4.8
+      },
+      {
+        "text": "turns",
+        "start": 5.04,
+        "end": 5.36
+      },
+      {
+        "text": "that",
+        "start": 5.36,
+        "end": 5.6
+      },
+      {
+        "text": "everyday",
+        "start": 5.6,
+        "end": 6.08
+      },
+      {
+        "text": "decision",
+        "start": 6.08,
+        "end": 6.56
+      },
+      {
+        "text": "into",
+        "start": 6.56,
+        "end": 6.8
+      },
+      {
+        "text": "a",
+        "start": 6.8,
+        "end": 6.96
+      },
+      {
+        "text": "small",
+        "start": 6.96,
+        "end": 7.36
+      },
+      {
+        "text": "action",
+        "start": 7.36,
+        "end": 7.84
+      },
+      {
+        "text": "that",
+        "start": 7.92,
+        "end": 8.16
+      },
+      {
+        "text": "helps",
+        "start": 8.16,
+        "end": 8.56
+      },
+      {
+        "text": "your",
+        "start": 8.56,
+        "end": 8.72
+      },
+      {
+        "text": "virtual",
+        "start": 8.72,
+        "end": 9.12
+      },
+      {
+        "text": "companion",
+        "start": 9.12,
+        "end": 9.68
+      },
+      {
+        "text": "grow.",
+        "start": 9.68,
+        "end": 10
+      }
+    ]
+  },
+  "idea": {
+    "file": "assets/vo/idea.wav",
+    "scene": "idea",
+    "at": 0.5,
+    "duration": 8.057,
+    "text": "Sustainable habits can feel disconnected from their results. We built a garden where small actions earn care, growth and restoration.",
+    "timing": "asr",
+    "words": [
+      {
+        "text": "Sustainable",
+        "start": 0,
+        "end": 0.64
+      },
+      {
+        "text": "habits",
+        "start": 0.64,
+        "end": 1.12
+      },
+      {
+        "text": "can",
+        "start": 1.12,
+        "end": 1.28
+      },
+      {
+        "text": "feel",
+        "start": 1.28,
+        "end": 1.52
+      },
+      {
+        "text": "disconnected",
+        "start": 1.52,
+        "end": 2.24
+      },
+      {
+        "text": "from",
+        "start": 2.24,
+        "end": 2.4
+      },
+      {
+        "text": "their",
+        "start": 2.4,
+        "end": 2.64
+      },
+      {
+        "text": "results.",
+        "start": 2.64,
+        "end": 3.44
+      },
+      {
+        "text": "We",
+        "start": 3.44,
+        "end": 3.6
+      },
+      {
+        "text": "built",
+        "start": 3.6,
+        "end": 3.92
+      },
+      {
+        "text": "a",
+        "start": 3.92,
+        "end": 4.08
+      },
+      {
+        "text": "garden",
+        "start": 4.08,
+        "end": 4.48
+      },
+      {
+        "text": "where",
+        "start": 4.48,
+        "end": 4.72
+      },
+      {
+        "text": "small",
+        "start": 4.72,
+        "end": 5.04
+      },
+      {
+        "text": "actions",
+        "start": 5.04,
+        "end": 5.52
+      },
+      {
+        "text": "earn",
+        "start": 5.52,
+        "end": 6
+      },
+      {
+        "text": "care,",
+        "start": 6,
+        "end": 6.4
+      },
+      {
+        "text": "growth",
+        "start": 6.56,
+        "end": 7.04
+      },
+      {
+        "text": "and",
+        "start": 7.04,
+        "end": 7.28
+      },
+      {
+        "text": "restoration.",
+        "start": 7.28,
+        "end": 7.92
+      }
+    ]
+  },
+  "lens-a": {
+    "file": "assets/vo/lens-a.wav",
+    "scene": "lens",
+    "at": 0.6,
+    "duration": 8.792,
+    "text": "GreenLens looks at a photo or short description and suggests one manageable eco quest. First, it says exactly where your note goes.",
+    "timing": "asr",
+    "words": [
+      {
+        "text": "GreenLens",
+        "start": 0.16,
+        "end": 0.8
+      },
+      {
+        "text": "looks",
+        "start": 0.8,
+        "end": 1.04
+      },
+      {
+        "text": "at",
+        "start": 1.04,
+        "end": 1.12
+      },
+      {
+        "text": "a",
+        "start": 1.12,
+        "end": 1.2
+      },
+      {
+        "text": "photo",
+        "start": 1.2,
+        "end": 1.6
+      },
+      {
+        "text": "or",
+        "start": 1.6,
+        "end": 1.84
+      },
+      {
+        "text": "short",
+        "start": 1.84,
+        "end": 2.16
+      },
+      {
+        "text": "description",
+        "start": 2.16,
+        "end": 2.8
+      },
+      {
+        "text": "and",
+        "start": 2.88,
+        "end": 3.12
+      },
+      {
+        "text": "suggests",
+        "start": 3.12,
+        "end": 3.76
+      },
+      {
+        "text": "one",
+        "start": 3.76,
+        "end": 4
+      },
+      {
+        "text": "manageable",
+        "start": 4,
+        "end": 4.64
+      },
+      {
+        "text": "eco",
+        "start": 4.64,
+        "end": 4.96
+      },
+      {
+        "text": "quest.",
+        "start": 5.12,
+        "end": 5.92
+      },
+      {
+        "text": "First,",
+        "start": 5.92,
+        "end": 6.56
+      },
+      {
+        "text": "it",
+        "start": 6.56,
+        "end": 6.8
+      },
+      {
+        "text": "says",
+        "start": 6.8,
+        "end": 7.2
+      },
+      {
+        "text": "exactly",
+        "start": 7.2,
+        "end": 7.6
+      },
+      {
+        "text": "where",
+        "start": 7.6,
+        "end": 7.84
+      },
+      {
+        "text": "your",
+        "start": 7.84,
+        "end": 8
+      },
+      {
+        "text": "note",
+        "start": 8,
+        "end": 8.24
+      },
+      {
+        "text": "goes.",
+        "start": 8.32,
+        "end": 8.64
+      }
+    ]
+  },
+  "lens-b": {
+    "file": "assets/vo/lens-b.wav",
+    "scene": "lens",
+    "at": 11.5,
+    "duration": 3.373,
+    "text": "I'll describe this jar in a few words. Here's what it suggests.",
+    "timing": "asr",
+    "words": [
+      {
+        "text": "I'll",
+        "start": 0,
+        "end": 0.32
+      },
+      {
+        "text": "describe",
+        "start": 0.32,
+        "end": 0.56
+      },
+      {
+        "text": "this",
+        "start": 0.56,
+        "end": 0.8
+      },
+      {
+        "text": "jar",
+        "start": 0.8,
+        "end": 1.12
+      },
+      {
+        "text": "in",
+        "start": 1.12,
+        "end": 1.28
+      },
+      {
+        "text": "a",
+        "start": 1.28,
+        "end": 1.36
+      },
+      {
+        "text": "few",
+        "start": 1.36,
+        "end": 1.52
+      },
+      {
+        "text": "words.",
+        "start": 1.52,
+        "end": 2.08
+      },
+      {
+        "text": "Here's",
+        "start": 2.08,
+        "end": 2.48
+      },
+      {
+        "text": "what",
+        "start": 2.48,
+        "end": 2.56
+      },
+      {
+        "text": "it",
+        "start": 2.56,
+        "end": 2.72
+      },
+      {
+        "text": "suggests.",
+        "start": 2.72,
+        "end": 3.36
+      }
+    ]
+  },
+  "lens-c": {
+    "file": "assets/vo/lens-c.wav",
+    "scene": "lens",
+    "at": 20.5,
+    "duration": 10.029,
+    "text": "It spotted a rinsed pasta sauce jar, and suggests keeping it for dry food like rice or pasta, instead of buying a new container. Less single-use packaging.",
+    "timing": "asr",
+    "words": [
+      {
+        "text": "It",
+        "start": 0,
+        "end": 0.16
+      },
+      {
+        "text": "spotted",
+        "start": 0.24,
+        "end": 0.64
+      },
+      {
+        "text": "a",
+        "start": 0.64,
+        "end": 0.72
+      },
+      {
+        "text": "rinsed",
+        "start": 0.72,
+        "end": 1.12
+      },
+      {
+        "text": "pasta",
+        "start": 1.12,
+        "end": 1.6
+      },
+      {
+        "text": "sauce",
+        "start": 1.6,
+        "end": 2
+      },
+      {
+        "text": "jar,",
+        "start": 2,
+        "end": 2.32
+      },
+      {
+        "text": "and",
+        "start": 2.48,
+        "end": 2.64
+      },
+      {
+        "text": "suggests",
+        "start": 2.64,
+        "end": 3.2
+      },
+      {
+        "text": "keeping",
+        "start": 3.2,
+        "end": 3.52
+      },
+      {
+        "text": "it",
+        "start": 3.52,
+        "end": 3.68
+      },
+      {
+        "text": "for",
+        "start": 3.68,
+        "end": 3.84
+      },
+      {
+        "text": "dry",
+        "start": 3.84,
+        "end": 4.24
+      },
+      {
+        "text": "food",
+        "start": 4.24,
+        "end": 4.64
+      },
+      {
+        "text": "like",
+        "start": 4.64,
+        "end": 4.88
+      },
+      {
+        "text": "rice",
+        "start": 4.88,
+        "end": 5.28
+      },
+      {
+        "text": "or",
+        "start": 5.28,
+        "end": 5.52
+      },
+      {
+        "text": "pasta,",
+        "start": 5.52,
+        "end": 6.24
+      },
+      {
+        "text": "instead",
+        "start": 6.24,
+        "end": 6.56
+      },
+      {
+        "text": "of",
+        "start": 6.56,
+        "end": 6.72
+      },
+      {
+        "text": "buying",
+        "start": 6.72,
+        "end": 7.12
+      },
+      {
+        "text": "a",
+        "start": 7.12,
+        "end": 7.28
+      },
+      {
+        "text": "new",
+        "start": 7.28,
+        "end": 7.52
+      },
+      {
+        "text": "container.",
+        "start": 7.52,
+        "end": 8.48
+      },
+      {
+        "text": "Less",
+        "start": 8.48,
+        "end": 8.8
+      },
+      {
+        "text": "single-use",
+        "start": 8.8,
+        "end": 9.36
+      },
+      {
+        "text": "packaging.",
+        "start": 9.52,
+        "end": 10
+      }
+    ]
+  },
+  "reward": {
+    "file": "assets/vo/reward.wav",
+    "scene": "reward",
+    "at": 4.2,
+    "duration": 7.874,
+    "text": "I've done the action, so I can confirm it and earn a reward. Completion is self-reported. The photo doesn't prove the action happened.",
+    "timing": "asr",
+    "words": [
+      {
+        "text": "I've",
+        "start": 0,
+        "end": 0.32
+      },
+      {
+        "text": "done",
+        "start": 0.32,
+        "end": 0.48
+      },
+      {
+        "text": "the",
+        "start": 0.48,
+        "end": 0.64
+      },
+      {
+        "text": "action,",
+        "start": 0.64,
+        "end": 1.04
+      },
+      {
+        "text": "so",
+        "start": 1.04,
+        "end": 1.28
+      },
+      {
+        "text": "I",
+        "start": 1.28,
+        "end": 1.44
+      },
+      {
+        "text": "can",
+        "start": 1.44,
+        "end": 1.6
+      },
+      {
+        "text": "confirm",
+        "start": 1.6,
+        "end": 2
+      },
+      {
+        "text": "it",
+        "start": 2,
+        "end": 2.16
+      },
+      {
+        "text": "and",
+        "start": 2.16,
+        "end": 2.4
+      },
+      {
+        "text": "earn",
+        "start": 2.4,
+        "end": 2.72
+      },
+      {
+        "text": "a",
+        "start": 2.72,
+        "end": 2.8
+      },
+      {
+        "text": "reward.",
+        "start": 2.8,
+        "end": 3.6
+      },
+      {
+        "text": "Completion",
+        "start": 3.6,
+        "end": 4.32
+      },
+      {
+        "text": "is",
+        "start": 4.32,
+        "end": 4.56
+      },
+      {
+        "text": "self-reported.",
+        "start": 4.56,
+        "end": 5.68
+      },
+      {
+        "text": "The",
+        "start": 5.68,
+        "end": 5.84
+      },
+      {
+        "text": "photo",
+        "start": 5.84,
+        "end": 6.32
+      },
+      {
+        "text": "doesn't",
+        "start": 6.32,
+        "end": 6.64
+      },
+      {
+        "text": "prove",
+        "start": 6.64,
+        "end": 6.96
+      },
+      {
+        "text": "the",
+        "start": 6.96,
+        "end": 7.04
+      },
+      {
+        "text": "action",
+        "start": 7.04,
+        "end": 7.36
+      },
+      {
+        "text": "happened.",
+        "start": 7.36,
+        "end": 7.76
+      }
+    ]
+  },
+  "useful-a": {
+    "file": "assets/vo/useful-a.wav",
+    "scene": "useful",
+    "at": 0.5,
+    "duration": 5.891,
+    "text": "Now something vaguer: a few things from a kitchen drawer. GreenLens asks one follow-up question.",
+    "timing": "asr",
+    "words": [
+      {
+        "text": "Now",
+        "start": 0,
+        "end": 0.24
+      },
+      {
+        "text": "something",
+        "start": 0.32,
+        "end": 0.56
+      },
+      {
+        "text": "vaguer:",
+        "start": 0.56,
+        "end": 1.36
+      },
+      {
+        "text": "a",
+        "start": 1.36,
+        "end": 1.44
+      },
+      {
+        "text": "few",
+        "start": 1.44,
+        "end": 1.68
+      },
+      {
+        "text": "things",
+        "start": 1.68,
+        "end": 1.92
+      },
+      {
+        "text": "from",
+        "start": 1.92,
+        "end": 2.08
+      },
+      {
+        "text": "a",
+        "start": 2.08,
+        "end": 2.16
+      },
+      {
+        "text": "kitchen",
+        "start": 2.16,
+        "end": 2.56
+      },
+      {
+        "text": "drawer.",
+        "start": 2.56,
+        "end": 3.28
+      },
+      {
+        "text": "GreenLens",
+        "start": 3.28,
+        "end": 4.08
+      },
+      {
+        "text": "asks",
+        "start": 4.24,
+        "end": 4.56
+      },
+      {
+        "text": "one",
+        "start": 4.56,
+        "end": 4.8
+      },
+      {
+        "text": "follow-up",
+        "start": 4.8,
+        "end": 5.44
+      },
+      {
+        "text": "question.",
+        "start": 5.44,
+        "end": 5.76
+      }
+    ]
+  },
+  "useful-b": {
+    "file": "assets/vo/useful-b.wav",
+    "scene": "useful",
+    "at": 8.0,
+    "duration": 3.831,
+    "text": "Dead batteries get a different quest, with a curated link for Ontario.",
+    "timing": "asr",
+    "words": [
+      {
+        "text": "Dead",
+        "start": 0.08,
+        "end": 0.32
+      },
+      {
+        "text": "batteries",
+        "start": 0.32,
+        "end": 0.88
+      },
+      {
+        "text": "get",
+        "start": 0.88,
+        "end": 0.96
+      },
+      {
+        "text": "a",
+        "start": 1.04,
+        "end": 1.12
+      },
+      {
+        "text": "different",
+        "start": 1.12,
+        "end": 1.44
+      },
+      {
+        "text": "quest,",
+        "start": 1.44,
+        "end": 1.92
+      },
+      {
+        "text": "with",
+        "start": 1.92,
+        "end": 2.08
+      },
+      {
+        "text": "a",
+        "start": 2.08,
+        "end": 2.16
+      },
+      {
+        "text": "curated",
+        "start": 2.16,
+        "end": 2.8
+      },
+      {
+        "text": "link",
+        "start": 2.8,
+        "end": 3.04
+      },
+      {
+        "text": "for",
+        "start": 3.04,
+        "end": 3.2
+      },
+      {
+        "text": "Ontario.",
+        "start": 3.2,
+        "end": 3.76
+      }
+    ]
+  },
+  "useful-c": {
+    "file": "assets/vo/useful-c.wav",
+    "scene": "useful",
+    "at": 13.6,
+    "duration": 9.901,
+    "text": "The model proposes the action. Our server validates the response, chooses rewards from fixed rules, and supplies curated recycling links where we have coverage.",
+    "timing": "asr",
+    "words": [
+      {
+        "text": "The",
+        "start": 0,
+        "end": 0.24
+      },
+      {
+        "text": "model",
+        "start": 0.24,
+        "end": 0.48
+      },
+      {
+        "text": "proposes",
+        "start": 0.64,
+        "end": 1.2
+      },
+      {
+        "text": "the",
+        "start": 1.2,
+        "end": 1.44
+      },
+      {
+        "text": "action.",
+        "start": 1.44,
+        "end": 2.08
+      },
+      {
+        "text": "Our",
+        "start": 2.08,
+        "end": 2.4
+      },
+      {
+        "text": "server",
+        "start": 2.4,
+        "end": 2.88
+      },
+      {
+        "text": "validates",
+        "start": 2.88,
+        "end": 3.52
+      },
+      {
+        "text": "the",
+        "start": 3.52,
+        "end": 3.68
+      },
+      {
+        "text": "response,",
+        "start": 3.68,
+        "end": 4.48
+      },
+      {
+        "text": "chooses",
+        "start": 4.48,
+        "end": 4.96
+      },
+      {
+        "text": "rewards",
+        "start": 4.96,
+        "end": 5.44
+      },
+      {
+        "text": "from",
+        "start": 5.44,
+        "end": 5.68
+      },
+      {
+        "text": "fixed",
+        "start": 5.68,
+        "end": 6.08
+      },
+      {
+        "text": "rules,",
+        "start": 6.08,
+        "end": 6.64
+      },
+      {
+        "text": "and",
+        "start": 6.64,
+        "end": 6.8
+      },
+      {
+        "text": "supplies",
+        "start": 6.8,
+        "end": 7.36
+      },
+      {
+        "text": "curated",
+        "start": 7.36,
+        "end": 8
+      },
+      {
+        "text": "recycling",
+        "start": 8,
+        "end": 8.56
+      },
+      {
+        "text": "links",
+        "start": 8.56,
+        "end": 8.88
+      },
+      {
+        "text": "where",
+        "start": 8.96,
+        "end": 9.12
+      },
+      {
+        "text": "we",
+        "start": 9.12,
+        "end": 9.2
+      },
+      {
+        "text": "have",
+        "start": 9.2,
+        "end": 9.36
+      },
+      {
+        "text": "coverage.",
+        "start": 9.36,
+        "end": 9.84
+      }
+    ]
+  },
+  "fail": {
+    "file": "assets/vo/fail.wav",
+    "scene": "fail",
+    "at": 0.8,
+    "duration": 10.306,
+    "text": "When the AI provider fails, GreenLens labels its prerecorded tip clearly. The rest of the garden still works, so an unavailable model doesn't end the experience.",
+    "timing": "asr",
+    "words": [
+      {
+        "text": "When",
+        "start": 0,
+        "end": 0.16
+      },
+      {
+        "text": "the",
+        "start": 0.16,
+        "end": 0.32
+      },
+      {
+        "text": "AI",
+        "start": 0.32,
+        "end": 0.72
+      },
+      {
+        "text": "provider",
+        "start": 0.72,
+        "end": 1.2
+      },
+      {
+        "text": "fails,",
+        "start": 1.2,
+        "end": 1.76
+      },
+      {
+        "text": "GreenLens",
+        "start": 1.76,
+        "end": 2.48
+      },
+      {
+        "text": "labels",
+        "start": 2.64,
+        "end": 3.04
+      },
+      {
+        "text": "its",
+        "start": 3.04,
+        "end": 3.2
+      },
+      {
+        "text": "prerecorded",
+        "start": 3.2,
+        "end": 4
+      },
+      {
+        "text": "tip",
+        "start": 4,
+        "end": 4.32
+      },
+      {
+        "text": "clearly.",
+        "start": 4.32,
+        "end": 5.12
+      },
+      {
+        "text": "The",
+        "start": 5.12,
+        "end": 5.36
+      },
+      {
+        "text": "rest",
+        "start": 5.36,
+        "end": 5.52
+      },
+      {
+        "text": "of",
+        "start": 5.52,
+        "end": 5.68
+      },
+      {
+        "text": "the",
+        "start": 5.68,
+        "end": 5.84
+      },
+      {
+        "text": "garden",
+        "start": 5.84,
+        "end": 6.4
+      },
+      {
+        "text": "still",
+        "start": 6.4,
+        "end": 6.64
+      },
+      {
+        "text": "works,",
+        "start": 6.64,
+        "end": 7.2
+      },
+      {
+        "text": "so",
+        "start": 7.2,
+        "end": 7.44
+      },
+      {
+        "text": "an",
+        "start": 7.44,
+        "end": 7.6
+      },
+      {
+        "text": "unavailable",
+        "start": 7.6,
+        "end": 8.4
+      },
+      {
+        "text": "model",
+        "start": 8.4,
+        "end": 8.72
+      },
+      {
+        "text": "doesn't",
+        "start": 8.8,
+        "end": 9.12
+      },
+      {
+        "text": "end",
+        "start": 9.12,
+        "end": 9.44
+      },
+      {
+        "text": "the",
+        "start": 9.44,
+        "end": 9.6
+      },
+      {
+        "text": "experience.",
+        "start": 9.6,
+        "end": 10.16
+      }
+    ]
+  },
+  "ship": {
+    "file": "assets/vo/ship.wav",
+    "scene": "ship",
+    "at": 0.8,
+    "duration": 10.21,
+    "text": "This is the deployed app at sustain-a-pet.deployxa.online. Players can start without an account, use it on their phone, and keep progress in this browser.",
+    "timing": "asr",
+    "words": [
+      {
+        "text": "This",
+        "start": 0,
+        "end": 0.24
+      },
+      {
+        "text": "is",
+        "start": 0.24,
+        "end": 0.32
+      },
+      {
+        "text": "the",
+        "start": 0.32,
+        "end": 0.48
+      },
+      {
+        "text": "deployed",
+        "start": 0.48,
+        "end": 1.12
+      },
+      {
+        "text": "app",
+        "start": 1.12,
+        "end": 1.36
+      },
+      {
+        "text": "at",
+        "start": 1.44,
+        "end": 1.68
+      },
+      {
+        "text": "sustain-a-pet.deployxa.online.",
+        "start": 1.68,
+        "end": 5.12
+      },
+      {
+        "text": "Players",
+        "start": 5.12,
+        "end": 5.68
+      },
+      {
+        "text": "can",
+        "start": 5.68,
+        "end": 5.84
+      },
+      {
+        "text": "start",
+        "start": 5.84,
+        "end": 6.16
+      },
+      {
+        "text": "without",
+        "start": 6.16,
+        "end": 6.48
+      },
+      {
+        "text": "an",
+        "start": 6.48,
+        "end": 6.64
+      },
+      {
+        "text": "account,",
+        "start": 6.64,
+        "end": 7.2
+      },
+      {
+        "text": "use",
+        "start": 7.2,
+        "end": 7.44
+      },
+      {
+        "text": "it",
+        "start": 7.44,
+        "end": 7.6
+      },
+      {
+        "text": "on",
+        "start": 7.6,
+        "end": 7.76
+      },
+      {
+        "text": "their",
+        "start": 7.76,
+        "end": 7.92
+      },
+      {
+        "text": "phone,",
+        "start": 7.92,
+        "end": 8.4
+      },
+      {
+        "text": "and",
+        "start": 8.4,
+        "end": 8.64
+      },
+      {
+        "text": "keep",
+        "start": 8.64,
+        "end": 8.96
+      },
+      {
+        "text": "progress",
+        "start": 8.96,
+        "end": 9.28
+      },
+      {
+        "text": "in",
+        "start": 9.28,
+        "end": 9.44
+      },
+      {
+        "text": "this",
+        "start": 9.44,
+        "end": 9.68
+      },
+      {
+        "text": "browser.",
+        "start": 9.68,
+        "end": 10.16
+      }
+    ]
+  },
+  "close": {
+    "file": "assets/vo/close.wav",
+    "scene": "close",
+    "at": 0.6,
+    "duration": 6.063,
+    "text": "Sustain-a-Pet connects something near you, one practical action, and a companion worth coming back for.",
+    "timing": "asr",
+    "words": [
+      {
+        "text": "Sustain-a-Pet",
+        "start": 0,
+        "end": 0.72
+      },
+      {
+        "text": "connects",
+        "start": 0.88,
+        "end": 1.2
+      },
+      {
+        "text": "something",
+        "start": 1.36,
+        "end": 1.6
+      },
+      {
+        "text": "near",
+        "start": 1.6,
+        "end": 1.92
+      },
+      {
+        "text": "you,",
+        "start": 1.92,
+        "end": 2.24
+      },
+      {
+        "text": "one",
+        "start": 2.4,
+        "end": 2.64
+      },
+      {
+        "text": "practical",
+        "start": 2.8,
+        "end": 3.28
+      },
+      {
+        "text": "action,",
+        "start": 3.28,
+        "end": 3.92
+      },
+      {
+        "text": "and",
+        "start": 3.92,
+        "end": 4.08
+      },
+      {
+        "text": "a",
+        "start": 4.08,
+        "end": 4.24
+      },
+      {
+        "text": "companion",
+        "start": 4.24,
+        "end": 4.96
+      },
+      {
+        "text": "worth",
+        "start": 4.96,
+        "end": 5.2
+      },
+      {
+        "text": "coming",
+        "start": 5.2,
+        "end": 5.52
+      },
+      {
+        "text": "back",
+        "start": 5.52,
+        "end": 5.68
+      },
+      {
+        "text": "for.",
+        "start": 5.68,
+        "end": 6
+      }
+    ]
+  }
+}

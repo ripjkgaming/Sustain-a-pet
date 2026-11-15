@@ -1,0 +1,9 @@
+<!doctype html><html><body style="margin:0;width:1920px;height:1080px;background:#dfe9d6;overflow:hidden;position:relative">
+<canvas id="c" style="position:absolute;inset:0;width:1920px;height:1080px"></canvas>
+<div id="s" style="position:absolute;left:0;top:0;width:440px;height:956px;transform-origin:0 0;border-radius:62px;overflow:hidden;background:#000">
+<img src="../.scratch/f.png" style="width:440px;height:956px;display:block"></div>
+<script src="../lib/three-kit.js"></script><script src="../lib/phone-stage.js"></script>
+<script>
+const st=PhoneStage.mount({canvas:document.getElementById('c'),screen:document.getElementById('s'),glb:'../assets/phone/supplied-iphone.glb',keys:[{t:0,x:+location.search.slice(1).split(',')[0]||0,y:0,z:0.25,rx:+(location.search.split(',')[1]||0),ry:+(location.search.split(',')[2]||0),rz:0}]});
+st.ready.then(()=>{st.render(0);window.done=1});
+</script></body></html>

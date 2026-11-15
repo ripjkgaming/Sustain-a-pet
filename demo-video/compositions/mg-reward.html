@@ -1,0 +1,65 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; color: #0f3a22; font-family: Nunito, sans-serif; }
+    .kick { font: 800 28px/1 Nunito, sans-serif; letter-spacing: .14em; color: #2f8a43; }
+    #rw-real { position: absolute; left: 560px; top: 150px; width: 1200px; height: 760px; }
+    #rw-jar { position: absolute; left: 0; top: 70px; width: 420px; height: 560px; }
+    #rw-jar svg { width: 100%; height: 100%; overflow: visible; }
+    #rw-real-copy { position: absolute; left: 500px; top: 170px; width: 660px; }
+    #rw-real-copy h2 { margin-top: 20px; font: 900 76px/1.02 Nunito, sans-serif; letter-spacing: -0.03em; }
+    #rw-real-copy p { margin-top: 22px; font: 700 34px/1.3 Nunito, sans-serif; color: #2d5238; }
+    #rw-honest { position: absolute; left: 150px; top: 230px; width: 640px; }
+    #rw-honest h2 { margin-top: 20px; font: 900 64px/1.04 Nunito, sans-serif; letter-spacing: -0.025em; }
+    #rw-quote { margin-top: 30px; padding: 26px 30px; border-radius: 26px; background: #fff7dc; border: 3px solid #f6b93b; font: 800 32px/1.3 Nunito, sans-serif; color: #6b4a00; }
+    #rw-quote small { display: block; margin-bottom: 10px; font: 800 28px/1 Nunito, sans-serif; letter-spacing: .12em; color: #a77400; }
+    #rw-pay { margin-top: 30px; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+    #rw-pay span { padding: 13px 22px; border-radius: 999px; background: #fff4d6; font: 900 30px/1 Nunito, sans-serif; color: #8a5a00; }
+    #rw-pay span:first-child { background: #f6b93b; color: #fff; }
+    #rw-pay em { font: 700 28px/1.2 Nunito, sans-serif; font-style: normal; color: #4f6f58; }
+  </style>
+  <div id="root" data-composition-id="mg-reward" data-width="1920" data-height="1080" data-layout-allow-overlap>
+    <div id="rw-real" class="clip" data-start="0.4" data-duration="4.6" data-track-index="1">
+      <div id="rw-jar">
+        <svg viewBox="0 0 330 430" aria-label="The jar, now holding rice">
+          <defs>
+            <clipPath id="rw-inside"><path d="M82 76h166c0 18 34 30 34 70v222c0 26-20 44-46 44H94c-26 0-46-18-46-44V146c0-40 34-52 34-70z" /></clipPath>
+            <pattern id="rw-grain" width="14" height="10" patternUnits="userSpaceOnUse"><rect width="14" height="10" fill="#f7f1e1" /><ellipse cx="4" cy="3" rx="3.4" ry="1.5" fill="#e5dcc4" /><ellipse cx="11" cy="8" rx="3.4" ry="1.5" fill="#e9e1cb" /></pattern>
+          </defs>
+          <g clip-path="url(#rw-inside)"><rect id="rw-rice" x="40" y="130" width="260" height="300" fill="url(#rw-grain)" /></g>
+          <path d="M82 76h166c0 18 34 30 34 70v222c0 26-20 44-46 44H94c-26 0-46-18-46-44V146c0-40 34-52 34-70z" fill="none" stroke="#0f3a22" stroke-width="6" stroke-linejoin="round" />
+          <path d="M74 190v150" stroke="#fff" stroke-width="9" stroke-linecap="round" opacity=".75" />
+          <g id="rw-lid"><rect x="70" y="18" width="190" height="56" rx="12" fill="#b38b3b" stroke="#0f3a22" stroke-width="5" /></g>
+          <rect x="108" y="236" width="114" height="60" rx="10" fill="#fff" stroke="#0f3a22" stroke-width="4" />
+          <text x="165" y="276" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="30" fill="#0f3a22">RICE</text>
+        </svg>
+      </div>
+      <div id="rw-real-copy">
+        <p class="kick">IN REAL LIFE · ILLUSTRATED</p>
+        <h2>Do the quest for real.</h2>
+        <p>Rinsed jar → dry pantry food.</p>
+      </div>
+    </div>
+    <div id="rw-honest" class="clip" data-start="5.4" data-duration="14.2" data-track-index="2">
+      <p class="kick">BACK IN THE APP</p>
+      <h2>Confirm it.<br>Earn the reward.</h2>
+      <div id="rw-quote"><small>THE APP SAYS</small>“A photo can’t prove it — tap only when you really did it.”</div>
+      <div id="rw-pay"><span>+6 XP</span><span>◉ +11</span><span>🍃 +1</span><em>reward from fixed server rules</em></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo('#rw-jar', { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.6, ease: 'expo.out' }, 0.45);
+      tl.fromTo('#rw-lid', { y: -120, opacity: 0 }, { y: -120, opacity: 1, duration: 0.01 }, 0.45);
+      tl.fromTo('#rw-rice', { y: 300 }, { y: 0, duration: 1.8, ease: 'power2.inOut' }, 1.0);
+      tl.to('#rw-lid', { y: 0, duration: 0.45, ease: 'back.out(1.4)' }, 2.95);
+      tl.fromTo('#rw-real-copy > *', { opacity: 0, y: 18, filter: 'blur(6px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.45, stagger: 0.16, ease: 'expo.out' }, 0.7);
+      tl.to('#rw-real', { opacity: 0, x: 120, filter: 'blur(10px)', duration: 0.35, ease: 'power3.in' }, 4.6);
+      tl.fromTo('#rw-honest > p, #rw-honest > h2', { opacity: 0, y: 18, filter: 'blur(6px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.45, stagger: 0.15, ease: 'expo.out' }, 5.45);
+      tl.fromTo('#rw-quote', { opacity: 0, y: 20, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'expo.out' }, 8.7);
+      tl.fromTo('#rw-pay > *', { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.4, stagger: 0.09, ease: 'back.out(2)' }, 12.4);
+      tl.to('#rw-honest', { opacity: 0, x: -50, filter: 'blur(8px)', duration: 0.3, ease: 'power3.in' }, 19.4);
+      window.__timelines['mg-reward'] = tl;
+    })();
+  </script>
+</template>

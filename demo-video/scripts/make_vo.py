@@ -22,8 +22,37 @@ vo_dir.mkdir(parents=True, exist_ok=True)
 out = {}
 
 
+os.environ.setdefault("HYPERFRAMES_PYTHON", "/tmp/claude-1000/-home-ripjk/923d399d-5294-4f32-a761-e8b5d47568fa/scratchpad/ttsvenv/bin/python")
+
+
 def run(cmd, **kw):
-    return subprocess.run(cmd, check=True, cwd=ROOT, capture_output=True, text=True, **kw)
+    r = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, env=os.environ, **kw)
+    if r.returncode:
+        raise SystemExit(f"{cmd[:3]} failed:\n{r.stdout[-600:]}\n{r.stderr[-600:]}")
+    return r
+
+
+def norm(s):
+    return re.sub(r"[^a-z0-9]", "", s.lower().replace("&", "and"))
+
+
+def merged(words, heard):
+    """Give each script word the time of the ASR tokens that spell it (hyphenated or spaced names span several)."""
+    out, j = [], 0
+    for w in words:
+        target, got, start = norm(w), "", None
+        while j < len(heard) and len(got) < len(target):
+            if got and len(got) + len(norm(heard[j]["text"])) > len(target) + 2:
+                break  # ASR dropped a letter ("connect" for "connects"): don't eat the next word
+            if start is None:
+                start = heard[j]["start"]
+            got += norm(heard[j]["text"])
+            end = heard[j]["end"]
+            j += 1
+        if start is None:
+            return None
+        out.append({"text": w, "start": round(start, 3), "end": round(end, 3)})
+    return out if j >= len(heard) - 1 else None
 
 
 def duration(path):
@@ -35,24 +64,26 @@ for line in spec["lines"]:
     raw = vo_dir / f"{lid}.raw.wav"
     wav = vo_dir / f"{lid}.wav"
     spoken = line.get("spoken", line["text"])
-    run(["npx", "hyperframes", "tts", spoken, "-v", spec["voice"], "-s", str(spec["speed"]), "-o", str(raw), "--json"])
-    # trim edges, normalise to -16 LUFS, true peak -1.5 dBTP, 48 kHz mono
-    run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-i", str(raw), "-af",
-         "silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse,"
-         "loudnorm=I=-16:TP=-1.5:LRA=7,aresample=48000", "-ac", "1", str(wav)])
-    raw.unlink()
-    res = run(["npx", "hyperframes", "transcribe", str(wav), "--model", "small.en", "--json"])
-    tpath = ROOT / "assets/transcript.json"
+    only = os.environ.get("ONLY", "")
+    if not os.environ.get("ALIGN_ONLY") and (not only or lid in only.split(",")):
+        run(["npx", "hyperframes", "tts", spoken, "-v", spec["voice"], "-s", str(spec["speed"]), "-o", str(raw), "--json"])
+        # trim edges, normalise to -16 LUFS, true peak -1.5 dBTP, 48 kHz mono
+        run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-i", str(raw), "-af",
+             "silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse,"
+             "loudnorm=I=-16:TP=-1.5:LRA=7,aresample=48000", "-ac", "1", str(wav)])
+        raw.unlink()
+    tpath = vo_dir / "transcript.json"
+    tpath.unlink(missing_ok=True)
+    run(["npx", "hyperframes", "transcribe", str(wav), "--engine", "parakeet", "--json"])
     heard = json.loads(tpath.read_text()) if tpath.exists() else []
     if isinstance(heard, dict):
         heard = heard.get("words", [])
     heard = [w for w in heard if re.search(r"[A-Za-z0-9]", w.get("text", ""))]
     words = line["text"].split()
     dur = duration(wav)
-    if len(heard) == len(words):
-        timed = [{"text": w, "start": round(h["start"], 3), "end": round(h["end"], 3)} for w, h in zip(words, heard)]
-        how = "whisper"
-    else:
+    timed = merged(words, heard)
+    how = "asr"
+    if timed is None:
         total = sum(len(w) + 1 for w in words)
         t, timed = 0.0, []
         for w in words:

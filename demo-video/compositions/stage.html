@@ -1,0 +1,109 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; }
+    #stage-canvas { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; }
+    #stage-screen, #stage-glass { position: absolute; left: 0; top: 0; width: 440px; height: 956px; transform-origin: 0 0; border-radius: 62px; overflow: hidden; }
+    #stage-screen { background: #0a0d0b; }
+    #stage-screen .shot { position: absolute; left: 0; top: 0; width: 440px; height: 956px; object-fit: cover; }
+    #stage-island { position: absolute; left: 157px; top: 13px; width: 126px; height: 37px; border-radius: 20px; background: #050505; z-index: 6; }
+    #stage-glass { pointer-events: none; background: linear-gradient(115deg, rgba(255,255,255,0) calc(var(--sheen, 40%) - 18%), rgba(255,255,255,.13) var(--sheen, 40%), rgba(255,255,255,0) calc(var(--sheen, 40%) + 14%)); }
+    .tap { position: absolute; width: 60px; height: 60px; z-index: 5; }
+    .tap i { position: absolute; inset: 0; border-radius: 50%; background: rgba(255,255,255,.55); border: 3px solid rgba(15,58,34,.55); box-shadow: 0 4px 14px rgba(15,58,34,.25); }
+    .note { position: absolute; left: 0; right: 0; top: 64px; text-align: center; z-index: 8; }
+    .note span { display: inline-block; font: 800 28px/1 Nunito, sans-serif; color: #0f3a22; background: rgba(255,255,255,.92); padding: 13px 22px; border-radius: 999px; box-shadow: 0 6px 24px rgba(15,58,34,.14); letter-spacing: .01em; }
+    .note b { font-weight: 800; margin-right: 10px; color: #2f8a43; }
+  </style>
+  <div id="root" data-composition-id="stage" data-width="1920" data-height="1080" data-layout-allow-overlap data-layout-allow-overflow>
+    <canvas id="stage-canvas" width="1920" height="1080"></canvas>
+    <div id="stage-screen">
+      <video id="sc00" class="clip shot" data-start="0" data-duration="5.5" data-media-start="0" data-track-index="2" src="assets/footage/garden.mp4" muted playsinline></video>
+      <video id="sc01" class="clip shot" data-start="5.5" data-duration="6.5" data-media-start="0.6" data-track-index="2" src="assets/footage/lens-jar.mp4" muted playsinline></video>
+      <video id="sc02" class="clip shot" data-start="12" data-duration="10" data-media-start="5" data-track-index="2" src="assets/footage/garden.mp4" muted playsinline></video>
+      <video id="sc03" class="clip shot" data-start="22" data-duration="3" data-media-start="21.2" data-track-index="2" src="assets/footage/garden.mp4" muted playsinline></video>
+      <video id="sc04" class="clip shot" data-start="25" data-duration="8.6" data-media-start="0" data-track-index="2" src="assets/footage/lens-jar.mp4" muted playsinline></video>
+      <video id="sc05" class="clip shot" data-start="33.6" data-duration="5" data-media-start="8.6" data-playback-rate="2.3" data-track-index="2" src="assets/footage/lens-jar.mp4" muted playsinline></video>
+      <video id="sc06" class="clip shot" data-start="38.6" data-duration="3" data-media-start="20.1" data-track-index="2" src="assets/footage/lens-jar.mp4" muted playsinline></video>
+      <video id="sc07" class="clip shot" data-start="41.6" data-duration="18.4" data-media-start="40.2" data-track-index="2" src="assets/footage/lens-jar.mp4" muted playsinline></video>
+      <video id="sc08" class="clip shot" data-start="60" data-duration="20" data-media-start="0" data-track-index="2" src="assets/footage/lens-confirm.mp4" muted playsinline></video>
+      <video id="sc09" class="clip shot" data-start="80" data-duration="4" data-media-start="0.6" data-playback-rate="2.75" data-track-index="2" src="assets/footage/lens-second.mp4" muted playsinline></video>
+      <video id="sc10" class="clip shot" data-start="84" data-duration="1.6" data-media-start="11.6" data-track-index="2" src="assets/footage/lens-second.mp4" muted playsinline></video>
+      <video id="sc11" class="clip shot" data-start="85.6" data-duration="5.6" data-media-start="24.1" data-track-index="2" src="assets/footage/lens-second.mp4" muted playsinline></video>
+      <video id="sc12" class="clip shot" data-start="91.2" data-duration="2" data-media-start="29.7" data-playback-rate="2.2" data-track-index="2" src="assets/footage/lens-second.mp4" muted playsinline></video>
+      <video id="sc13" class="clip shot" data-start="93.2" data-duration="1.2" data-media-start="34.1" data-track-index="2" src="assets/footage/lens-second.mp4" muted playsinline></video>
+      <video id="sc14" class="clip shot" data-start="94.4" data-duration="10.6" data-media-start="49.2" data-track-index="2" src="assets/footage/lens-second.mp4" muted playsinline></video>
+      <video id="sc15" class="clip shot" data-start="105" data-duration="3" data-media-start="0" data-track-index="2" src="assets/footage/lens-fail.mp4" muted playsinline></video>
+      <video id="sc16" class="clip shot" data-start="108" data-duration="2.6" data-media-start="3" data-playback-rate="2.9" data-track-index="2" src="assets/footage/lens-fail.mp4" muted playsinline></video>
+      <video id="sc17" class="clip shot" data-start="110.6" data-duration="6" data-media-start="10.6" data-track-index="2" src="assets/footage/lens-fail.mp4" muted playsinline></video>
+      <video id="sc18" class="clip shot" data-start="116.6" data-duration="8.4" data-media-start="19.6" data-track-index="2" src="assets/footage/lens-fail.mp4" muted playsinline></video>
+      <video id="sc19" class="clip shot" data-start="133" data-duration="8" data-media-start="18" data-playback-rate="1.75" data-track-index="2" src="assets/footage/live-phone.mp4" muted playsinline></video>
+      <video id="sc20" class="clip shot" data-start="141" data-duration="7" data-media-start="41.6" data-playback-rate="1.85" data-track-index="2" src="assets/footage/live-phone.mp4" muted playsinline></video>
+      <video id="sc21" class="clip shot" data-start="148" data-duration="6.3" data-media-start="16.5" data-track-index="2" src="assets/footage/lens-confirm.mp4" muted playsinline></video>
+      <video id="sc22" class="clip shot" data-start="154.3" data-duration="5.7" data-media-start="25.9" data-track-index="2" src="assets/footage/garden.mp4" muted playsinline></video>
+      <div id="tap00" class="clip tap" data-start="6.902" data-duration="0.6" data-track-index="3" style="left:39.8px;top:100.0px"><i></i></div>
+      <div id="tap01" class="clip tap" data-start="13.207" data-duration="0.6" data-track-index="3" style="left:346.0px;top:534.0px"><i></i></div>
+      <div id="tap02" class="clip tap" data-start="17.082" data-duration="0.6" data-track-index="3" style="left:190.0px;top:879.0px"><i></i></div>
+      <div id="tap03" class="clip tap" data-start="27.002" data-duration="0.6" data-track-index="3" style="left:39.8px;top:100.0px"><i></i></div>
+      <div id="tap04" class="clip tap" data-start="32.054" data-duration="0.6" data-track-index="3" style="left:190.0px;top:257.5px"><i></i></div>
+      <div id="tap05" class="clip tap" data-start="34.076" data-duration="0.6" data-track-index="3" style="left:190.0px;top:620.9px"><i></i></div>
+      <div id="tap06" class="clip tap" data-start="38.18" data-duration="0.6" data-track-index="3" style="left:190.0px;top:720.3px"><i></i></div>
+      <div id="tap07" class="clip tap" data-start="56.958" data-duration="0.6" data-track-index="3" style="left:190.0px;top:533.4px"><i></i></div>
+      <div id="tap08" class="clip tap" data-start="63.52" data-duration="0.6" data-track-index="3" style="left:334.3px;top:782.2px"><i></i></div>
+      <div id="tap09" class="clip tap" data-start="68.203" data-duration="0.6" data-track-index="3" style="left:269.8px;top:896.3px"><i></i></div>
+      <div id="tap10" class="clip tap" data-start="73.665" data-duration="0.6" data-track-index="3" style="left:190.0px;top:627.7px"><i></i></div>
+      <div id="tap11" class="clip tap" data-start="80.308" data-duration="0.6" data-track-index="3" style="left:39.8px;top:100.0px"><i></i></div>
+      <div id="tap12" class="clip tap" data-start="81.062" data-duration="0.6" data-track-index="3" style="left:190.0px;top:808.3px"><i></i></div>
+      <div id="tap13" class="clip tap" data-start="82.155" data-duration="0.6" data-track-index="3" style="left:190.0px;top:620.9px"><i></i></div>
+      <div id="tap14" class="clip tap" data-start="90.176" data-duration="0.6" data-track-index="3" style="left:190.0px;top:255.8px"><i></i></div>
+      <div id="tap15" class="clip tap" data-start="92.935" data-duration="0.6" data-track-index="3" style="left:190.0px;top:329.2px"><i></i></div>
+      <div id="tap16" class="clip tap" data-start="106.737" data-duration="0.6" data-track-index="3" style="left:39.8px;top:100.0px"><i></i></div>
+      <div id="tap17" class="clip tap" data-start="108.189" data-duration="0.6" data-track-index="3" style="left:190.0px;top:257.5px"><i></i></div>
+      <div id="tap18" class="clip tap" data-start="108.933" data-duration="0.6" data-track-index="3" style="left:190.0px;top:620.9px"><i></i></div>
+      <div id="tap19" class="clip tap" data-start="110.412" data-duration="0.6" data-track-index="3" style="left:190.0px;top:720.3px"><i></i></div>
+      <div id="tap20" class="clip tap" data-start="117.375" data-duration="0.6" data-track-index="3" style="left:321.0px;top:611.0px"><i></i></div>
+      <div id="tap21" class="clip tap" data-start="121.814" data-duration="0.6" data-track-index="3" style="left:190.0px;top:879.0px"><i></i></div>
+      <div id="tap22" class="clip tap" data-start="136.925" data-duration="0.6" data-track-index="3" style="left:241.0px;top:554.0px"><i></i></div>
+      <div id="tap23" class="clip tap" data-start="140.045" data-duration="0.6" data-track-index="3" style="left:190.0px;top:879.0px"><i></i></div>
+      <div id="tap24" class="clip tap" data-start="147.569" data-duration="0.6" data-track-index="3" style="left:190.0px;top:811.0px"><i></i></div>
+      <div id="tap25" class="clip tap" data-start="154.324" data-duration="0.6" data-track-index="3" style="left:190.0px;top:879.0px"><i></i></div>
+      <div id="stage-island"></div>
+    </div>
+    <div id="stage-glass"></div>
+    <div id="note00" class="clip note" data-start="33.7" data-duration="4.8" data-track-index="4"><span><b>⏩</b>Typing sped up</span></div>
+    <div id="note01" class="clip note" data-start="38.7" data-duration="2.8" data-track-index="4"><span><b>⏩</b>Live model call · 20 s wait shortened</span></div>
+    <div id="note02" class="clip note" data-start="80.1" data-duration="3.8" data-track-index="4"><span><b>⏩</b>Typing sped up</span></div>
+    <div id="note03" class="clip note" data-start="84.1" data-duration="2.1" data-track-index="4"><span><b>⏩</b>Live model call · wait shortened</span></div>
+    <div id="note04" class="clip note" data-start="91.3" data-duration="2.1" data-track-index="4"><span><b>⏩</b>Typing sped up</span></div>
+    <div id="note05" class="clip note" data-start="93.3" data-duration="2.1" data-track-index="4"><span><b>⏩</b>Live model call · wait shortened</span></div>
+    <div id="note06" class="clip note" data-start="108.1" data-duration="2.4" data-track-index="4"><span><b>⏩</b>Typing sped up</span></div>
+  </div>
+  <script>
+    (function () {
+      const KEYS = [{"t": 0, "x": 0.085, "y": -0.012, "z": -0.05, "rx": 6, "ry": -24, "rz": 2}, {"t": 5.2, "x": 0.085, "y": 0.0, "z": 0.0, "rx": 2, "ry": -14, "rz": 0, "ease": "inOut"}, {"t": 12, "x": 0.075, "y": 0.0, "z": 0.02, "rx": 0, "ry": -8, "rz": 0, "ease": "inOut"}, {"t": 24.6, "x": 0.07, "y": 0.0, "z": 0.03, "rx": 0, "ry": -6, "rz": 0, "ease": "inOut"}, {"t": 26.2, "x": 0.0, "y": 0.0, "z": 0.08, "rx": 0, "ry": 0, "rz": 0, "ease": "inOut"}, {"t": 40.5, "x": 0.0, "y": 0.0, "z": 0.08, "rx": 0, "ry": 0, "rz": 0, "ease": "linear"}, {"t": 42.0, "x": -0.07, "y": 0.0, "z": 0.12, "rx": 0, "ry": 8, "rz": 0, "ease": "inOut"}, {"t": 59.2, "x": -0.07, "y": 0.0, "z": 0.12, "rx": 0, "ry": 8, "rz": 0, "ease": "linear"}, {"t": 60.6, "x": -0.33, "y": 0.0, "z": 0.0, "rx": 0, "ry": 30, "rz": -6, "ease": "in"}, {"t": 64.0, "x": -0.33, "y": 0.0, "z": 0.0, "rx": 0, "ry": 30, "rz": -6, "ease": "linear"}, {"t": 65.2, "x": 0.07, "y": 0.0, "z": 0.1, "rx": 0, "ry": -6, "rz": 0, "ease": "out"}, {"t": 79.4, "x": 0.07, "y": 0.0, "z": 0.1, "rx": 0, "ry": -6, "rz": 0, "ease": "linear"}, {"t": 80.6, "x": -0.07, "y": 0.0, "z": 0.1, "rx": 0, "ry": 8, "rz": 0, "ease": "inOut"}, {"t": 94.0, "x": -0.07, "y": 0.0, "z": 0.1, "rx": 0, "ry": 8, "rz": 0, "ease": "linear"}, {"t": 95.4, "x": -0.13, "y": 0.0, "z": 0.04, "rx": 0, "ry": 12, "rz": 0, "ease": "inOut"}, {"t": 104.2, "x": -0.13, "y": 0.0, "z": 0.04, "rx": 0, "ry": 12, "rz": 0, "ease": "linear"}, {"t": 105.6, "x": 0.07, "y": 0.0, "z": 0.1, "rx": 0, "ry": -8, "rz": 0, "ease": "inOut"}, {"t": 124.2, "x": 0.07, "y": 0.0, "z": 0.1, "rx": 0, "ry": -8, "rz": 0, "ease": "linear"}, {"t": 125.2, "x": 0.4, "y": -0.02, "z": 0.0, "rx": 0, "ry": -34, "rz": 6, "ease": "in"}, {"t": 132.4, "x": 0.4, "y": -0.02, "z": 0.0, "rx": 0, "ry": -34, "rz": 6, "ease": "linear"}, {"t": 133.6, "x": 0.075, "y": 0.0, "z": 0.1, "rx": 0, "ry": -8, "rz": 0, "ease": "out"}, {"t": 147.2, "x": 0.075, "y": 0.0, "z": 0.1, "rx": 0, "ry": -8, "rz": 0, "ease": "linear"}, {"t": 148.6, "x": 0.0, "y": 0.0, "z": 0.1, "rx": 0, "ry": 0, "rz": 0, "ease": "inOut"}, {"t": 153.4, "x": 0.0, "y": 0.0, "z": 0.1, "rx": 0, "ry": 0, "rz": 0, "ease": "linear"}, {"t": 155.0, "x": 0.115, "y": 0.0, "z": 0.0, "rx": 3, "ry": -16, "rz": 0, "ease": "inOut"}, {"t": 160, "x": 0.115, "y": 0.0, "z": 0.0, "rx": 3, "ry": -20, "rz": 0, "ease": "linear"}];
+      const st = PhoneStage.mount({
+        canvas: document.getElementById('stage-canvas'),
+        screen: document.getElementById('stage-screen'),
+        glass: document.getElementById('stage-glass'),
+        glb: 'assets/phone/supplied-iphone.glb',
+        keys: KEYS,
+      });
+      window.__hf = window.__hf || {};
+      window.__hf.buildReady = window.__hf.buildReady || {};
+      const tl = gsap.timeline({ paused: true });
+      document.querySelectorAll('#stage-screen .tap i').forEach((el) => {
+        const t = parseFloat(el.parentElement.dataset.start);
+        tl.fromTo(el, { scale: 0.55, opacity: 0 }, { scale: 0.8, opacity: 1, duration: 0.1, ease: 'power2.out' }, t);
+        tl.to(el, { scale: 1.25, opacity: 0, duration: 0.4, ease: 'power2.out' }, t + 0.16);
+      });
+      document.querySelectorAll('.note span').forEach((el) => {
+        const host = el.parentElement, t = parseFloat(host.dataset.start), d = parseFloat(host.dataset.duration);
+        tl.fromTo(el, { y: -16, opacity: 0, filter: 'blur(6px)' }, { y: 0, opacity: 1, filter: 'blur(0px)', duration: 0.3, ease: 'expo.out' }, t);
+        tl.to(el, { opacity: 0, filter: 'blur(4px)', duration: 0.15, ease: 'power2.in' }, t + d - 0.17);
+      });
+      tl.set({}, {}, 160);
+      tl.eventCallback('onUpdate', () => st.render(tl.time()));
+      window.addEventListener('hf-seek', (e) => st.render(e.detail.time));
+      window.__hf.buildReady.phone = st.ready.then(() => st.render(0));
+      window.__timelines['stage'] = tl;
+    })();
+  </script>
+</template>

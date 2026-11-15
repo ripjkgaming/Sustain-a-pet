@@ -1,0 +1,67 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; color: #0f3a22; font-family: Nunito, sans-serif; }
+    .kick { font: 800 28px/1 Nunito, sans-serif; letter-spacing: .14em; color: #2f8a43; }
+    #lens-title { position: absolute; left: 150px; top: 200px; width: 560px; }
+    #lens-title h2 { margin-top: 20px; font-weight: 900; font-size: 64px; line-height: 1.04; letter-spacing: -0.025em; }
+    #lens-title p { margin-top: 22px; font: 700 32px/1.3 Nunito, sans-serif; color: #2d5238; }
+    #lens-privacy { position: absolute; left: 1250px; top: 300px; width: 520px; padding: 34px 36px; border-radius: 30px; background: #fff; box-shadow: 0 18px 50px rgba(15,58,34,.14); }
+    #lens-privacy .lock { display: inline-grid; place-items: center; width: 56px; height: 56px; border-radius: 16px; background: #e4f3ff; font-size: 28px; }
+    #lens-privacy h3 { margin-top: 18px; font: 900 38px/1.1 Nunito, sans-serif; }
+    #lens-privacy p { margin-top: 14px; font: 600 29px/1.38 Nunito, sans-serif; color: #2d5238; }
+    #lens-card { position: absolute; left: 905px; top: 120px; width: 860px; padding: 40px 46px 38px; border-radius: 36px; background: #fff; box-shadow: 0 24px 70px rgba(15,58,34,.16); }
+    #lens-live { display: inline-flex; align-items: center; gap: 12px; padding: 10px 18px; border-radius: 999px; background: #e9f8df; font: 900 28px/1 Nunito, sans-serif; letter-spacing: .08em; color: #2f8a43; }
+    #lens-live i { width: 12px; height: 12px; border-radius: 50%; background: #3fbf3a; }
+    #lens-spot { margin-top: 26px; display: flex; align-items: center; gap: 22px; }
+    #lens-spot small { display: block; font: 800 28px/1 Nunito, sans-serif; letter-spacing: .12em; color: #6c8a74; }
+    #lens-spot strong { display: block; margin-top: 8px; font: 800 34px/1.2 Nunito, sans-serif; }
+    #lens-conf { margin-left: auto; flex: none; padding: 10px 16px; border-radius: 999px; background: #e9f8df; font: 800 28px/1 Nunito, sans-serif; color: #2f8a43; }
+    #lens-qt { margin-top: 28px; font: 900 56px/1.05 Nunito, sans-serif; letter-spacing: -0.02em; }
+    #lens-act { margin-top: 16px; font: 700 34px/1.36 Nunito, sans-serif; color: #1f3d2a; }
+    #lens-why { margin-top: 24px; padding: 18px 24px; border-left: 6px solid #58c643; border-radius: 12px; background: #f2faec; }
+    #lens-why small { font: 800 28px/1 Nunito, sans-serif; letter-spacing: .12em; color: #2f8a43; }
+    #lens-why p { margin-top: 10px; font: 600 29px/1.35 Nunito, sans-serif; color: #2d5238; }
+    #lens-rew { margin-top: 24px; display: flex; gap: 14px; }
+    #lens-rew span { padding: 12px 20px; border-radius: 999px; font: 900 28px/1 Nunito, sans-serif; background: #fff4d6; color: #8a5a00; }
+    #lens-rew span:first-child { background: #f6b93b; color: #fff; }
+    #lens-src { position: absolute; left: 905px; top: 64px; width: 1000px; font: 600 28px/1.3 Inter, sans-serif; color: #4f6f58; }
+  </style>
+  <div id="root" data-composition-id="mg-lens" data-width="1920" data-height="1080" data-layout-allow-overlap>
+    <div id="lens-title" class="clip" data-start="0.4" data-duration="15.2" data-track-index="1">
+      <p class="kick">GREENLENS · AI</p>
+      <h2>A photo or a few words.</h2>
+      <p>One manageable eco quest back.</p>
+    </div>
+    <div id="lens-privacy" class="clip" data-start="5.6" data-duration="8.6" data-track-index="2">
+      <span class="lock">🔒</span>
+      <h3>Before you snap</h3>
+      <p>“Your photo or note is sent to OpenRouter and the AI model it routes to, only to write your tip. Leave out faces, names and addresses.”</p>
+    </div>
+    <div id="lens-card" class="clip" data-start="17.0" data-duration="17.6" data-track-index="2">
+      <span id="lens-live"><i></i>LIVE AI RESULT</span>
+      <div id="lens-spot"><div><small>I SPOTTED</small><strong>empty rinsed glass pasta sauce jar with lid on</strong></div><span id="lens-conf">●●● Pretty sure</span></div>
+      <h3 id="lens-qt">Reuse the sauce jar</h3>
+      <p id="lens-act">Use the rinsed jar with its lid to store dry pantry items such as rice or pasta instead of a new disposable container.</p>
+      <div id="lens-why"><small>WHY THIS HELPS</small><p>Reusing the jar extends its life and reduces demand for single-use packaging and waste.</p></div>
+      <div id="lens-rew"><span>+6 XP</span><span>◉ +11</span><span>🍃 +1</span></div>
+    </div>
+    <p id="lens-src" class="clip" data-start="17.6" data-duration="17" data-track-index="3">Copied from the recorded live response · reward set by the server</p>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo('#lens-title > *', { opacity: 0, y: 18, filter: 'blur(6px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.45, stagger: 0.18, ease: 'expo.out' }, 0.45);
+      tl.to('#lens-title', { opacity: 0, x: -40, filter: 'blur(8px)', duration: 0.3, ease: 'power3.in' }, 15.2);
+      tl.fromTo('#lens-privacy', { opacity: 0, x: 60, scale: 0.96 }, { opacity: 1, x: 0, scale: 1, duration: 0.6, ease: 'expo.out' }, 5.65);
+      tl.to('#lens-privacy', { opacity: 0, x: 40, filter: "blur(6px)", duration: 0.25, ease: "power2.in" }, 13.9);
+      tl.fromTo('#lens-card', { opacity: 0, x: 120, scale: 0.94, filter: 'blur(10px)' }, { opacity: 1, x: 0, scale: 1, filter: 'blur(0px)', duration: 0.7, ease: 'expo.out' }, 17.05);
+      tl.fromTo('#lens-spot', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: 'expo.out' }, 20.3);
+      tl.fromTo(['#lens-qt', '#lens-act'], { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.45, stagger: 0.25, ease: 'expo.out' }, 22.7);
+      tl.fromTo('#lens-why', { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.45, ease: 'expo.out' }, 28.5);
+      tl.fromTo('#lens-rew span', { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.4, stagger: 0.09, ease: 'back.out(2)' }, 30.2);
+      tl.fromTo('#lens-src', { opacity: 0 }, { opacity: 1, duration: 0.4 }, 18.0);
+      tl.to(['#lens-card', '#lens-src'], { opacity: 0, x: 60, filter: 'blur(8px)', duration: 0.3, ease: 'power3.in' }, 34.3);
+      window.__timelines['mg-lens'] = tl;
+    })();
+  </script>
+</template>

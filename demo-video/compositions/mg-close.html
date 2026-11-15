@@ -1,0 +1,34 @@
+<template>
+  <style>
+    #root { position: absolute; inset: 0; color: #0f3a22; font-family: Nunito, sans-serif; }
+    #cl-card { position: absolute; left: 150px; top: 250px; width: 900px; }
+    #cl-mark { width: 150px; height: 150px; border-radius: 50%; background: #fff; box-shadow: 0 16px 40px rgba(15,58,34,.16); display: grid; place-items: center; }
+    #cl-mark img { width: 128px; height: 128px; }
+    #cl-name { margin-top: 30px; font: 900 112px/.95 Nunito, sans-serif; letter-spacing: -0.035em; }
+    #cl-name em { font-style: normal; color: #2f8a43; }
+    #cl-line { margin-top: 24px; width: 760px; font: 700 34px/1.3 Nunito, sans-serif; color: #2d5238; }
+    #cl-url { margin-top: 34px; display: inline-flex; align-items: center; gap: 14px; padding: 18px 28px; border-radius: 999px; background: #0f3a22; color: #fff; font: 700 34px/1 Inter, sans-serif; }
+    #cl-url i { width: 14px; height: 14px; border-radius: 50%; background: #7be05a; }
+    .word { display: inline-block; }
+  </style>
+  <div id="root" data-composition-id="mg-close" data-width="1920" data-height="1080">
+    <div id="cl-card" class="clip" data-start="6.6" data-duration="5.4" data-track-index="1">
+      <div id="cl-mark"><img src="assets/brand/leafling.svg" alt="Leafling, the Sustain-a-Pet companion"></div>
+      <h1 id="cl-name"><span class="word">Sustain-</span><span class="word">a-</span><span class="word"><em>Pet</em></span></h1>
+      <p id="cl-line">Something near you. One practical action. A companion worth coming back for.</p>
+      <p id="cl-url"><i></i><span class="site">sustain-a-pet.deployxa.online</span></p>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const vars = (window.__hyperframes && window.__hyperframes.getVariables && window.__hyperframes.getVariables()) || {};
+      if (vars.siteUrl) document.querySelectorAll('#root .site').forEach((el) => { el.textContent = vars.siteUrl; });
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo('#cl-mark', { scale: 0.3, opacity: 0, rotation: -20 }, { scale: 1, opacity: 1, rotation: 0, duration: 0.7, ease: 'back.out(1.7)' }, 6.65);
+      tl.fromTo('#cl-name .word', { opacity: 0, y: 40, filter: 'blur(10px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.5, stagger: 0.09, ease: 'expo.out' }, 6.95);
+      tl.fromTo('#cl-line', { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.5, ease: 'expo.out' }, 7.5);
+      tl.fromTo('#cl-url', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.6)' }, 7.9);
+      window.__timelines['mg-close'] = tl;
+    })();
+  </script>
+</template>
