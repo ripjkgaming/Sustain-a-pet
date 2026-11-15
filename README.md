@@ -51,10 +51,53 @@ See [DEPLOY.md](DEPLOY.md) for DeployXA, Cloudflare Pages, Netlify, and Docker s
 
 Open **Today** to collect the daily gift and review the seven real-life habits and daily quiz. The three-action and all-eight garden quests provide one-time daily bonuses. Use **Shop**, **Friends** and **Explore** to spend coins and leaves, care for or switch companions, visit areas and restore their landmarks.
 
+## GreenLens AI
+
+GreenLens turns a photo and/or a short note (up to 200 characters) into one small, safe, real-world green action. The action is worth 5–15 XP once you confirm you did it.
+
+Architecture:
+
+```
+client (GreenLens.jsx, greenLensClient.js)
+  -> /api/eco-quest (api/eco-quest.js)
+  -> Gemini structured output (JSON response schema = QUEST_SCHEMA)
+  -> validateQuest (src/ecoQuest.js)
+  -> deterministic game engine (src/game.js, src/store.js)
+```
+
+- The client shrinks the photo to 1024 px (JPEG, quality 0.82) and posts it to `/api/eco-quest`. Accepted images: JPEG, PNG or WebP, up to 3.5 MB.
+- The endpoint validates input and applies a rate limit of 10 requests per minute. It then calls Gemini with a schema-constrained JSON response.
+- `validateQuest` clamps XP, trims and strips HTML from text, and rejects denied (unsafe) actions. Model output is never trusted as-is.
+- The game engine alone changes state. The model cannot grant rewards.
+
+Setup:
+
+```bash
+cp .env.example .env   # then set GEMINI_API_KEY
+npm run dev            # http://localhost:5173
+```
+
+- `GEMINI_API_KEY` (required): without it, `/api/eco-quest` returns `503 ai_unconfigured`. Habits and quests keep working.
+- `GEMINI_MODEL` (optional): defaults to `gemini-flash-latest`.
+- Server-side only. Never prefix these with `VITE_` and never import them into client code. The key must not reach the client bundle. `.env` is git-ignored.
+- Deployed hosts need `GEMINI_API_KEY` in their environment variables.
+
+Safety:
+
+- The user must confirm each action ("Yes, I did it") before any reward.
+- XP is capped at 5–15.
+- 3 AI quest completions per day (`MAX_AI_QUESTS_PER_DAY`).
+- Each quest completes once. Completing it again is a no-op.
+- Text in photos or notes is untrusted data and cannot override the system prompt.
+- Quests must avoid medical, legal and dangerous advice; the prompt and denylist enforce this.
 
 ## AI-use disclosure
 
-Written with Claude Code (Anthropic). _Team: expand this section with who prompted, reviewed and can explain each part._
+- **Claude Code (Anthropic):** development of code, tests and documentation.
+- **Gemini (Google):** runtime. Reads the photo and/or note (vision) and generates quests through `/api/eco-quest`.
+- **OpenAI Codex:** named only in a git stash label in `plans/animation-audit.md`; its role is not documented.
+
+_Team: expand this section with who prompted, reviewed and can explain each part._
 
 ## Sources
 
