@@ -59,7 +59,9 @@ export function checkRate(ip, now = Date.now()) {
 
 function clientIp(req) {
   const forwarded = req.headers?.['x-forwarded-for']
-  if (typeof forwarded === 'string' && forwarded.trim()) return forwarded.split(',')[0].trim()
+  // Rightmost entry is the one the platform proxy appended; leftmost is client-controlled.
+  const last = typeof forwarded === 'string' ? forwarded.split(',').map((s) => s.trim()).filter(Boolean).at(-1) : ''
+  if (last) return last
   return req.socket?.remoteAddress || 'unknown'
 }
 

@@ -85,7 +85,9 @@ export function createApp(config, { env = process.env, log = (line) => process.s
   const clientIp = (req) => {
     if (config.trustProxy) {
       const fwd = req.headers['x-forwarded-for']
-      if (typeof fwd === 'string' && fwd.trim()) return fwd.split(',')[0].trim()
+      // Rightmost entry is the one our trusted proxy appended; leftmost is client-controlled.
+      const last = typeof fwd === 'string' ? fwd.split(',').map((s) => s.trim()).filter(Boolean).at(-1) : ''
+      if (last) return last
     }
     return req.socket.remoteAddress || 'unknown'
   }
