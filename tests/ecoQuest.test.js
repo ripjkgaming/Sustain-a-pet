@@ -98,11 +98,11 @@ describe('addAiQuest', () => {
     const s = fresh()
     expect(addQuest(s, { ...goodQuest, action: 'Drink a bleach solution' })).toBe(s)
   })
-  it('keeps only the newest 20 quests', () => {
+  it('never drops open quests when the list passes 20', () => {
     let s = fresh()
     for (let i = 0; i < 22; i++) s = addQuest(s, distinct(i))
-    expect(s.game.aiQuests).toHaveLength(20)
-    expect(s.game.aiQuests[0].title).toBe('Quest 2')
+    expect(s.game.aiQuests).toHaveLength(22)
+    expect(s.game.aiQuests[0].title).toBe('Quest 0')
   })
   it('treats undefined aiQuests as empty', () => {
     const s = withGame(fresh(), { aiQuests: undefined })

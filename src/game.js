@@ -113,7 +113,10 @@ export function gardenAction(state, action, today) {
       if (!v.ok) return state
       const list = g.aiQuests ?? []
       if (list.some(q => q.id === v.quest.id)) return state
-      return patch({ aiQuests: [...list, { ...v.quest, ...pickServerFields(action.quest), createdOn: today, status: 'open' }].slice(-20) })
+      const next = [...list, { ...v.quest, ...pickServerFields(action.quest), createdOn: today, status: 'open' }]
+      // Cap at 20 by dropping the oldest done quests only; open quests are never dropped.
+      let excess = next.length - 20
+      return patch({ aiQuests: excess > 0 ? next.filter(q => !(q.status === 'done' && excess-- > 0)) : next })
     }
     case 'refreshAiQuestToken': {
       // A repeat look returns the same quest id with a fresh token; replace the stale token of the open quest.
