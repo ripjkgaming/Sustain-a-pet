@@ -14,6 +14,7 @@ import Rewards, { unlockText } from './components/Rewards.jsx'
 import { usePrefersReducedMotion } from './components/pet3d/shared.js'
 import LeafFootsteps from './components/LeafFootsteps.jsx'
 import GardenJournal from './components/GardenJournal.jsx'
+import GreenLens from './components/GreenLens.jsx'
 import SceneBoundary from './components/SceneBoundary.jsx'
 import { sceneLayout } from './sceneLayout.js'
 
@@ -64,6 +65,8 @@ export default function App() {
   const [muted, setMuted] = useState(() => sfx.isMuted())
   const [questId, setQuestId] = useState(null) // null | habit id | 'list'
   const [splash, setSplash] = useState(true)
+  const [lens, setLens] = useState(false)
+  const lensBtn = useRef(null)
   const endSplash = useCallback(() => setSplash(false), [])
   const taps = useRef([])
   const camApi = useRef({})
@@ -170,7 +173,7 @@ export default function App() {
     bump('dance', 'confetti', 'leaves')
     powerUp(6)
     petCtl.current.hold?.(3)
-    if (cheer) pushToast(`+${cheer.xp} XP · +${cheer.xp + 5} coins · +1 leaf`)
+    if (cheer) pushToast(`+${cheer.xp} XP · +${cheer.coins ?? cheer.xp + 5} coins${cheer.leaves === 0 ? '' : ' · +1 leaf'}`)
   }
 
   if (splash) return <Splash onDone={endSplash} />
@@ -210,6 +213,8 @@ export default function App() {
           </PetCanvas>
         </Suspense></SceneBoundary>
         <div className="world-guide" aria-live="polite"><Icon name="quest" size={16} />{done.length}/{habitList.length} quests</div>
+        <button ref={lensBtn} type="button" className="world-lens" aria-haspopup="dialog" aria-label="Open GreenLens: snap something near you for a real-world eco quest"
+          onClick={() => { sfx.open(); setLens(true) }}><Icon name="lens" size={16} />GreenLens</button>
         <div className="world-tools" aria-label="Garden camera">
           <button aria-label="Zoom out" onClick={() => { sfx.tap(); camApi.current.zoom?.(1.25) }}>−</button>
           <button aria-label="Reset garden camera" onClick={() => { sfx.tap(); camApi.current.reset?.() }}><Icon name="refresh" size={14} /></button>
@@ -228,6 +233,9 @@ export default function App() {
       <button className="duo-btn green quests-btn" onClick={() => { sfx.open(); setQuestId('list') }}><Icon name="quest" size={20} />Quests</button>
       <Vitals health={pet.health} xp={pet.xp} doneToday={done.length} totalHabits={habitList.length} />
       <GardenJournal state={pet} today={today} dispatch={dispatch} onCelebrate={celebrateLens} />
+      {lens && <GreenLens game={pet.game} today={today} petName={pet.pet.name} dispatch={dispatch}
+        onClose={() => { sfx.close(); setLens(false); requestAnimationFrame(() => lensBtn.current?.focus()) }}
+        onCelebrate={celebrateLens} />}
     </main>
     </SpriteProvider>
   )

@@ -240,3 +240,68 @@ export function aiQuestLists(game, recent = 3) {
     done: list.filter((q) => q.status === 'done').slice(-recent).reverse(),
   }
 }
+
+// ---------- UI helpers (pure; storage is injectable for tests) ----------
+export const PRIVACY_KEY = 'sustain-pet-greenlens-privacy-v1'
+export const PLACE_KEY = 'sustain-pet-greenlens-place'
+export const PRIVACY_NOTICE = 'Your photo or note is sent to OpenRouter and the AI model it routes to, only to write your tip. Their privacy terms apply. Leave out faces, names and addresses.'
+
+function browserStorage() {
+  try { return typeof window !== 'undefined' ? window.localStorage : null } catch { return null }
+}
+
+/** True once the player has acknowledged the AI privacy notice on this device. */
+export function hasPrivacyAck(storage = browserStorage()) {
+  try { return storage?.getItem(PRIVACY_KEY) === 'yes' } catch { return false }
+}
+
+/** Remember the acknowledgement. Returns false when storage is blocked (the screen still unlocks for this visit). */
+export function savePrivacyAck(storage = browserStorage()) {
+  try { storage?.setItem(PRIVACY_KEY, 'yes'); return !!storage } catch { return false }
+}
+
+/** Optional free-text town or region, used only to pick curated recycling links. */
+export function loadPlace(storage = browserStorage()) {
+  try { return (storage?.getItem(PLACE_KEY) || '').slice(0, MAX_LOCATION_CHARS) } catch { return '' }
+}
+
+export function savePlace(value, storage = browserStorage()) {
+  const place = typeof value === 'string' ? value.trim().slice(0, MAX_LOCATION_CHARS) : ''
+  try { if (place) storage?.setItem(PLACE_KEY, place); else storage?.removeItem(PLACE_KEY) } catch { /* not remembered */ }
+  return place
+}
+
+/** Label for canned output, or null for a live AI result. Anything not explicitly live counts as prerecorded. */
+export function fallbackBadge(quest) {
+  if (!quest) return null
+  if (quest.fallback_label) return quest.fallback_label
+  return quest.live === false ? FALLBACK_LABEL : null
+}
+
+/** Recycling links (curated only) or the note explaining why there are none. */
+export function sourcesView(quest) {
+  const links = Array.isArray(quest?.sources) ? quest.sources.filter((s) => s && typeof s.url === 'string' && /^https:\/\//.test(s.url)) : []
+  const note = links.length ? null : (typeof quest?.source_note === 'string' && quest.source_note) || null
+  return { links, note }
+}
+
+/** Short, kind message for a rejected completion. */
+export function completionNotice(code) {
+  switch (code) {
+    case 'already_completed': return 'This one already earned its reward. Nice work!'
+    case 'daily_cap': return 'That’s today’s last GreenLens reward. Come back tomorrow for more.'
+    case 'invalid_token': return 'This quest has expired. Ask GreenLens for a fresh one to earn a reward.'
+    case 'rate_limited': return 'Lots of quests at once! Wait a minute, then try again.'
+    case 'offline':
+    case 'network':
+    case 'timeout': return 'Couldn’t reach GreenLens just now. Try again in a moment.'
+    default: return 'Couldn’t confirm that one just now. Try again in a moment.'
+  }
+}
+
+/** Display reward for a quest before completion (table-derived xp), or the server reward after. */
+export function rewardView(reward, xp) {
+  if (reward && Number.isFinite(reward.xp)) return { xp: reward.xp, coins: reward.coins ?? reward.xp + 5, leaves: reward.leaves ?? 1 }
+  const safe = Number.isFinite(xp) ? xp : 0
+  return { xp: safe, coins: safe + 5, leaves: 1 }
+}

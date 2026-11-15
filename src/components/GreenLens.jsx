@@ -3,8 +3,11 @@ import { createPortal } from 'react-dom'
 import { Mascot } from './Duo.jsx'
 import Icon from './Icons.jsx'
 import {
-  MAX_TEXT, aiDailyUsed, aiQuestLists, confidenceCopy, describeError, downscaleImage, requestEcoQuest,
+  MAX_TEXT, PRIVACY_NOTICE, aiDailyUsed, aiQuestLists, completeEcoQuest, completionNotice, confidenceCopy, describeError,
+  downscaleImage, fallbackBadge, hasPrivacyAck, loadPlace, recentHistory, requestEcoQuest, rewardView, savePlace, savePrivacyAck,
+  sourcesView,
 } from '../greenLensClient.js'
+import { MAX_LOCATION_CHARS } from '../ecoQuestConfig.js'
 import '../greenlens.css'
 
 const HONEST_LINE = 'A photo can’t prove it — tap only when you really did it.'
@@ -51,12 +54,24 @@ function ConfidenceBadge({ confidence }) {
   </span>
 }
 
-function Reward({ xp }) {
+function Reward({ reward }) {
   return <span className="gl-reward">
-    <span className="gl-xp">+{xp} XP</span>
-    <span className="gl-reward-extra"><b aria-hidden="true">◉</b> +{xp + 5}<span className="sr-only"> coins</span></span>
-    <span className="gl-reward-extra"><Icon name="leaf" size={13} /> +1<span className="sr-only"> leaf</span></span>
+    <span className="gl-xp">+{reward.xp} XP</span>
+    <span className="gl-reward-extra"><b aria-hidden="true">◉</b> +{reward.coins}<span className="sr-only"> coins</span></span>
+    {reward.leaves > 0 && <span className="gl-reward-extra"><Icon name="leaf" size={13} /> +{reward.leaves}<span className="sr-only"> {reward.leaves === 1 ? 'leaf' : 'leaves'}</span></span>}
   </span>
+}
+
+/** Curated recycling links chosen by the server, or the note saying none cover this place. */
+function Sources({ quest }) {
+  const { links, note } = sourcesView(quest)
+  if (!links.length && !note) return null
+  return <div className="gl-sources">
+    <span className="gl-kicker">Check local rules</span>
+    {links.length > 0
+      ? <ul>{links.map((s) => <li key={s.url}><a href={s.url} target="_blank" rel="noopener noreferrer">{s.title}<span className="sr-only"> (opens in a new tab)</span></a>{s.publisher !== s.title && <small>{s.publisher}</small>}</li>)}</ul>
+      : <p>{note}. Check your local council or authority before you recycle.</p>}
+  </div>
 }
 
 /**
@@ -73,13 +88,20 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
   const [confirmId, setConfirmId] = useState(null)
   const [cheer, setCheer] = useState(null)
   const [status, setStatus] = useState('')
+  const [ack, setAck] = useState(() => hasPrivacyAck())
+  const [place, setPlace] = useState(() => loadPlace())
+  const [question, setQuestion] = useState('')
+  const [answer, setAnswer] = useState('')
+  const [busyId, setBusyId] = useState(null)
+  const [notice, setNotice] = useState(null) // { id, text } for a rejected completion
   const rootRef = useRef(null)
   const headRef = useRef(null)
   const textRef = useRef(null)
+  const answerRef = useRef(null)
   const lastInput = useRef(null)
   const inflight = useRef(null)
   const baseId = useId()
-  const ids = { title: `${baseId}t`, mine: `${baseId}m`, text: `${baseId}x`, hint: `${baseId}h`, camera: `${baseId}c`, gallery: `${baseId}g` }
+  const ids = { title: `${baseId}t`, mine: `${baseId}m`, text: `${baseId}x`, hint: `${baseId}h`, camera: `${baseId}c`, gallery: `${baseId}g`, place: `${baseId}p`, answer: `${baseId}a`, privacy: `${baseId}v` }
 
   const { open, done } = aiQuestLists(game)
   const cap = aiDailyUsed(game, today)
@@ -106,7 +128,7 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
     const controller = new AbortController()
     inflight.current = controller
     lastInput.current = input
-    setPhase('loading'); setQuest(null); setErrorCode(null); setConfirmId(null)
+    setPhase('loading'); setQuest(null); setErrorCode(null); setConfirmId(null); setNotice(null)
     setAsked(input.text?.trim() || '')
     setStatus('Looking around…')
     let image = input.image
@@ -118,31 +140,56 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
         return
       }
       if (controller.signal.aborted) return
-      lastInput.current = { image, text: input.text }
+      lastInput.current = { ...input, file: undefined, image }
       setPreview(image)
     }
-    const res = await requestEcoQuest({ image, text: input.text }, { signal: controller.signal })
+    const location = savePlace(place)
+    const res = await requestEcoQuest({ image, text: input.text, clarification: input.clarification, history: recentHistory(game), location }, { signal: controller.signal })
     if (controller.signal.aborted || res.code === 'aborted') return
     inflight.current = null
     if (!res.ok) { fail(res.code); return }
+    if (res.kind === 'clarify') {
+      // Only one round: a second question after an answer is treated as unusable output.
+      if (input.clarification) { fail('invalid_model_output'); return }
+      setQuestion(res.question); setAnswer(''); setPhase('clarify')
+      setStatus(`One quick question: ${res.question}`)
+      requestAnimationFrame(() => answerRef.current?.focus())
+      return
+    }
     setQuest(res.quest); setPhase('result')
-    setStatus(`Found a quest: ${res.quest.title}. Plus ${res.quest.xp} XP.`)
+    const badge = fallbackBadge(res.quest)
+    setStatus(`Found a quest: ${res.quest.title}. ${res.quest.confidence_label || ''}${badge ? ` ${badge}.` : ''}`)
     focusHead()
   }
 
   const onFile = (event) => {
     const file = event.target.files?.[0]
     event.target.value = '' // let the same photo be picked again
-    if (!file) return
+    if (!file || !ack) return
     setPreview(null)
     look({ file, text })
   }
 
   const onSubmitText = (event) => {
     event.preventDefault()
+    if (!ack) return
     if (!text.trim()) { textRef.current?.focus(); return }
     setPreview(null)
     look({ text })
+  }
+
+  const acknowledge = () => {
+    savePrivacyAck()
+    setAck(true)
+    setStatus('Thanks. GreenLens is ready.')
+    focusHead()
+  }
+
+  const sendAnswer = (event, skip = false) => {
+    event?.preventDefault()
+    const reply = skip ? 'Not sure' : answer.trim()
+    if (!reply) { answerRef.current?.focus(); return }
+    look({ ...lastInput.current, clarification: reply })
   }
 
   const describeInstead = () => {
@@ -152,7 +199,7 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
 
   const startOver = () => {
     inflight.current?.abort(); inflight.current = null
-    setPhase('capture'); setQuest(null); setPreview(null); setErrorCode(null)
+    setPhase('capture'); setQuest(null); setPreview(null); setErrorCode(null); setQuestion(''); setAnswer('')
     setStatus('Ready to look again.')
     focusHead()
   }
@@ -163,13 +210,23 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
     setStatus(`Added “${quest.title}” to your quests.`)
   }
 
-  const complete = (q) => {
-    if (cap.left <= 0) return
-    dispatch({ type: 'completeAiQuest', id: q.id })
+  // The server confirms the completion and decides the reward; the client only shows what it returns.
+  const complete = async (q) => {
+    if (cap.left <= 0 || busyId) return
+    setBusyId(q.id); setNotice(null)
+    setStatus('Checking with GreenLens…')
+    const res = await completeEcoQuest(q)
+    setBusyId(null)
+    if (!res.ok) {
+      const text = completionNotice(res.code)
+      setConfirmId(null); setNotice({ id: q.id, text }); setStatus(text)
+      return
+    }
+    dispatch({ type: 'completeAiQuest', id: q.id, reward: res.reward })
     setConfirmId(null)
-    setCheer({ title: q.title, xp: q.xp })
+    setCheer({ title: q.title, ...res.reward })
     setPhase('celebrate')
-    setStatus(`Quest complete: ${q.title}. Plus ${q.xp} XP, ${q.xp + 5} coins and 1 leaf.`)
+    setStatus(`Quest complete: ${q.title}. Plus ${res.reward.xp} XP, ${res.reward.coins} coins${res.reward.leaves ? ` and ${res.reward.leaves} leaf` : ''}.`)
     focusHead()
   }
 
@@ -195,8 +252,10 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
 
   const err = errorCode ? describeError(errorCode) : null
   const conf = quest ? confidenceCopy(quest.confidence, quest.caveat) : null
-  const heading = { loading: 'Looking around…', result: 'Here’s a little quest', error: err?.title, celebrate: 'Quest complete!' }[phase] || 'What’s near you?'
-  const showMine = phase !== 'loading' && phase !== 'celebrate' && (open.length > 0 || done.length > 0)
+  const badge = fallbackBadge(quest)
+  const gated = phase === 'capture' && !ack
+  const heading = gated ? 'Before you snap' : { loading: 'Looking around…', clarify: 'One quick question', result: 'Here’s a little quest', error: err?.title, celebrate: 'Quest complete!' }[phase] || 'What’s near you?'
+  const showMine = phase !== 'loading' && phase !== 'celebrate' && !gated && (open.length > 0 || done.length > 0)
 
   const host = document.querySelector('.screen') || document.body
 
@@ -216,8 +275,18 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
       <div className="gl-scroll">
         <h2 id={ids.title} ref={headRef} tabIndex={-1} className="gl-title">{heading}</h2>
 
-        {phase === 'capture' && <div className="gl-panel" key="capture">
+        {gated && <div className="gl-panel" key="privacy">
+          <div className="gl-privacy" id={ids.privacy}>
+            <span className="gl-privacy-icon" aria-hidden="true"><Icon name="lock" size={22} /></span>
+            <p>{PRIVACY_NOTICE}</p>
+          </div>
+          <button type="button" className="duo-btn green" onClick={acknowledge} aria-describedby={ids.privacy}>Got it</button>
+          <button type="button" className="gl-text-btn" onClick={onClose}>Not now</button>
+        </div>}
+
+        {phase === 'capture' && ack && <div className="gl-panel" key="capture">
           <p className="gl-lede">Snap something you use every day. GreenLens suggests one small, safe thing to do about it today.</p>
+          <p className="gl-privacy-line"><Icon name="lock" size={13} />Sent to an AI model via OpenRouter to write your tip.</p>
           <label className="gl-finder" htmlFor={ids.camera}>
             <input id={ids.camera} className="gl-file" type="file" accept="image/*" capture="environment" onChange={onFile} />
             <span className="gl-corners" aria-hidden="true"><i /><i /><i /><i /></span>
@@ -239,6 +308,11 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
             <small id={ids.hint} className="gl-hint">{text.length > 150 ? `${MAX_TEXT - text.length} characters left.` : 'Works without a camera, too.'}</small>
             <button type="submit" className="duo-btn green" disabled={!text.trim()}>Find a quest</button>
           </form>
+          <div className="gl-place">
+            <label htmlFor={ids.place}>Town or region <small>(optional, for recycling links)</small></label>
+            <input id={ids.place} type="text" maxLength={MAX_LOCATION_CHARS} autoComplete="address-level2" value={place}
+              placeholder="e.g. Ontario" onChange={(e) => setPlace(e.target.value)} />
+          </div>
         </div>}
 
         {phase === 'loading' && <div className="gl-panel gl-looking" key="loading">
@@ -251,18 +325,35 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
           <button type="button" className="gl-text-btn" onClick={startOver}>Cancel</button>
         </div>}
 
+        {phase === 'clarify' && <div className="gl-panel" key="clarify">
+          <div className="gl-error gl-ask">
+            <Mascot size={56} className="gl-error-mascot" />
+            <p>{question}</p>
+          </div>
+          <form className="gl-describe" onSubmit={sendAnswer}>
+            <label htmlFor={ids.answer}>Your answer</label>
+            <textarea id={ids.answer} ref={answerRef} rows={2} maxLength={MAX_TEXT} value={answer} onChange={(e) => setAnswer(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); e.currentTarget.form.requestSubmit() } }} />
+            <button type="submit" className="duo-btn green" disabled={!answer.trim()}>Get my quest</button>
+          </form>
+          <button type="button" className="gl-text-btn" onClick={() => sendAnswer(null, true)}>Not sure, skip</button>
+        </div>}
+
         {phase === 'result' && quest && <div className="gl-panel" key="result">
           <article className="gl-quest">
+            {badge && <p className="gl-fallback"><Icon name="refresh" size={14} />{badge}</p>}
             <div className="gl-spotted">
               {preview ? <img src={preview} alt="Your photo" /> : <span className="gl-spotted-icon" aria-hidden="true"><Icon name="spark" size={22} /></span>}
               <div className="gl-spotted-copy"><span className="gl-kicker">I spotted</span><strong>{quest.object}</strong></div>
               <ConfidenceBadge confidence={quest.confidence} />
             </div>
-            {conf.note && <p className={`gl-caveat is-${quest.confidence}`}><span aria-hidden="true" />{conf.note}</p>}
+            <p className={`gl-caveat is-${quest.confidence}`}><span aria-hidden="true" />{quest.confidence_label || conf.note}{quest.caveat ? ` ${quest.caveat}` : ''}</p>
             <h3 className="gl-quest-title">{quest.title}</h3>
             <p className="gl-action">{quest.action}</p>
             <div className="gl-why"><span className="gl-kicker">Why this helps</span><p>{quest.why}</p></div>
-            <Reward xp={quest.xp} />
+            {quest.personalization_note && <p className="gl-personal"><Icon name="sprout" size={15} />{quest.personalization_note}</p>}
+            <Sources quest={quest} />
+            <Reward reward={rewardView(quest.reward, quest.xp)} />
           </article>
           {saved
             ? <p className="gl-added" role="status"><span aria-hidden="true">✓</span>{saved.status === 'done' ? 'You already did this one. Lovely.' : 'Added below. Do it for real, then tap “I did it”.'}</p>
@@ -295,7 +386,7 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
             <Mascot size={150} className="gl-cheer-mascot" />
           </div>
           <p className="gl-lede gl-center"><q>{cheer.title}</q>, done in real life. {petName} is so proud of you.</p>
-          <Reward xp={cheer.xp} />
+          <Reward reward={rewardView(cheer, cheer.xp)} />
           <button type="button" className="duo-btn green" onClick={backToGarden}>Back to the garden</button>
           <button type="button" className="gl-text-btn" onClick={startOver}>Find another quest</button>
         </div>}
@@ -309,12 +400,14 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
           <ul className="gl-list">
             {open.map((q) => {
               const confirming = confirmId === q.id
+              const rowNotice = notice?.id === q.id ? notice.text : ''
               return <li key={q.id} className={`gl-row ${confirming ? 'is-confirming' : ''}`}>
                 <div className="gl-row-main">
                   <div className="gl-row-copy">
                     <strong>{q.title}</strong>
                     <p>{q.action}</p>
                     <span className="gl-xp small">+{q.xp} XP</span>
+                    {fallbackBadge(q) && <span className="gl-fallback-tag">Prerecorded tip</span>}
                   </div>
                   {!confirming && <button type="button" className="gl-did" disabled={cap.left <= 0} onClick={() => setConfirmId(q.id)}
                     aria-label={cap.left <= 0 ? `${q.title}: come back tomorrow` : `I did it: ${q.title}`}>{cap.left <= 0 ? 'Tomorrow' : 'I did it'}</button>}
@@ -322,11 +415,12 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
                 {confirming && <div className="gl-confirm" role="group" aria-label={`Confirm: ${q.title}`}>
                   <p><strong>Really done?</strong> {HONEST_LINE}</p>
                   <div className="gl-confirm-actions">
-                    <button type="button" className="gl-confirm-no" onClick={() => setConfirmId(null)}>Not yet</button>
+                    <button type="button" className="gl-confirm-no" onClick={() => setConfirmId(null)} disabled={busyId === q.id}>Not yet</button>
                     {/* oxlint-disable-next-line jsx-a11y/no-autofocus -- focus must move to the confirm the user just opened */}
-                    <button type="button" className="gl-confirm-yes" onClick={() => complete(q)} autoFocus>Yes, I did it</button>
+                    <button type="button" className="gl-confirm-yes" onClick={() => complete(q)} disabled={busyId === q.id} autoFocus>{busyId === q.id ? 'Checking…' : 'Yes, I did it'}</button>
                   </div>
                 </div>}
+                {rowNotice && <p className="gl-row-notice" role="status">{rowNotice}</p>}
               </li>
             })}
             {done.map((q) => <li key={q.id} className="gl-row is-done">

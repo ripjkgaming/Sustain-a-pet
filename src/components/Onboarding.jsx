@@ -13,6 +13,7 @@ const BENEFITS = [
   ['heart', 'Build kinder habits', 'One small action a day'],
   ['sprout', 'Watch a friend grow', 'From seed to guardian'],
   ['leaf', 'Restore the garden', 'Bring the meadow back'],
+  ['lens', 'Snap with GreenLens', 'Turn what you see into a tiny real quest'],
 ]
 
 export default function Onboarding({ reduced, onHatch }) {
