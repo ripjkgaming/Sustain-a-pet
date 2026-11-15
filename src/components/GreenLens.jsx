@@ -160,6 +160,7 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
       return
     }
     setQuest(res.quest); setPhase('result')
+    dispatch({ type: 'refreshAiQuestToken', quest: res.quest })
     const badge = fallbackBadge(res.quest)
     setStatus(`Found a quest: ${res.quest.title}. ${res.quest.confidence_label || ''}${badge ? ` ${badge}.` : ''}`)
     focusHead()

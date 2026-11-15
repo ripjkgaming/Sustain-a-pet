@@ -111,6 +111,7 @@ export function reduce(app, action) {
     case 'restore':
     case 'claimQuest':
     case 'addAiQuest':
+    case 'refreshAiQuestToken':
     case 'completeAiQuest':
       return withPet(app, (s, t) => gardenAction(s, action, t))
     case 'tick':

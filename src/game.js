@@ -115,6 +115,17 @@ export function gardenAction(state, action, today) {
       if (list.some(q => q.id === v.quest.id)) return state
       return patch({ aiQuests: [...list, { ...v.quest, ...pickServerFields(action.quest), createdOn: today, status: 'open' }].slice(-20) })
     }
+    case 'refreshAiQuestToken': {
+      // A repeat look returns the same quest id with a fresh token; replace the stale token of the open quest.
+      const v = validateQuest(action.quest)
+      if (!v.ok) return state
+      const list = g.aiQuests ?? []
+      const fresh = pickServerFields(action.quest)
+      if (!fresh.token) return state
+      const old = list.find(q => q.id === v.quest.id)
+      if (!old || old.status !== 'open' || old.token === fresh.token) return state
+      return patch({ aiQuests: list.map(q => q.id === old.id ? { ...q, token: fresh.token } : q) })
+    }
     case 'completeAiQuest': {
       // The reward must be the one the server returned for this completion; the quest's own xp is never paid.
       const reward = clampReward(action.reward)
