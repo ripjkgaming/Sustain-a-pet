@@ -2,7 +2,7 @@
 
 Date: 2026-11-15 (Asia/Singapore). Base commit: `102760d`.
 Scope: current working tree, including preserved, uncommitted botanical-model work.
-Status: audit complete; awaiting selection before writing implementation plans.
+Status: implementation complete in `9089a1c`. All ten findings and both missed opportunities below were addressed. The finding table records the original audit state; its fix summaries are no longer outstanding work.
 
 ## Recon
 
@@ -41,6 +41,8 @@ Status: audit complete; awaiting selection before writing implementation plans.
 All eight playbook categories were reviewed. Purpose/frequency is cleared beyond the repetitive prompt entrance: living-pet movement has a purpose and rare evolution effects fit the product. No ease-in UI declaration, transition:all, or exact CSS scale(0) was found. Centered modal origins are appropriate. Existing reversible checkbox/chevron transitions retarget; particle instancing is appropriate. No deliberate documented tradeoff was rejected. Performance and spring risks are code-based findings, not measured frame-rate regressions; browser feel checks remain necessary before claiming visual improvement.
 
 ## Update verification
+
+Implementation and follow-up verification: all ten recommendations plus the demo-drawer and onboarding-hatch opportunities were implemented. On 2026-11-15, `npm test` passed 63 tests and `npm run build` succeeded. Browser checks are recorded in `qa/game-expansion-verification.md`; reduced-motion preference emulation was unavailable in the browser QA controls.
 
 Fetched `atharvahuja13/Sustain-a-pet` main and fast-forwarded from `4c42d5a` to `102760d`. Preserved local botanical work, resolved README and PetModel conflicts, retained the new gait phase initialization alongside the botanical renderer. Pushed the upstream commit to `ripjkgaming/Sustain-a-pet` main; remote SHA verified. Existing local work remains uncommitted. A tracked-work backup remains in stash with label `codex-preserve-local-work-before-atharvahuja13-update`; original untracked files were left in place.
 
