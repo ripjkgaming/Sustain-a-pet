@@ -12,4 +12,6 @@ createRoot(document.getElementById('root')).render(
   </StrictMode>,
 )
 
+
 import './motion.css'
+import './duo.css'

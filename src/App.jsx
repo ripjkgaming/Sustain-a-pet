@@ -7,6 +7,7 @@ import { questionFor } from './components/QuizCard.jsx'
 import Vitals from './components/Vitals.jsx'
 import Icon from './components/Icons.jsx'
 import DemoDrawer from './components/DemoDrawer.jsx'
+import { Splash } from './components/Duo.jsx'
 import Onboarding from './components/Onboarding.jsx'
 import Rewards, { unlockText } from './components/Rewards.jsx'
 import { usePrefersReducedMotion } from './components/pet3d/shared.js'
@@ -58,6 +59,8 @@ export default function App() {
   const [evolve, setEvolve] = useState(null)
   const [live, setLive] = useState('')
   const [tutorial, setTutorial] = useState(() => tutorialStorage.get() === 'in-progress' ? 'in-progress' : null)
+  const [splash, setSplash] = useState(true)
+  const endSplash = useCallback(() => setSplash(false), [])
   const taps = useRef([])
   const camApi = useRef({})
   const petCtl = useRef({ pos: new THREE.Vector3(0, 0, 0.4) })
@@ -137,6 +140,7 @@ export default function App() {
 
   petTapRef.current = petTap
 
+  if (splash) return <Splash onDone={endSplash} />
   if (!app.real && !app.inDemo) return <Onboarding reduced={reduced} onHatch={(name, sprite) => { dispatch({ type: 'hatch', name, sprite }); tutorialStorage.set('in-progress'); setTutorial('in-progress') }} />
   if (!pet) return null
 
@@ -191,7 +195,7 @@ export default function App() {
         </div>
         <LeafFootsteps movement={petCtl} enabled />
         {tutorial === 'in-progress' && <QuickGuide onFinish={finishTutorial} />}
-        <Rewards floats={floats} toasts={toasts} evolve={evolve} onCloseEvolve={() => setEvolve(null)} petName={pet.pet.name} />
+        <Rewards floats={floats} toasts={toasts} evolve={evolve} onCloseEvolve={() => setEvolve(null)} petName={pet.pet.name} xp={pet.xp} doneCount={done.length} total={habitList.length} />
       </section>
       <div className="sr-only" aria-live="polite">{live}</div>
 

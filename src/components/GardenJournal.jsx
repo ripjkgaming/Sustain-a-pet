@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { SHOP, AREAS, PET_CATALOG, PROJECTS, dailyRewardFor, questProgress } from '../game.js'
 import Icon from './Icons.jsx'
 import habits from '../data/habits.json'
+import { StreakScreen, ShareSheet } from './Duo.jsx'
 import QuizCard from './QuizCard.jsx'
 
 const tabs = [ ['today', 'Today', 'cal'], ['shop', 'Shop', 'spark'], ['pets', 'Friends', 'heart'], ['map', 'Explore', 'layers'] ]
@@ -18,6 +19,8 @@ function CostButton({ cost, game, children, disabled, reason, ...props }) {
 
 export default function GardenJournal({ state, today, dispatch, inDemo }) {
   const [tab, setTab] = useState(null)
+  const [streakView, setStreakView] = useState(false)
+  const [sharing, setSharing] = useState(false)
   const closeRef = useRef(null)
   const openRef = useRef(null)
   const game = state.game
@@ -43,7 +46,7 @@ export default function GardenJournal({ state, today, dispatch, inDemo }) {
         {tab === 'today' && <>
           <div className="daily-gift"><Icon name="calr" size={28} /><div><h3>Your daily gift</h3><p>{game.daily.streak > 0 ? `${game.daily.streak} day streak. Keep growing together.` : 'A fresh start for your little world.'}</p></div></div>
           <div className="daily-days" aria-label="Seven day reward cycle">{Array.from({ length: 7 }, (_, index) => <span key={index} className={index < (reward.available ? reward.day - 1 : reward.day) ? 'collected' : ''}><small>Day {index + 1}</small><Icon name={index === 6 ? 'spark' : 'leaf'} size={18} /></span>)}</div>
-          <button className="game-primary daily-claim" disabled={!reward.available} onClick={() => dispatch({ type: 'claimDaily' })}>{!reward.available ? 'Gift collected · come back tomorrow' : <>Collect today’s gift <Price coins={reward.coins} leaves={reward.leaves} /></>}</button>
+          <button className="game-primary daily-claim" disabled={!reward.available} onClick={() => { dispatch({ type: 'claimDaily' }); setStreakView(true) }}>{!reward.available ? 'Gift collected · come back tomorrow' : <>Collect today’s gift <Price coins={reward.coins} leaves={reward.leaves} /></>}</button>
           <div className="journal-section-title"><h3>Today’s little adventures</h3><small>Habits earn coins and leaves. Quests give a little extra.</small></div>
           <div className="game-list">{values(quests).map((quest) => <article className="quest-row" key={quest.id}><div><strong>{quest.name || quest.title}</strong><p>{quest.description}</p><div className="quest-track"><span style={{ transform: `scaleX(${Math.min(1, quest.progress / quest.target)})` }} /></div><small>{Math.min(quest.progress, quest.target)} / {quest.target} · <Price coins={quest.coins ?? quest.reward?.coins} leaves={quest.leaves ?? quest.reward?.leaves} /></small></div><button className="game-small" disabled={quest.claimed || !quest.complete} onClick={() => dispatch({ type: 'claimQuest', id: quest.id })}>{quest.claimed ? 'Collected' : quest.complete ? 'Collect' : 'Growing'}</button></article>)}</div>
           <details className="journal-habits">
@@ -84,6 +87,10 @@ export default function GardenJournal({ state, today, dispatch, inDemo }) {
         })}</div></>}
       </div>
     </section>}
+    {streakView && <StreakScreen streak={game.daily.streak} onShare={() => setSharing(true)} onContinue={() => setStreakView(false)} />}
+    {sharing && <ShareSheet title="Garden streak" headline={`${game.daily.streak} day streak with ${state.pet.name}!`}
+      stats={[[game.daily.streak, 'day streak'], [state.xp, 'total XP'], [game.daily.total, 'gifts collected'], [game.leaves, game.leaves === 1 ? 'leaf' : 'leaves']]}
+      text={`I'm on a ${game.daily.streak} day streak growing ${state.pet.name} in Sustain-a-Pet! 🌱`} onClose={() => setSharing(false)} />}
     <nav className="garden-dock" aria-label="Garden activities">{tabs.map(([id, label, icon]) => <button key={id} className={tab === id ? 'selected' : ''} aria-expanded={tab === id} onClick={(event) => { openRef.current = event.currentTarget; setTab(tab === id ? null : id) }}><Icon name={icon} size={21} /><span>{label}</span>{id === 'today' && reward.available && <i className="gift-ready" aria-label="Daily gift ready" />}</button>)}</nav>
   </>
 }

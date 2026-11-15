@@ -1,33 +1,35 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { STAGES } from '../engine.js'
+import { Mascot, StatTile } from './Duo.jsx'
 import accessories from '../data/accessories.json'
 
 /** Floating "+XP" chips over the pet, toasts for unlocks/streaks, and the stage-up cutscene. */
-export default function Rewards({ floats, toasts, evolve, onCloseEvolve, petName }) {
+export default function Rewards({ floats, toasts, evolve, onCloseEvolve, petName, xp = 0, doneCount = 0, total = 7 }) {
   return (
     <>
       <div className="floats" aria-hidden="true">
         {floats.map((f) => <span key={f.id} className="float" style={{ left: `${f.x}%` }}>+{f.xp} XP</span>)}
       </div>
       <ToastStack toasts={toasts} />
-      {evolve && <EvolveCutscene stage={evolve.stage} name={petName} onClose={onCloseEvolve} />}
+      {evolve && <EvolveCutscene stage={evolve.stage} name={petName} xp={xp} doneCount={doneCount} total={total} onClose={onCloseEvolve} />}
     </>
   )
 }
 
-function EvolveCutscene({ stage, name, onClose }) {
-  useEffect(() => {
-    const t = setTimeout(onClose, 4200)
-    return () => clearTimeout(t)
-  }, [onClose])
+function EvolveCutscene({ stage, name, xp, doneCount, total, onClose }) {
+  const first = useRef(null)
+  useEffect(() => { first.current?.focus() }, [])
   return (
-    <div className="evolve" role="dialog" aria-label="Your pet evolved" onClick={onClose}>
-      <div className="rays" aria-hidden="true" />
-      <div className="evolve-text">
-        <small>{name} evolved!</small>
-        <strong>{STAGES[stage]}</strong>
-        <em>Tap to continue</em>
+    <div className="evolve complete-screen" role="dialog" aria-modal="true" aria-label="Your pet evolved">
+      <div className="complete-hero"><span className="sparkle s1" /><span className="sparkle s2" /><span className="sparkle s3" /><Mascot size={200} className="complete-mascot" /></div>
+      <h2 className="complete-title">{STAGES[stage]}!</h2>
+      <p className="complete-sub">{name} evolved. All that small care is paying off.</p>
+      <div className="stat-row">
+        <StatTile tone="gold" label="TOTAL XP">⚡ {xp}</StatTile>
+        <StatTile tone="green" label="STAGE">{STAGES[stage]}</StatTile>
+        <StatTile tone="blue" label="HABITS">{doneCount}/{total}</StatTile>
       </div>
+      <button ref={first} type="button" className="duo-btn blue" onClick={onClose}>Claim XP</button>
     </div>
   )
 }
