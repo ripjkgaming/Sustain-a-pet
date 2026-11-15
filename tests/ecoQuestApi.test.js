@@ -1,8 +1,11 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
-import handler, { generateQuest } from '../api/eco-quest.js'
+import handler, { generateQuest, modelChain, extractJson } from '../api/eco-quest.js'
 
 const IMG = 'data:image/png;base64,iVBORw0KGgo='
-const KEY_ENV = { GEMINI_API_KEY: 'test-key' }
+const KEY_ENV = { OPENROUTER_API_KEY: 'test-key' }
+const PRIMARY = 'google/gemma-4-31b-it:free'
+const FALLBACK_1 = 'nvidia/nemotron-3.5-super-vl:free'
+const FALLBACK_2 = 'google/gemma-4-26b-a4b-it:free'
 const validRaw = {
   object: 'plastic water bottle',
   title: 'Refill, do not rebuy',
@@ -11,9 +14,10 @@ const validRaw = {
   xp: 10,
   confidence: 'high',
 }
-const geminiOk = (text) => ({ candidates: [{ content: { parts: [{ text }] } }] })
+const chatOk = (content) => ({ choices: [{ message: { role: 'assistant', content } }] })
 const jsonResponse = (body, ok = true, status = 200) => ({ ok, status, json: async () => body })
-const okFetch = (obj = validRaw) => vi.fn(async () => jsonResponse(geminiOk(JSON.stringify(obj))))
+const okFetch = (obj = validRaw) => vi.fn(async () => jsonResponse(chatOk(JSON.stringify(obj))))
+const modelOf = (fetchImpl, call = 0) => JSON.parse(fetchImpl.mock.calls[call][1].body).model
 
 let ipCounter = 0
 function mockReq(overrides = {}) {
@@ -52,17 +56,33 @@ describe('generateQuest', () => {
     expect(out.body.quest.xp).toBeLessThanOrEqual(15)
     expect(fetchImpl).toHaveBeenCalledTimes(1)
     const [url, init] = fetchImpl.mock.calls[0]
-    expect(url).toContain('gemini-flash-latest:generateContent')
-    expect(init.headers['x-goog-api-key']).toBe('test-key')
+    expect(url).toBe('https://openrouter.ai/api/v1/chat/completions')
+    expect(init.headers.Authorization).toBe('Bearer test-key')
+    expect(init.headers['HTTP-Referer']).toBeTruthy()
+    expect(init.headers['X-Title']).toBeTruthy()
     const payload = JSON.parse(init.body)
-    expect(payload.generationConfig.responseMimeType).toBe('application/json')
-    expect(payload.contents[0].parts[1].inline_data).toEqual({ mime_type: 'image/png', data: 'iVBORw0KGgo=' })
+    expect(payload.model).toBe(PRIMARY)
+    expect(payload.messages[0]).toEqual({ role: 'system', content: expect.stringContaining('GreenLens') })
+    expect(payload.messages[1].role).toBe('user')
+    expect(payload.messages[1].content[0].type).toBe('text')
+    expect(payload.messages[1].content[1]).toEqual({ type: 'image_url', image_url: { url: IMG } })
+    expect(payload.response_format.type).toBe('json_schema')
+    expect(payload.response_format.json_schema.name).toBe('eco_quest')
+    expect(payload.response_format.json_schema.strict).toBe(true)
+    expect(payload.response_format.json_schema.schema.required).toContain('xp')
   })
 
-  it('uses GEMINI_MODEL from env when set', async () => {
+  it('never sends the API key in the body or the response', async () => {
     const fetchImpl = okFetch()
-    await generateQuest({ text: 'bottle', fetchImpl, env: { GEMINI_API_KEY: 'k', GEMINI_MODEL: 'gemini-test-model' } })
-    expect(fetchImpl.mock.calls[0][0]).toContain('gemini-test-model:generateContent')
+    const out = await generateQuest({ text: 'bottle', fetchImpl, env: KEY_ENV })
+    expect(fetchImpl.mock.calls[0][1].body).not.toContain('test-key')
+    expect(JSON.stringify(out.body)).not.toContain('test-key')
+  })
+
+  it('uses OPENROUTER_MODEL from env as the first model', async () => {
+    const fetchImpl = okFetch()
+    await generateQuest({ text: 'bottle', fetchImpl, env: { OPENROUTER_API_KEY: 'k', OPENROUTER_MODEL: 'vendor/custom:free' } })
+    expect(modelOf(fetchImpl)).toBe('vendor/custom:free')
   })
 
   it('returns 503 ai_unconfigured when the key is missing and never calls upstream', async () => {
@@ -110,7 +130,7 @@ describe('generateQuest', () => {
   })
 
   it('returns 422 when the model output is not JSON', async () => {
-    const fetchImpl = vi.fn(async () => jsonResponse(geminiOk('not json')))
+    const fetchImpl = vi.fn(async () => jsonResponse(chatOk('not json')))
     const out = await generateQuest({ text: 'bottle', fetchImpl, env: KEY_ENV })
     expect(out.status).toBe(422)
     expect(out.body.error).toBe('invalid_model_output')
@@ -123,16 +143,90 @@ describe('generateQuest', () => {
     expect(out.body.error).toBe('invalid_model_output')
   })
 
-  it('returns 502 when upstream responds 500', async () => {
+  it('extracts JSON when the model wraps it in fences and prose', async () => {
+    const reply = `Here you go:\n\`\`\`json\n${JSON.stringify(validRaw)}\n\`\`\`\nHope it helps.`
+    const fetchImpl = vi.fn(async () => jsonResponse(chatOk(reply)))
+    const out = await generateQuest({ text: 'bottle', fetchImpl, env: KEY_ENV })
+    expect(out.status).toBe(200)
+    expect(out.body.quest.title).toBe(validRaw.title)
+  })
+
+  it('reads array-style message content', async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse({
+      choices: [{ message: { content: [{ type: 'text', text: JSON.stringify(validRaw) }] } }],
+    }))
+    const out = await generateQuest({ text: 'bottle', fetchImpl, env: KEY_ENV })
+    expect(out.status).toBe(200)
+  })
+
+  it('falls back to the next model on 404 and succeeds', async () => {
+    const fetchImpl = vi.fn(async (_url, init) => (
+      JSON.parse(init.body).model === PRIMARY
+        ? jsonResponse({ error: 'not found' }, false, 404)
+        : jsonResponse(chatOk(JSON.stringify(validRaw)))
+    ))
+    const out = await generateQuest({ text: 'bottle', fetchImpl, env: KEY_ENV })
+    expect(out.status).toBe(200)
+    expect(fetchImpl).toHaveBeenCalledTimes(2)
+    expect(modelOf(fetchImpl, 1)).toBe(FALLBACK_1)
+  })
+
+  it('falls back on 429 and 5xx, in fallback order', async () => {
+    const fetchImpl = vi.fn()
+      .mockResolvedValueOnce(jsonResponse({}, false, 429))
+      .mockResolvedValueOnce(jsonResponse({}, false, 503))
+      .mockResolvedValueOnce(jsonResponse(chatOk(JSON.stringify(validRaw))))
+    const out = await generateQuest({ text: 'bottle', fetchImpl, env: KEY_ENV })
+    expect(out.status).toBe(200)
+    expect([modelOf(fetchImpl, 0), modelOf(fetchImpl, 1), modelOf(fetchImpl, 2)])
+      .toEqual([PRIMARY, FALLBACK_1, FALLBACK_2])
+  })
+
+  it('does not fall back on a non-retryable 4xx', async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse({ error: 'bad key' }, false, 401))
+    const out = await generateQuest({ text: 'bottle', fetchImpl, env: KEY_ENV })
+    expect(out).toEqual({ status: 502, body: { error: 'upstream_failed' } })
+    expect(fetchImpl).toHaveBeenCalledTimes(1)
+  })
+
+  it('returns 502 after every model in the chain fails with a retryable status', async () => {
     const fetchImpl = vi.fn(async () => jsonResponse({ error: 'boom' }, false, 500))
     const out = await generateQuest({ text: 'bottle', fetchImpl, env: KEY_ENV })
     expect(out).toEqual({ status: 502, body: { error: 'upstream_failed' } })
+    expect(fetchImpl).toHaveBeenCalledTimes(3)
   })
 
   it('returns 502 when fetch rejects', async () => {
     const fetchImpl = vi.fn(async () => { throw new Error('network down') })
     const out = await generateQuest({ text: 'bottle', fetchImpl, env: KEY_ENV })
     expect(out.status).toBe(502)
+  })
+})
+
+describe('modelChain', () => {
+  it('defaults to the free Gemma model followed by two fallbacks', () => {
+    expect(modelChain({})).toEqual([PRIMARY, FALLBACK_1, FALLBACK_2])
+  })
+
+  it('puts OPENROUTER_MODEL first and does not repeat it', () => {
+    expect(modelChain({ OPENROUTER_MODEL: FALLBACK_2 })).toEqual([FALLBACK_2, PRIMARY, FALLBACK_1])
+  })
+
+  it('caps the chain at three models when OPENROUTER_MODEL is a new id', () => {
+    expect(modelChain({ OPENROUTER_MODEL: 'vendor/custom:free' })).toEqual(['vendor/custom:free', PRIMARY, FALLBACK_1])
+  })
+})
+
+describe('extractJson', () => {
+  it('parses plain JSON, fenced JSON and JSON inside prose', () => {
+    expect(extractJson('{"a":1}')).toEqual({ a: 1 })
+    expect(extractJson('```json\n{"a":1}\n```')).toEqual({ a: 1 })
+    expect(extractJson('sure: {"a":1} thanks')).toEqual({ a: 1 })
+  })
+
+  it('returns undefined when no JSON object is present', () => {
+    expect(extractJson('no braces here')).toBeUndefined()
+    expect(extractJson('{ broken')).toBeUndefined()
   })
 })
 

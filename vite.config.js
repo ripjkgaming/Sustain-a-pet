@@ -30,7 +30,7 @@ function readBody(req) {
   })
 }
 
-// Dev-only: serves /api/eco-quest from the Vite dev server. The Gemini key
+// Dev-only: serves /api/eco-quest from the Vite dev server. The OpenRouter key
 // comes from env files via loadEnv and is passed to the handler directly, so
 // it never reaches the client bundle (no `define`).
 function ecoQuestDevApi(env) {
@@ -102,7 +102,7 @@ function pwa() {
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
-  // Empty prefix loads every variable, including GEMINI_API_KEY (no VITE_ prefix).
+  // Empty prefix loads every variable, including OPENROUTER_API_KEY (no VITE_ prefix).
   const env = loadEnv(mode, process.cwd(), '')
   return {
     plugins: [react(), ecoQuestDevApi(env), pwa()],

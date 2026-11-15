@@ -279,10 +279,10 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
             <span className="gl-kicker">To wake it up</span>
             <ol>
               <li>Copy <code>.env.example</code> to <code>.env</code></li>
-              <li>Fill in <code>GEMINI_API_KEY</code></li>
+              <li>Fill in <code>OPENROUTER_API_KEY</code></li>
               <li>Restart <code>npm run dev</code></li>
             </ol>
-            <small>Deployed? Add <code>GEMINI_API_KEY</code> to your host’s environment variables. Habits and quests keep working meanwhile.</small>
+            <small>Deployed? Add <code>OPENROUTER_API_KEY</code> to your host’s environment variables. Habits and quests keep working meanwhile.</small>
           </div>}
           {err.retry && <button type="button" className="duo-btn green" onClick={() => look(lastInput.current)}>Try again</button>}
           {err.fallback && <button type="button" className={err.retry ? 'gl-ghost-btn' : 'duo-btn green'} onClick={describeInstead}>Describe it in words</button>}

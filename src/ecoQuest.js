@@ -14,6 +14,7 @@ const DENY = [
   /\bself-harm\b/i, /\bdrown\w*/i, /\btrespass\w*/i,
 ]
 
+// JSON schema sent to the model as response_format json_schema (strict). No id field.
 export const QUEST_SCHEMA = {
   type: 'object',
   properties: {
@@ -23,9 +24,11 @@ export const QUEST_SCHEMA = {
     why: { type: 'string' },
     xp: { type: 'integer', minimum: XP_MIN, maximum: XP_MAX },
     confidence: { type: 'string', enum: CONFIDENCE },
-    caveat: { type: 'string' },
+    caveat: { type: ['string', 'null'] },
   },
-  required: ['object', 'title', 'action', 'why', 'xp', 'confidence'],
+  // Strict json_schema: every property required, no extra keys. caveat may be null.
+  required: ['object', 'title', 'action', 'why', 'xp', 'confidence', 'caveat'],
+  additionalProperties: false,
 }
 
 // FNV-1a 32-bit hash, rendered as 8 hex chars.

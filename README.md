@@ -60,27 +60,27 @@ Architecture:
 ```
 client (GreenLens.jsx, greenLensClient.js)
   -> /api/eco-quest (api/eco-quest.js)
-  -> Gemini structured output (JSON response schema = QUEST_SCHEMA)
+  -> OpenRouter chat completions, free vision model (json_schema response_format = QUEST_SCHEMA)
   -> validateQuest (src/ecoQuest.js)
   -> deterministic game engine (src/game.js, src/store.js)
 ```
 
 - The client shrinks the photo to 1024 px (JPEG, quality 0.82) and posts it to `/api/eco-quest`. Accepted images: JPEG, PNG or WebP, up to 3.5 MB.
-- The endpoint validates input and applies a rate limit of 10 requests per minute. It then calls Gemini with a schema-constrained JSON response.
+- The endpoint validates input and applies a rate limit of 10 requests per minute. It then calls OpenRouter with a strict JSON-schema response. Free models are slow and flaky, so the upstream timeout is 30 seconds. On 404, 429 or 5xx the endpoint tries the fallback models in order.
 - `validateQuest` clamps XP, trims and strips HTML from text, and rejects denied (unsafe) actions. Model output is never trusted as-is.
 - The game engine alone changes state. The model cannot grant rewards.
 
 Setup:
 
 ```bash
-cp .env.example .env   # then set GEMINI_API_KEY
+cp .env.example .env   # then set OPENROUTER_API_KEY
 npm run dev            # http://localhost:5173
 ```
 
-- `GEMINI_API_KEY` (required): without it, `/api/eco-quest` returns `503 ai_unconfigured`. Habits and quests keep working.
-- `GEMINI_MODEL` (optional): defaults to `gemini-flash-latest`.
+- `OPENROUTER_API_KEY` (required): without it, `/api/eco-quest` returns `503 ai_unconfigured`. Habits and quests keep working.
+- `OPENROUTER_MODEL` (optional): defaults to the free vision model `google/gemma-4-31b-it:free`. Fallbacks, tried in order on 404, 429 or 5xx: `nvidia/nemotron-3.5-super-vl:free`, then `google/gemma-4-26b-a4b-it:free`.
 - Server-side only. Never prefix these with `VITE_` and never import them into client code. The key must not reach the client bundle. `.env` is git-ignored.
-- Deployed hosts need `GEMINI_API_KEY` in their environment variables.
+- Deployed hosts need `OPENROUTER_API_KEY` in their environment variables.
 
 Safety:
 
@@ -94,7 +94,7 @@ Safety:
 ## AI-use disclosure
 
 - **Claude Code (Anthropic):** development of code, tests and documentation.
-- **Gemini (Google):** runtime. Reads the photo and/or note (vision) and generates quests through `/api/eco-quest`.
+- **OpenRouter, free model `google/gemma-4-31b-it:free` (Google Gemma):** runtime. Reads the photo and/or note (vision) and generates quests through `/api/eco-quest`.
 - **OpenAI Codex:** named only in a git stash label in `plans/animation-audit.md`; its role is not documented.
 
 _Team: expand this section with who prompted, reviewed and can explain each part._
