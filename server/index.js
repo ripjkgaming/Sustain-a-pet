@@ -56,7 +56,7 @@ function securityHeaders(res, proto) {
 /** Cache-Control by path. Hashed assets are immutable; entry document and service worker must revalidate. */
 export function cacheControlFor(urlPath) {
   if (urlPath.startsWith('/assets/')) return 'public, max-age=31536000, immutable'
-  if (urlPath === '/' || urlPath === '/index.html' || urlPath === '/sw.js' || urlPath === '/registerSW.js'
+  if (urlPath === '/' || urlPath === '/index.html' || urlPath === '/sw.js' || urlPath === '/sw-extra.js' || urlPath === '/registerSW.js'
     || /^\/workbox-[\w-]+\.js$/.test(urlPath) || urlPath === '/manifest.webmanifest') return 'no-cache'
   if (urlPath.startsWith('/models/') || urlPath.startsWith('/textures/')) return 'public, max-age=2592000'
   return 'public, max-age=86400'
@@ -201,6 +201,7 @@ export function createApp(config, { env = process.env, log = (line) => process.s
     res.setHeader('Cache-Control', cacheControlFor(urlPath))
     res.setHeader('ETag', etag)
     res.setHeader('Vary', 'Accept-Encoding')
+    if (urlPath === '/sw.js') res.setHeader('Service-Worker-Allowed', '/')
     res.setHeader('Content-Type', MIME[ext] || 'application/octet-stream')
     ctx.status = 200
     if (req.headers['if-none-match'] === etag) {

@@ -145,17 +145,48 @@ Both rate limits apply to both the generate and the complete actions.
 
 ## Logging
 
-The production server writes one JSON line per request: `request_id`, method, path, status, latency, model id, error category and retry count. Request bodies, photos, base64 data and notes are not logged. The dev handler logs the model id and status. It logs validation error codes, not user text.
+The production server writes one JSON line per request with these fields:
+
+- `ts` (ISO time), `level` (`info`, or `error` for status 500 and above), `msg` (`request`)
+- `request_id` (taken from `X-Request-Id` if valid, else generated), `method`, `path` (no query string)
+- `status`, `latency_ms`, `model` (upstream model id, or `null`)
+- `error_category`: `validation`, `rate_limit`, `payload_too_large`, `upstream_timeout`, `upstream_error`, `internal` or `none`
+- `upstream_retries`, only when retries happened
+
+Other lines: `listening` at startup, `fatal` (exit 1) on bad configuration, `shutting_down` on SIGTERM or SIGINT. `console.*` output is rewritten as JSON lines with `ts`, `level` and `msg`, for example `[eco-quest] model=... answered`.
+
+Request bodies, photos, base64 data, notes and credentials are not logged. The dev handler logs the model id and status only, and validation error codes rather than user text.
 
 ## Storage
 
-Everything the server keeps is in memory:
+### Server
 
-- Completion ledger (`api/_completions.js`): `Map`s, cleaned when they pass 5000 entries.
+Everything the server keeps is in memory. Nothing is written to disk.
+
+- Completion ledger (`api/_completions.js`): `Map`s holding a key (`clientId|quest id|UTC day`) and counts. Cleaned when they pass 5000 entries.
 - Rate limit buckets (`server/rateLimit.js` and `api/eco-quest.js`).
-- Signing secret: random per process when `QUEST_SIGNING_SECRET` is unset.
+- Signing secret: random per process when `QUEST_SIGNING_SECRET` is unset or shorter than 16 characters.
+- Request bodies, photos and notes are not stored. They exist only for the length of the request.
 
-The app keeps no database and no accounts. Player state lives in the browser's `localStorage`.
+### Browser (per browser and device)
+
+Player progress lives in the browser's `localStorage`. It is per browser and per device, is cleared when site data is cleared, and is not synced anywhere. If storage is blocked, the app keeps an in-memory copy that is lost on reload.
+
+Exact keys, verified by grepping `src/`:
+
+| Key | Value | Written in |
+| --- | --- | --- |
+| `sustain-a-pet` | Game save (JSON). `Duo.jsx` reads the companion sprite from the same key. | `src/store.js` (`REAL_KEY`) |
+| `sustain-pet-muted` | `'1'` muted, `'0'` sound on | `src/sfx.js` |
+| `sustain-pet-tutorial-v1` | `'in-progress'` or `'done'` | `src/App.jsx` (`TUTORIAL_KEY`) |
+| `sustain-pet-allDone-<YYYY-MM-DD>` | `'1'` once the all-habits celebration shows that local day | `src/App.jsx` |
+| `sustain-a-pet-client` | Random client id, 8–64 characters of `A-Z a-z 0-9 _ -` | `src/greenLensClient.js` (`CLIENT_ID_KEY`) |
+| `sustain-pet-greenlens-privacy-v1` | `'yes'` after the GreenLens privacy notice | `src/greenLensClient.js` (`PRIVACY_KEY`) |
+| `sustain-pet-greenlens-place` | Optional town or region, up to 60 characters | `src/greenLensClient.js` (`PLACE_KEY`) |
+
+Cache Storage (offline app files) is separate. See [OFFLINE.md](OFFLINE.md).
+
+The app keeps no database and no accounts.
 
 ## Known limitations
 

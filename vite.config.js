@@ -19,22 +19,29 @@ function ecoQuestApi(env) {
 // Offline support (generateSW). Precaches the app shell, fonts and audio.
 // Large models and textures are excluded from precache and cached on first
 // use (CacheFirst) so the install stays small. Service worker is build-only.
+// Update flow is "prompt": a new worker waits until the user taps Reload (src/pwa.jsx),
+// so a running page never loses its hashed chunks mid-session. See docs/OFFLINE.md.
+// Bump CACHE_VERSION when runtime cache contents change; public/sw-extra.js drops every other version.
+const CACHE_VERSION = 'v1'
 function pwa() {
   const cacheFirst = (cacheName, urlPattern) => ({
     urlPattern,
     handler: 'CacheFirst',
     options: {
-      cacheName,
+      cacheName: `sustain-a-pet-${cacheName}-${CACHE_VERSION}`,
       expiration: { maxEntries: 80 },
       cacheableResponse: { statuses: [0, 200] },
     },
   })
   return VitePWA({
-    registerType: 'autoUpdate',
-    injectRegister: 'auto',
+    registerType: 'prompt',
+    injectRegister: false, // registration lives in src/pwa.jsxx (production only)
     // public/manifest.webmanifest is hand-written and linked from index.html.
     manifest: false,
     workbox: {
+      cacheId: 'sustain-a-pet',
+      cleanupOutdatedCaches: true,
+      importScripts: ['sw-extra.js'],
       globPatterns: ['**/*.{js,css,html,svg,png,webmanifest,woff,woff2,m4a}'],
       globIgnores: ['models/**', 'textures/**'],
       navigateFallback: '/index.html',
@@ -53,6 +60,8 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
     plugins: [react(), ecoQuestApi(env), pwa()],
+    // Playwright specs live in e2e/ (run with `npm run test:e2e`), not vitest.
+    test: { exclude: ['**/node_modules/**', '**/dist/**', 'e2e/**', 'demo-video/**'] },
     build: {
       rolldownOptions: {
         output: {

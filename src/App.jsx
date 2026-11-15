@@ -7,7 +7,7 @@ import QuestScreen from './components/QuestScreen.jsx'
 import { questionFor } from './components/QuizCard.jsx'
 import Vitals from './components/Vitals.jsx'
 import Icon from './components/Icons.jsx'
-import { Splash, SpriteProvider, ResultScreen } from './components/Duo.jsx'
+import { Mascot, Splash, SpriteProvider, ResultScreen } from './components/Duo.jsx'
 import { sfx } from './sfx.js'
 import Onboarding from './components/Onboarding.jsx'
 import Rewards, { unlockText } from './components/Rewards.jsx'
@@ -15,7 +15,9 @@ import { usePrefersReducedMotion } from './components/pet3d/shared.js'
 import LeafFootsteps from './components/LeafFootsteps.jsx'
 import GardenJournal from './components/GardenJournal.jsx'
 import GreenLens from './components/GreenLens.jsx'
-import SceneBoundary from './components/SceneBoundary.jsx'
+import SceneBoundary, { SceneFallback } from './components/SceneBoundary.jsx'
+import { useOnline } from './resilience.js'
+import { MESSAGES } from './greenLensClient.js'
 import { sceneLayout } from './sceneLayout.js'
 
 const PetCanvas = lazy(() => import('./components/pet3d/PetCanvas.jsx'))
@@ -66,6 +68,9 @@ export default function App() {
   const [questId, setQuestId] = useState(null) // null | habit id | 'list'
   const [splash, setSplash] = useState(true)
   const [lens, setLens] = useState(false)
+  const online = useOnline()
+  const [offlineSeen, setOfflineSeen] = useState(false)
+  if (online && offlineSeen) setOfflineSeen(false) // show the notice again next time the connection drops
   const lensBtn = useRef(null)
   const endSplash = useCallback(() => setSplash(false), [])
   const taps = useRef([])
@@ -196,7 +201,12 @@ export default function App() {
         <button className="icon-btn" aria-label={muted ? 'Unmute sound' : 'Mute sound'} aria-pressed={muted} onClick={() => { sfx.setMuted(!muted); setMuted(!muted); if (muted) sfx.toggle() }}><Icon name={muted ? 'mute' : 'speaker'} size={18} /></button>
       </header>
 
-      {app.awayDays >= 2 && (
+      {!online && !offlineSeen ? (
+        <div className="banner" role="status">
+          {MESSAGES.offline}
+          <button onClick={() => setOfflineSeen(true)} aria-label="Dismiss">×</button>
+        </div>
+      ) : app.awayDays >= 2 && (
         <div className="banner" role="status">
           Welcome back! {pet.pet.name} missed you. Tick a habit and it will perk right up.
           <button onClick={() => dispatch({ type: 'dismissAway' })} aria-label="Dismiss">×</button>
@@ -204,7 +214,7 @@ export default function App() {
       )}
 
       <section className={`pet-stage mood-${mood.toLowerCase()}`} aria-label={`${pet.pet.name}'s world`}>
-        <SceneBoundary><Suspense fallback={<div className="loading">Waking up {pet.pet.name}…</div>}>
+        <SceneBoundary fallback={<SceneFallback title={`${pet.pet.name} is in a simple garden`}><Mascot size={120} /></SceneFallback>}><Suspense fallback={<div className="loading">Waking up {pet.pet.name}…</div>}>
           <PetCanvas orbit api={camApi} follow={{ get current() { return petCtl.current.pos } }} stage={stage} camera={{ position: [0, 7.7, 8.4], fov: 48 }} target={[0, 0.7, 0]}>
             <World ctl={petCtl} area={pet.game.activeArea} unlocked={pet.game.areas} decorations={pet.game.decorations} projects={pet.game.projects} garden={garden} reduced={reduced} habits={habitList} done={done} today={today} quizResult={pet.days[today]?.quiz}
               onHabit={(id) => dispatch({ type: 'tick', id })} onQuizAnswer={(choice, correct) => dispatch({ type: 'quiz', choice, correct })}

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import habits from '../data/habits.json'
+import FitContent from './FitContent.jsx'
 import { questionFor } from './QuizCard.jsx'
 import { FlowBar, Say } from './Duo.jsx'
 import { sfx } from '../sfx.js'
@@ -127,7 +128,7 @@ export default function QuestScreen({ habit, done = [], today, quizResult, onCom
   return (
     <div className="quest-screen" ref={root} role="dialog" aria-modal="true" aria-labelledby="quest-title" tabIndex={-1} onKeyDown={trap}>
       <div className="quest-top">{bar}</div>
-      <div className="quest-body">{body}</div>
+      <FitContent className="quest-body" align="center">{body}</FitContent>
       {showCta && (isQuiz
         ? <div className="quest-foot"><button type="button" className="duo-btn green" disabled={picked === null} onClick={check}>Check</button></div>
         : <div className="quest-foot"><button type="button" className="duo-btn green" onClick={complete}>I did it</button></div>)}

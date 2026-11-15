@@ -2,7 +2,7 @@
 
 Date: 2026-11-15 (Asia/Singapore). Base commit: `102760d`.
 Scope: current working tree, including preserved, uncommitted botanical-model work.
-Status: implementation complete in `9089a1c`. All ten findings and both missed opportunities below were addressed. The finding table records the original audit state; its fix summaries are no longer outstanding work.
+Status: implementation complete in `51efa96`. All ten findings and both missed opportunities below were addressed. The finding table records the original audit state; its fix summaries are no longer outstanding work.
 
 ## Recon
 

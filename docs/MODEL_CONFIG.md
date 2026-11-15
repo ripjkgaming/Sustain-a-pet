@@ -32,7 +32,7 @@ All requests go to `https://openrouter.ai/api/v1/chat/completions` with `respons
 | --- | --- | --- | --- | --- |
 | `OPENROUTER_API_KEY` | For live quests | none | `api/eco-quest.js` (`generateQuest`), `server/config.js` (`missingConfig`) | Missing: `POST /api/eco-quest` returns `503 ai_unconfigured` and `/readyz` returns `503`. Server-only. Never prefix with `VITE_`. |
 | `OPENROUTER_MODEL` | No | `nvidia/nemotron-3.5-super-vl:free` | `api/eco-quest.js` (`modelChain`) | Primary model. See [Model chain](#model-chain). |
-| `QUEST_SIGNING_SECRET` | Yes in production | random per process | `api/_questToken.js` (`signingSecret`) | HMAC key for quest tokens. Must be at least 16 characters, else an ephemeral secret is used. Ephemeral tokens stop working after a restart and across instances. |
+| `QUEST_SIGNING_SECRET` | Yes in production | random per process | `api/_questToken.js` (`signingSecret`) | HMAC key for quest tokens. Must be at least 16 characters. A shorter value is ignored, and an ephemeral secret is used. The log line then says "not set", which is misleading in that case. Ephemeral tokens stop working after a restart and across instances. |
 
 ### Server
 
@@ -74,6 +74,8 @@ Any integer variable outside its range also stops startup. Startup prints a `fat
 | `AI_BASE_URL` | Sends upstream calls to `<AI_BASE_URL>/chat/completions`. |
 
 Both are refused when `NODE_ENV=production`. `/readyz` reports `"mock": true` only in mock mode.
+
+Only `node server/index.js` (`createApp` in `server/index.js`) reads these two variables. `npm run dev` and `vite preview` mount `server/ecoQuestMiddleware.js`, which calls OpenRouter directly. In those modes `AI_MOCK=1` has no effect: without `OPENROUTER_API_KEY` the endpoint returns `503 ai_unconfigured`.
 
 ### Eval runner
 

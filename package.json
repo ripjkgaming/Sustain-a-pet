@@ -11,6 +11,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "test:bundle": "node scripts/test-bundle.mjs",
     "eval:real": "node eval/run-real.js",
     "eval:fixtures": "node eval/make-fixtures.js"
   },

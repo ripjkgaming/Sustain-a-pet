@@ -1,7 +1,9 @@
 import { describe, it, expect, vi } from 'vitest'
 import {
-  ENDPOINT, aiDailyUsed, aiQuestLists, buildBody, confidenceCopy, describeError, fitWithin, requestEcoQuest,
+  ENDPOINT, MESSAGES, aiDailyUsed, aiQuestLists, buildBody, completeEcoQuest, completionNotice, confidenceCopy, describeError, fitWithin, requestEcoQuest,
 } from '../src/greenLensClient.js'
+import { CLIENT_TIMEOUT_MS } from '../src/ecoQuestConfig.js'
+import { loadConfig } from '../server/config.js'
 import { MAX_AI_QUESTS_PER_DAY } from '../src/ecoQuest.js'
 
 const IMG = 'data:image/jpeg;base64,AAAA'
@@ -73,7 +75,7 @@ describe('requestEcoQuest', () => {
   })
   it('falls back to a status-based code when the error body is not JSON', async () => {
     expect(await requestEcoQuest({ text: 'cup' }, { fetchImpl: reply(503, null, { json: false }) })).toEqual({ ok: false, code: 'ai_unconfigured', status: 503 })
-    expect((await requestEcoQuest({ text: 'cup' }, { fetchImpl: reply(500, null, { json: false }) })).code).toBe('upstream_failed')
+    expect((await requestEcoQuest({ text: 'cup' }, { fetchImpl: reply(500, null, { json: false }) })).code).toBe('server_error')
   })
   it('rejects a 200 whose quest fails validation (unsafe content)', async () => {
     const res = await requestEcoQuest({ text: 'cup' }, { fetchImpl: reply(200, { quest: { ...raw, action: 'Mix bleach into it.' } }) })
@@ -97,11 +99,24 @@ describe('requestEcoQuest', () => {
 })
 
 describe('describeError', () => {
-  it('shows setup help, not a text fallback, when AI is unconfigured', () => {
-    expect(describeError('ai_unconfigured')).toMatchObject({ setup: true, fallback: false })
+  it('shows a plain unavailable message, never setup steps, when AI is unconfigured or down', () => {
+    for (const code of ['ai_unconfigured', 'upstream_failed', 'server_error', 'not_found', 'network', 'nope']) {
+      const copy = describeError(code)
+      expect(copy.body).toBe(MESSAGES.unavailable)
+      expect(copy).toMatchObject({ retry: true, fallback: false })
+      expect(copy).not.toHaveProperty('setup')
+    }
+  })
+  it('maps server error codes to the customer-facing messages', () => {
+    expect(describeError('payload_too_large').body).toBe(MESSAGES.tooLarge)
+    expect(describeError('rate_limited').body).toBe(MESSAGES.rateLimited)
+    expect(describeError('offline').body).toBe(MESSAGES.offline)
+    expect(describeError('gateway_timeout')).toMatchObject({ body: MESSAGES.timeout, retry: true })
+    expect(completionNotice('offline')).toBe(MESSAGES.offline)
+    expect(completionNotice('rate_limited')).toBe(MESSAGES.rateLimited)
   })
   it('offers the words fallback for unusable photos and model output', () => {
-    for (const code of ['invalid_model_output', 'image_unreadable', 'payload_too_large', 'upstream_failed', 'timeout']) {
+    for (const code of ['invalid_model_output', 'image_unreadable', 'payload_too_large', 'timeout']) {
       expect(describeError(code).fallback).toBe(true)
     }
   })
@@ -112,6 +127,39 @@ describe('describeError', () => {
       expect(copy.title.length).toBeGreaterThan(3)
       expect(copy.body.length).toBeGreaterThan(10)
     }
+  })
+  it('never shows developer setup text to players', () => {
+    const codes = ['ai_unconfigured', 'rate_limited', 'invalid_model_output', 'image_unreadable', 'payload_too_large', 'bad_body', 'offline', 'timeout',
+      'gateway_timeout', 'already_completed', 'daily_cap', 'invalid_token', 'empty', 'server_error', 'unsupported_media_type', 'nope']
+    for (const code of codes) {
+      const { title, body } = describeError(code)
+      expect(`${title} ${body}`).not.toMatch(/api[ _-]?key|OPENROUTER|\.env|npm|localhost|configur|environment variable|server/i)
+    }
+  })
+})
+
+describe('resilience', () => {
+  it('keeps the client timeout above the server timeout', () => {
+    expect(CLIENT_TIMEOUT_MS).toBeGreaterThan(loadConfig({}).serverTimeoutMs)
+  })
+  it('maps a non-JSON 504 to gateway_timeout and a 503 to ai_unconfigured', async () => {
+    const reply = (status) => vi.fn(async () => ({ ok: false, status, json: async () => { throw new SyntaxError('html') } }))
+    expect(await requestEcoQuest({ text: 'cup' }, { fetchImpl: reply(504) })).toEqual({ ok: false, code: 'gateway_timeout', status: 504 })
+    expect(await requestEcoQuest({ text: 'cup' }, { fetchImpl: reply(503) })).toEqual({ ok: false, code: 'ai_unconfigured', status: 503 })
+  })
+  it('skips the network and reports offline when the browser is offline', async () => {
+    vi.stubGlobal('navigator', { onLine: false })
+    try {
+      const fetchImpl = vi.fn()
+      expect(await requestEcoQuest({ text: 'cup' }, { fetchImpl })).toEqual({ ok: false, code: 'offline', status: 0 })
+      expect(await completeEcoQuest({ token: 't' }, { fetchImpl })).toEqual({ ok: false, code: 'offline', status: 0 })
+      expect(fetchImpl).not.toHaveBeenCalled()
+    } finally {
+      vi.unstubAllGlobals()
+    }
+  })
+  it('only ever calls the same-origin endpoint', () => {
+    expect(ENDPOINT).toBe('/api/eco-quest')
   })
 })
 

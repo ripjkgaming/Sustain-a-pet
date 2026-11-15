@@ -92,7 +92,12 @@ export function buildBody({ image, text, clarification, history, location, clien
   return body
 }
 
-const STATUS_CODES = { 400: 'bad_body', 403: 'invalid_token', 409: 'already_completed', 413: 'payload_too_large', 422: 'invalid_model_output', 429: 'rate_limited', 502: 'upstream_failed', 503: 'ai_unconfigured' }
+/** True when the browser reports no network. `navigator.onLine === true` does not prove a connection. */
+export function isOffline() {
+  return typeof navigator !== 'undefined' && navigator.onLine === false
+}
+
+const STATUS_CODES = { 400: 'bad_body', 403: 'invalid_token', 409: 'already_completed', 404: 'not_found', 405: 'method_not_allowed', 413: 'payload_too_large', 415: 'unsupported_media_type', 422: 'invalid_model_output', 429: 'rate_limited', 500: 'server_error', 502: 'upstream_failed', 503: 'ai_unconfigured', 504: 'gateway_timeout' }
 
 function parseQuestReply(data, status) {
   if (data?.kind === 'clarify') {
@@ -119,6 +124,7 @@ function parseQuestReply(data, status) {
  */
 export async function completeEcoQuest(quest, { fetchImpl = globalThis.fetch, timeoutMs = CLIENT_TIMEOUT_MS } = {}) {
   if (!quest?.token) return { ok: false, code: 'invalid_token', status: 0 }
+  if (isOffline()) return { ok: false, code: 'offline', status: 0 }
   const controller = new AbortController()
   const timer = setTimeout(() => controller.abort(), timeoutMs)
   try {
@@ -138,7 +144,8 @@ export async function completeEcoQuest(quest, { fetchImpl = globalThis.fetch, ti
     if (!reward) return { ok: false, code: 'upstream_failed', status: res.status }
     return { ok: true, reward, dailyUsed: data.dailyUsed ?? null, dailyMax: data.dailyMax ?? null }
   } catch {
-    return { ok: false, code: controller.signal.aborted ? 'timeout' : 'network', status: 0 }
+    if (controller.signal.aborted) return { ok: false, code: 'timeout', status: 0 }
+    return { ok: false, code: isOffline() ? 'offline' : 'network', status: 0 }
   } finally {
     clearTimeout(timer)
   }
@@ -154,6 +161,7 @@ export async function completeEcoQuest(quest, { fetchImpl = globalThis.fetch, ti
 export async function requestEcoQuest(input, { fetchImpl = globalThis.fetch, signal, timeoutMs = CLIENT_TIMEOUT_MS } = {}) {
   const body = buildBody({ clientId: getClientId(), ...input })
   if (!body) return { ok: false, code: 'empty', status: 0 }
+  if (isOffline()) return { ok: false, code: 'offline', status: 0 }
   const controller = new AbortController()
   const abort = () => controller.abort()
   signal?.addEventListener?.('abort', abort)
@@ -176,45 +184,54 @@ export async function requestEcoQuest(input, { fetchImpl = globalThis.fetch, sig
   } catch {
     if (signal?.aborted) return { ok: false, code: 'aborted', status: 0 }
     if (timedOut) return { ok: false, code: 'timeout', status: 0 }
-    const offline = typeof navigator !== 'undefined' && navigator.onLine === false
-    return { ok: false, code: offline ? 'offline' : 'network', status: 0 }
+    return { ok: false, code: isOffline() ? 'offline' : 'network', status: 0 }
   } finally {
     clearTimeout(timer)
     signal?.removeEventListener?.('abort', abort)
   }
 }
 
+// Customer-facing copy only: never mention keys, env vars, hosts or setup steps here.
+export const MESSAGES = {
+  unavailable: 'Quest generation is unavailable. Try again later.',
+  tooLarge: 'Photo is too large. Try a smaller one.',
+  rateLimited: 'Too many requests. Wait a minute and try again.',
+  offline: 'You appear to be offline. Your progress is saved on this device.',
+  timeout: 'That took too long. Try again, or describe it in words for a quicker answer.',
+}
+
 /**
  * Friendly copy for a failure code.
- * fallback: suggest describing it in words. setup: server has no AI key, show setup steps. retry: same input may work later.
+ * fallback: suggest describing it in words. retry: the same input may work later.
  */
 export function describeError(code) {
   switch (code) {
-    case 'ai_unconfigured':
-      return { title: 'GreenLens is still asleep', body: 'This server has no AI key yet, so the lens can’t look at anything.', fallback: false, setup: true, retry: false }
     case 'rate_limited':
-      return { title: 'Lots of looking!', body: 'GreenLens needs a short breather. Try again in about a minute.', fallback: false, setup: false, retry: true }
+      return { title: 'Lots of looking!', body: MESSAGES.rateLimited, fallback: false, retry: true }
     case 'invalid_model_output':
-      return { title: 'No safe quest in that one', body: 'GreenLens couldn’t turn that into a small, safe action. Try another angle, or tell it in words.', fallback: true, setup: false, retry: false }
+      return { title: 'No safe quest in that one', body: 'GreenLens couldn’t turn that into a small, safe action. Try another angle, or tell it in words.', fallback: true, retry: false }
     case 'image_unreadable':
-      return { title: 'That photo wouldn’t open', body: 'Try a different photo, or describe what you see instead.', fallback: true, setup: false, retry: false }
+      return { title: 'That photo wouldn’t open', body: 'Try a different photo, or describe what you see instead.', fallback: true, retry: false }
     case 'payload_too_large':
+      return { title: 'That photo is too big', body: MESSAGES.tooLarge, fallback: true, retry: false }
     case 'bad_body':
-      return { title: 'That photo didn’t come through', body: 'Try a different photo, or describe what you see instead.', fallback: true, setup: false, retry: false }
+      return { title: 'That photo didn’t come through', body: 'Try a different photo, or describe what you see instead.', fallback: true, retry: false }
     case 'offline':
-      return { title: 'You seem to be offline', body: 'GreenLens needs the internet to look around. The rest of your garden still works.', fallback: false, setup: false, retry: true }
+      return { title: 'You seem to be offline', body: MESSAGES.offline, fallback: false, retry: true }
     case 'timeout':
-      return { title: 'That took too long', body: 'The lens got a little foggy. Try again, or describe it in words for a quicker answer.', fallback: true, setup: false, retry: true }
+    case 'gateway_timeout':
+      return { title: 'That took too long', body: MESSAGES.timeout, fallback: true, retry: true }
     case 'already_completed':
-      return { title: 'Already counted', body: 'This quest has already earned its reward.', fallback: false, setup: false, retry: false }
+      return { title: 'Already counted', body: 'This quest has already earned its reward.', fallback: false, retry: false }
     case 'daily_cap':
-      return { title: 'Daily quest limit reached', body: 'You have earned the most AI quest rewards for today. Come back tomorrow.', fallback: false, setup: false, retry: false }
+      return { title: 'Daily quest limit reached', body: 'You have earned the most AI quest rewards for today. Come back tomorrow.', fallback: false, retry: false }
     case 'invalid_token':
-      return { title: 'This quest expired', body: 'Ask GreenLens for a fresh quest to earn its reward.', fallback: true, setup: false, retry: false }
+      return { title: 'This quest expired', body: 'Ask GreenLens for a fresh quest to earn its reward.', fallback: true, retry: false }
     case 'empty':
-      return { title: 'Nothing to look at yet', body: 'Take a photo, or describe something near you.', fallback: true, setup: false, retry: false }
+      return { title: 'Nothing to look at yet', body: 'Take a photo, or describe something near you.', fallback: true, retry: false }
     default:
-      return { title: 'The lens got foggy', body: 'GreenLens couldn’t reach its helper just now. Try again, or describe it in words.', fallback: true, setup: false, retry: true }
+      // ai_unconfigured, upstream_failed, server_error, network and anything unknown.
+      return { title: 'GreenLens is resting', body: MESSAGES.unavailable, fallback: false, retry: true }
   }
 }
 
@@ -291,10 +308,11 @@ export function completionNotice(code) {
     case 'already_completed': return 'This one already earned its reward. Nice work!'
     case 'daily_cap': return 'That’s today’s last GreenLens reward. Come back tomorrow for more.'
     case 'invalid_token': return 'This quest has expired. Ask GreenLens for a fresh one to earn a reward.'
-    case 'rate_limited': return 'Lots of quests at once! Wait a minute, then try again.'
-    case 'offline':
+    case 'rate_limited': return MESSAGES.rateLimited
+    case 'offline': return MESSAGES.offline
     case 'network':
-    case 'timeout': return 'Couldn’t reach GreenLens just now. Try again in a moment.'
+    case 'timeout':
+    case 'gateway_timeout': return 'Couldn’t reach GreenLens just now. Try again in a moment.'
     default: return 'Couldn’t confirm that one just now. Try again in a moment.'
   }
 }

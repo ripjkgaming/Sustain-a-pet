@@ -1,0 +1,84 @@
+/* One bounded app screen. All layout measurements belong to the phone, not the desktop around it. */
+html, body, #root { width: 100%; height: 100%; min-height: 0; overflow: hidden; }
+#root { height: 100dvh; min-height: 0; }
+.device { --screen-top: max(12px, env(safe-area-inset-top)); --screen-bottom: max(12px, env(safe-area-inset-bottom)); }
+.screen { container-type: size; }
+.home, .onboard.duo-screen { height: 100%; min-height: 0; overflow: hidden; }
+.home { --top-off: var(--screen-top); --dock-h: calc(70px + var(--screen-bottom)); }
+
+@media (min-width: 700px) and (min-height: 520px) {
+  .device { --screen-top: 54px; --screen-bottom: 18px; height: min(880px, calc(100dvh - 28px)); }
+}
+@media (max-width: 699px), (max-height: 519px) {
+  .device { display: block; width: 100%; height: 100%; }
+  .screen { display: block; position: relative; width: 100%; height: 100%; overflow: hidden; transform: translateZ(0); }
+}
+
+/* Keep the footer outside the flexible body so it is always on screen. */
+.onboard.duo-screen { padding: var(--screen-top) 20px var(--screen-bottom); gap: 12px; }
+.flowbar, .duo-foot, .quest-top, .quest-foot, .gl-top, .journal-head, .journal-pages { flex-shrink: 0; }
+.onboard .duo-foot { margin: 0; padding: 4px 0 6px; }
+.fit-frame { position: relative; flex: 1 1 0; min-height: 0; overflow: hidden; overflow: clip; display: block; }
+/* Absolute so the scaled content never adds layout height to the frame (which would let it scroll). */
+.fit-content { position: absolute; top: 0; left: 0; right: 0; display: flex; flex-direction: column; gap: inherit; transform-origin: top center; }
+.duo-body.fit-frame { animation: none; }
+.onboard .stage-pick { flex: none; height: clamp(90px, 21cqh, 180px); }
+.onboard .duo-options { gap: 8px; }
+.onboard .duo-option { min-height: 60px; padding: 6px 12px; }
+.onboard .opt-copy strong { font-size: 1.1rem; }
+.onboard .say .mascot { width: 68px; height: 68px; }
+.onboard .bubble { padding: 12px 14px; font-size: 1.1rem; }
+.onboard .benefits { margin-top: 8px; gap: 18px; }
+.onboard .benefits strong { font-size: 1.1rem; }
+.onboard .benefits small { font-size: .9rem; }
+
+/* Reserve the dock's actual height, plus the button shadow, above the phone's home indicator. */
+.home .garden-dock { left: 0; right: 0; bottom: 0; padding: 8px 10px var(--screen-bottom); }
+.home > .quests-btn { bottom: calc(var(--dock-h) + 10px); }
+.home > .vitals { display: flex; bottom: calc(var(--dock-h) + 80px); }
+.home .garden-journal { top: calc(var(--screen-top) + 64px); bottom: var(--dock-h); max-height: none; }
+.journal-body.fit-frame { padding: 12px 14px; }
+.journal-pages { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 14px 12px; }
+.journal-pages button { min-height: 40px; padding: 6px 12px; border: 2px solid var(--d-line); border-radius: 12px; background: #fff; font-weight: 800; }
+
+/* Dialogs stay inside the screen's containing block, including the desktop phone frame. */
+.quest-screen { position: absolute; padding: var(--screen-top) 18px calc(var(--screen-bottom) + 6px); overflow: hidden; gap: 12px; }
+.quest-body.fit-frame { display: block; }
+.quest-body > .fit-content { gap: 12px; }
+.quest-list { gap: 6px; }
+.quest-list .quest-row { min-height: 48px; padding: 6px 10px; font-size: .9rem; }
+.quest-body .bubble { font-size: 1.1rem; padding: 12px 14px; }
+.quest-reward { padding: 6px 16px; font-size: 1.2rem; }
+.quest-sheet { position: absolute; padding-bottom: var(--screen-bottom); }
+.quest-screen:has(.quest-sheet) .quest-body { visibility: hidden; }
+.gl-screen { position: absolute; overflow: hidden; }
+.gl-top { padding-top: var(--screen-top); }
+.gl-scroll.fit-frame { padding: 12px 16px var(--screen-bottom); }
+.gl-scroll > .fit-content { gap: 8px; max-width: 480px; margin: 0 auto; }
+.gl-panel { gap: 8px; }
+.gl-finder { aspect-ratio: auto; min-height: 120px; height: clamp(120px, 20cqh, 180px); padding: 12px; gap: 6px; }
+.gl-finder-mascot { width: 56px; height: 56px; }
+.gl-lede, .gl-privacy-line { font-size: .82rem; }
+.gl-title { font-size: 1.3rem; }
+.gl-describe { gap: 5px; }
+.gl-describe textarea { min-height: 54px; padding: 8px 12px; }
+.gl-place { gap: 4px; }
+.gl-place input { min-height: 40px; }
+.gl-cheer-hero { height: clamp(90px, 22cqh, 180px); }
+
+@container (max-height: 600px) {
+  .onboard.duo-screen { gap: 8px; }
+  .onboard .stage-pick { height: 90px; }
+  .onboard .duo-option { min-height: 50px; }
+  .onboard .opt-emoji, .onboard .opt-emoji .mascot { width: 36px; height: 36px; }
+  .onboard .benefits { gap: 12px; }
+  .onboard .benefits li > span { width: 44px; height: 44px; }
+  .home > .vitals { padding: 5px 10px; bottom: calc(var(--dock-h) + 68px); }
+  .home > .quests-btn { min-height: 48px; }
+  .quest-opt { min-height: 48px; padding: 6px 12px; }
+  .gl-finder { height: 100px; min-height: 100px; }
+}
+
+/* FitContent owns the content box: the absolute wrapper is sized by left/right, never width:100%. */
+.gl-screen .gl-scroll.fit-frame { display: block; }
+.gl-scroll > .fit-content, .gl-screen .gl-scroll > .fit-content { width: auto; }

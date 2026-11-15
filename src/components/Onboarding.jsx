@@ -3,6 +3,7 @@ import SceneBoundary from './SceneBoundary.jsx'
 import { SPRITES } from './pet3d/shared.js'
 import { FlowBar, Mascot, Say, SpriteProvider } from './Duo.jsx'
 import Icon from './Icons.jsx'
+import FitContent from './FitContent.jsx'
 import { sfx } from '../sfx.js'
 
 const PetCanvas = lazy(() => import('./pet3d/PetCanvas.jsx'))
@@ -53,11 +54,11 @@ export default function Onboarding({ reduced, onHatch }) {
     <SpriteProvider value={sprite}>
     <main className={`onboard duo-screen ${hatching ? 'is-hatching' : ''}`}>
       <FlowBar value={PROGRESS[step]} onBack={step > 0 ? () => setStep(step - 1) : undefined} />
-      <div className="duo-body" key={step}>
+      <FitContent className="duo-body" key={step}>
         {step === 0 && <>
           <Say>Who will you grow with?</Say>
           <div className="stage-pick" aria-label="Preview your three companions">
-            <SceneBoundary><Suspense fallback={<div className="loading">Loading…</div>}>
+            <SceneBoundary fallback={<div className="stage-static" aria-hidden="true">{KEYS.map((k) => <Mascot key={k} sprite={k} size={k === sprite ? 104 : 80} />)}</div>}><Suspense fallback={<div className="loading">Loading…</div>}>
               <PetCanvas camera={{ position: [0, 1.6, 9.4], fov: 34 }} target={[0, 1.1, 0]}>
                 {KEYS.map((k, i) => (
                   <group key={k} onClick={() => pick(k)}>
@@ -95,7 +96,7 @@ export default function Onboarding({ reduced, onHatch }) {
             {BENEFITS.map(([e, t, d]) => <li key={t}><span aria-hidden="true"><Icon name={e} size={28} /></span><div><strong>{t}</strong><small>{d}</small></div></li>)}
           </ul>
         </>}
-      </div>
+      </FitContent>
       <footer className="duo-foot">
         <button type="button" className="duo-btn green" disabled={hatching || (step === 1 && empty)} onClick={next}>{step === 2 ? `Hatch ${SPRITES[sprite].label}` : 'Continue'}</button>
       </footer>

@@ -22,7 +22,7 @@
 .home .world-tools button { width: 28px; height: 28px; border-radius: 10px; font-size: 1rem; line-height: 1; padding: 0; }
 
 /* away banner + toasts below that row */
-.home > .banner { top: calc(var(--top-off) + 106px); left: 12px; right: 12px; }
+.home > .banner { top: calc(var(--top-off) + 146px); left: 12px; right: 12px; }
 .home .toasts { top: calc(var(--top-off) + 106px); }
 
 /* bottom stack: growth bar, QUESTS, dock */

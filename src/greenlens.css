@@ -113,11 +113,9 @@
 .gl-error { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 2px solid var(--d-line); border-radius: 18px; }
 .gl-error p { margin: 0; color: var(--d-muted); font-size: .95rem; font-weight: 700; line-height: 1.45; }
 .gl-error-mascot { flex: none; filter: saturate(.6); transform: rotate(-8deg); }
-.gl-setup { padding: 14px; border-radius: 18px; background: var(--d-blue-l); color: #135f86; }
-.gl-setup .gl-kicker { color: var(--d-blue-d); }
-.gl-setup ol { margin: 8px 0 10px; padding-left: 22px; display: grid; gap: 6px; font-size: .9rem; font-weight: 800; }
-.gl-setup small { display: block; font-size: .76rem; font-weight: 700; line-height: 1.45; }
-.gl-setup code { padding: 1px 6px; border-radius: 6px; background: #fff; color: #0d4e70; font: 700 .82em/1.4 ui-monospace, 'SF Mono', Menlo, monospace; }
+.gl-offline { display: grid; gap: 10px; padding: 12px 14px; border: 2px dashed var(--d-gold); border-radius: 18px; background: #fffbea; color: #8a6400; }
+.gl-offline p { margin: 0; font-size: .9rem; font-weight: 800; line-height: 1.45; }
+.gl-finder.is-off, .gl-gallery.is-off { opacity: .5; cursor: not-allowed; filter: saturate(.4); }
 
 /* ---------- Celebration ---------- */
 .gl-cheer { justify-items: stretch; text-align: center; }

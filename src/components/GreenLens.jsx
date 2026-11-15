@@ -1,13 +1,15 @@
+import FitContent from './FitContent.jsx'
 import { useEffect, useId, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { Mascot } from './Duo.jsx'
 import Icon from './Icons.jsx'
 import {
-  MAX_TEXT, PRIVACY_NOTICE, aiDailyUsed, aiQuestLists, completeEcoQuest, completionNotice, confidenceCopy, describeError,
+  MAX_TEXT, MESSAGES, PRIVACY_NOTICE, aiDailyUsed, aiQuestLists, completeEcoQuest, completionNotice, confidenceCopy, describeError,
   downscaleImage, fallbackBadge, hasPrivacyAck, loadPlace, recentHistory, requestEcoQuest, rewardView, savePlace, savePrivacyAck,
   sourcesView,
 } from '../greenLensClient.js'
 import { MAX_LOCATION_CHARS } from '../ecoQuestConfig.js'
+import { useOnline } from '../resilience.js'
 import '../greenlens.css'
 
 const HONEST_LINE = 'A photo can’t prove it — tap only when you really did it.'
@@ -94,6 +96,7 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
   const [answer, setAnswer] = useState('')
   const [busyId, setBusyId] = useState(null)
   const [notice, setNotice] = useState(null) // { id, text } for a rejected completion
+  const online = useOnline()
   const rootRef = useRef(null)
   const headRef = useRef(null)
   const textRef = useRef(null)
@@ -166,6 +169,7 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
     const file = event.target.files?.[0]
     event.target.value = '' // let the same photo be picked again
     if (!file || !ack) return
+    if (!online) { fail('offline'); return }
     setPreview(null)
     look({ file, text })
   }
@@ -173,6 +177,7 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
   const onSubmitText = (event) => {
     event.preventDefault()
     if (!ack) return
+    if (!online) { fail('offline'); return }
     if (!text.trim()) { textRef.current?.focus(); return }
     setPreview(null)
     look({ text })
@@ -272,7 +277,7 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
         </span>
       </header>
 
-      <div className="gl-scroll">
+      <FitContent className="gl-scroll" align={phase === 'celebrate' || phase === 'loading' ? 'center' : 'start'}>
         <h2 id={ids.title} ref={headRef} tabIndex={-1} className="gl-title">{heading}</h2>
 
         {gated && <div className="gl-panel" key="privacy">
@@ -287,14 +292,18 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
         {phase === 'capture' && ack && <div className="gl-panel" key="capture">
           <p className="gl-lede">Snap something you use every day. GreenLens suggests one small, safe thing to do about it today.</p>
           <p className="gl-privacy-line"><Icon name="lock" size={13} />Sent to an AI model via OpenRouter to write your tip.</p>
-          <label className="gl-finder" htmlFor={ids.camera}>
-            <input id={ids.camera} className="gl-file" type="file" accept="image/*" capture="environment" onChange={onFile} />
+          {!online && <div className="gl-offline" role="status">
+            <p>{MESSAGES.offline} Finding new quests needs the internet. Your habits, quiz and saved quests still work.</p>
+            <button type="button" className="gl-ghost-btn" onClick={() => setStatus(navigator.onLine === false ? MESSAGES.offline : 'Back online. GreenLens is ready.')}>Try again</button>
+          </div>}
+          <label className={`gl-finder ${online ? '' : 'is-off'}`} htmlFor={ids.camera}>
+            <input id={ids.camera} className="gl-file" type="file" accept="image/*" capture="environment" onChange={onFile} disabled={!online} />
             <span className="gl-corners" aria-hidden="true"><i /><i /><i /><i /></span>
             <Mascot size={96} className="gl-finder-mascot" />
             <span className="gl-finder-cta"><CameraGlyph />Take a photo</span>
           </label>
-          <label className="gl-gallery" htmlFor={ids.gallery}>
-            <input id={ids.gallery} className="gl-file" type="file" accept="image/*" onChange={onFile} />
+          <label className={`gl-gallery ${online ? '' : 'is-off'}`} htmlFor={ids.gallery}>
+            <input id={ids.gallery} className="gl-file" type="file" accept="image/*" onChange={onFile} disabled={!online} />
             Choose from your photos instead
           </label>
 
@@ -306,7 +315,7 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
               placeholder="e.g. a stack of takeaway cups by the sink" onChange={(e) => setText(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); e.currentTarget.form.requestSubmit() } }} />
             <small id={ids.hint} className="gl-hint">{text.length > 150 ? `${MAX_TEXT - text.length} characters left.` : 'Works without a camera, too.'}</small>
-            <button type="submit" className="duo-btn green" disabled={!text.trim()}>Find a quest</button>
+            <button type="submit" className="duo-btn green" disabled={!online || !text.trim()}>Find a quest</button>
           </form>
           <div className="gl-place">
             <label htmlFor={ids.place}>Town or region <small>(optional, for recycling links)</small></label>
@@ -366,18 +375,9 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
             <Mascot size={64} className="gl-error-mascot" />
             <p>{err.body}</p>
           </div>
-          {err.setup && <div className="gl-setup">
-            <span className="gl-kicker">To wake it up</span>
-            <ol>
-              <li>Copy <code>.env.example</code> to <code>.env</code></li>
-              <li>Fill in <code>OPENROUTER_API_KEY</code></li>
-              <li>Restart <code>npm run dev</code></li>
-            </ol>
-            <small>Deployed? Add <code>OPENROUTER_API_KEY</code> to your host’s environment variables. Habits and quests keep working meanwhile.</small>
-          </div>}
           {err.retry && <button type="button" className="duo-btn green" onClick={() => look(lastInput.current)}>Try again</button>}
           {err.fallback && <button type="button" className={err.retry ? 'gl-ghost-btn' : 'duo-btn green'} onClick={describeInstead}>Describe it in words</button>}
-          <button type="button" className="gl-text-btn" onClick={startOver}>{err.setup ? 'Back' : 'Start over'}</button>
+          <button type="button" className="gl-text-btn" onClick={startOver}>Start over</button>
         </div>}
 
         {phase === 'celebrate' && cheer && <div className="gl-panel gl-cheer" key="celebrate">
@@ -431,7 +431,7 @@ export default function GreenLens({ game, today, petName = 'Your pet', dispatch,
             </li>)}
           </ul>
         </section>}
-      </div>
+      </FitContent>
       <div className="sr-only" role="status" aria-live="polite">{status}</div>
     </div>,
     host,

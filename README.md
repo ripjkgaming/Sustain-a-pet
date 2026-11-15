@@ -1,10 +1,163 @@
-**Live:** <LIVE_URL_TODO>
-
 # Sustain-a-Pet
+
+**Live URL: not yet deployed**
 
 A virtual pet that grows with small green habits in real life. Pick a companion, explore three garden areas, complete daily habits, answer a quiz, and use the shared garden economy to restore habitats and care for your friends.
 
-Everything stays on your device (localStorage). No accounts, no tracking. The one exception is GreenLens, the optional AI feature described below, which sends a photo or note to an AI provider when you use it.
+The game keeps its progress in your browser (localStorage). There are no accounts and no analytics. The exception is **GreenLens**, an optional AI feature. When you use it, the photo or note you submit is sent to an AI provider through this app's server. See [What GreenLens sends](#what-greenlens-sends).
+
+## Architecture (one supported setup)
+
+- **Game:** a static single-page app (Vite, React, three.js). Built to `dist/`.
+- **GreenLens:** one endpoint, `POST /api/eco-quest`. It needs the Node server, not a static host. The server forwards the request to OpenRouter using `OPENROUTER_API_KEY`.
+- **Production:** one Node process (`node server/index.js`, or the Docker image) serves `dist/` and the API. This is the only deployment path this repo documents. See [docs/DEPLOY.md](docs/DEPLOY.md).
+
+Without the AI backend, the game still works. GreenLens returns `503 ai_unconfigured`.
+
+## Requirements
+
+- Node.js 22 (the Dockerfile and CI use 22).
+- npm.
+
+## Quick start (development)
+
+```bash
+npm install
+npm run dev          # http://localhost:5173 (Vite also serves /api/eco-quest)
+```
+
+To use live GreenLens in development, copy `.env.example` to `.env` and set `OPENROUTER_API_KEY`. `npm run dev` reads `.env`. `node server/index.js` does not (see [Configuration](#configuration)).
+
+## Production run (one process)
+
+```bash
+npm run build
+OPENROUTER_API_KEY=... QUEST_SIGNING_SECRET=... NODE_ENV=production node server/index.js
+```
+
+The server listens on `PORT` (default `8080`). Open `http://localhost:8080`.
+
+## Docker
+
+```bash
+docker build -t sustain-a-pet .
+docker run -p 8080:8080 -e OPENROUTER_API_KEY=... -e QUEST_SIGNING_SECRET=... sustain-a-pet
+```
+
+The image runs as the `node` user with `NODE_ENV=production`, exposes port 8080, and has a `HEALTHCHECK` on `/healthz`. Deployment steps for a generic container host: [docs/DEPLOY.md](docs/DEPLOY.md).
+
+## Configuration
+
+Every variable in `.env.example` is listed below. Server-side only: never prefix these with `VITE_`, because `VITE_` variables are shipped to the browser. Defaults are the values in code.
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `OPENROUTER_API_KEY` | none | OpenRouter API key. Required for live GreenLens. Without it: `POST /api/eco-quest` returns `503 ai_unconfigured` and `/readyz` returns `503`. |
+| `OPENROUTER_MODEL` | `nvidia/nemotron-3.5-super-vl:free` | Primary model. Fallback models follow in the chain. The model must accept images. |
+| `QUEST_SIGNING_SECRET` | none (random per process) | HMAC key for quest tokens. Use 16+ characters. If unset or shorter, a random per-process secret is used, and tokens stop working after a restart or across instances. |
+| `NODE_ENV` | unset | Set to `production` in deployments (the Dockerfile does). Refuses `AI_MOCK` and `AI_BASE_URL` at startup. |
+| `PORT` | `8080` | Listen port. |
+| `HOST` | `0.0.0.0` | Listen address. |
+| `DIST_DIR` | `dist` in the repo root | Directory of the built app. `/readyz` checks for `index.html` in it. |
+| `TRUST_PROXY` | off | `1`, `true` or `yes` makes the server take the client IP from `X-Forwarded-For`. Enable only behind a proxy you control. |
+| `MAX_BODY_BYTES` | `6291456` (6 MB) | Largest accepted request body. Larger returns `413 payload_too_large`. |
+| `RATE_LIMIT_MAX` | `10` | Requests per IP per window on `/api/eco-quest` (token bucket). Over the limit: `429 rate_limited` with `Retry-After`. |
+| `RATE_LIMIT_WINDOW_MS` | `60000` | Window for the rate limit, in milliseconds. |
+| `SERVER_TIMEOUT_MS` | `40000` | Whole-request timeout for `/api/eco-quest`. On expiry: `504 gateway_timeout`. Must be below the client timeout (45 s) and above `UPSTREAM_TIMEOUT_MS`. |
+| `UPSTREAM_TIMEOUT_MS` | `30000` | One deadline for the whole model chain and all retries. On expiry: a labelled prerecorded tip. |
+| `UPSTREAM_MAX_RETRIES` | `2` | Retries per request for network errors, 429 and 5xx. Allowed range 0 to 2. Shared across the model chain. |
+| `UPSTREAM_RETRY_BASE_MS` | `400` | Base delay for exponential backoff with full jitter. Capped at 4 s. |
+| `SHUTDOWN_TIMEOUT_MS` | `10000` | Time allowed for in-flight requests after SIGTERM before the process exits. |
+| `AI_MOCK` | off | Test only. `1` answers from a built-in fake model. Refused when `NODE_ENV=production`. Applies to `node server/index.js` only. |
+| `AI_BASE_URL` | unset | Test only. Sends upstream calls to a local stub at this base URL. Refused when `NODE_ENV=production`. Applies to `node server/index.js` only. |
+
+Client timeout (45 s) is the constant `CLIENT_TIMEOUT_MS` in `src/ecoQuestConfig.js`. It is not an environment variable.
+
+`node server/index.js` does not read `.env`. Export variables in the process environment or pass them with `docker run -e`. Full detail, ranges and the startup checks: [docs/MODEL_CONFIG.md](docs/MODEL_CONFIG.md#environment-variables).
+
+## Where progress is saved
+
+Progress is stored **per browser and per device** in `localStorage`. It is cleared when you clear site data. It is not synced to any server or other device. If storage is blocked, the app keeps an in-memory copy, and that copy is lost on reload.
+
+Exact keys (verified in `src/`):
+
+| Key | Stores | Written in |
+| --- | --- | --- |
+| `sustain-a-pet` | Game save (JSON). The companion sprite is also read from this key. | `src/store.js`, `src/components/Duo.jsx` |
+| `sustain-pet-muted` | `1` sound muted, `0` sound on | `src/sfx.js` |
+| `sustain-pet-tutorial-v1` | `in-progress` or `done` | `src/App.jsx` |
+| `sustain-pet-allDone-<YYYY-MM-DD>` | `1` after the all-habits celebration was shown that local day | `src/App.jsx` |
+| `sustain-a-pet-client` | Random client id (8–64 characters, `A-Z a-z 0-9 _ -`) for GreenLens daily limits | `src/greenLensClient.js` |
+| `sustain-pet-greenlens-privacy-v1` | `yes` after the GreenLens privacy notice is acknowledged | `src/greenLensClient.js` |
+| `sustain-pet-greenlens-place` | Optional town or region, up to 60 characters | `src/greenLensClient.js` |
+
+The offline app also stores files in the browser's Cache Storage. See [docs/OFFLINE.md](docs/OFFLINE.md).
+
+## What GreenLens sends
+
+GreenLens takes a photo and/or a note (up to 200 characters) and returns one small, safe real-world action. You earn XP, coins and a leaf after you confirm you did it.
+
+Data path:
+
+1. The browser shrinks the photo to a 1024 px JPEG (quality 0.82) and sends `POST /api/eco-quest` **to this app's own origin**. The body can include the photo, the note, a clarification answer, up to 5 recent completed quests (title, category, date), the optional town or region, and a random client id.
+2. The server calls OpenRouter (`https://openrouter.ai/api/v1/chat/completions`) with the photo and text. The server forwards the data to the model that OpenRouter routes to.
+3. The server does not keep photos, notes or model replies after the response. It keeps only in-memory completion and rate-limit counters, which hold ids and counts, not content. It does not log request bodies, photos, base64 or notes.
+4. Retention and training of the data by OpenRouter and the routed model provider are set by their own policies. This repo cannot verify them: **check provider policy** before real users.
+
+Full detail: [docs/AI_DISCLOSURE.md](docs/AI_DISCLOSURE.md) and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+
+## Timeouts, limits and retries
+
+Timeout order, longest to shortest. Each layer must outlive the one inside it. The server refuses to start if the production values break this order.
+
+| Layer | Default | On expiry |
+| --- | --- | --- |
+| Client fetch | 45 s | Client shows a timeout message. |
+| Server request (`SERVER_TIMEOUT_MS`) | 40 s | `504 gateway_timeout`. |
+| Upstream, all models and retries (`UPSTREAM_TIMEOUT_MS`) | 30 s | Labelled prerecorded tip, HTTP 200. |
+
+- **Body:** `MAX_BODY_BYTES`, 6 MB by default. Oversized bodies return `413`.
+- **Image:** JPEG, PNG or WebP data URL, at most 3.5 MB decoded.
+- **Text:** note at most 200 characters; clarification at most 200; location at most 60.
+- **Rate limit:** `RATE_LIMIT_MAX` (10) per `RATE_LIMIT_WINDOW_MS` (60 s) per IP, token bucket.
+- **Retries:** up to `UPSTREAM_MAX_RETRIES` (2) per request, for network errors, 429 and 5xx. Backoff starts at `UPSTREAM_RETRY_BASE_MS` (400 ms), capped at 4 s, with full jitter. A retry never runs past the upstream deadline.
+- **Model chain:** up to three models. The chain moves on for 404, 429 and 5xx. Other statuses end the chain with a fallback.
+- **Daily cap:** 3 AI quest completions per client per UTC day (`MAX_AI_QUESTS_PER_DAY`).
+
+Detail: [docs/ARCHITECTURE.md#timeouts](docs/ARCHITECTURE.md#timeouts) and [docs/MODEL_CONFIG.md](docs/MODEL_CONFIG.md).
+
+## Health, readiness and logs
+
+- `GET /healthz`: `200 {"status":"ok"}` while the process runs.
+- `GET /readyz`: `200 {"status":"ready",...}` when `OPENROUTER_API_KEY` is set (or mock mode is on) and `dist/index.html` exists. Otherwise `503 {"status":"not_ready",...,"missing":[...]}` naming the missing settings, never their values. Returns 503 with `draining: true` during shutdown.
+
+Logs are JSON, one line per request, with these fields: `ts`, `level` (`info`, or `error` for 5xx), `msg` (`request`), `request_id`, `method`, `path` (no query string), `status`, `latency_ms`, `model`, `error_category`, and `upstream_retries` when retries happened. Bodies, photos, notes and credentials are never logged. Full field list: [docs/ARCHITECTURE.md#logging](docs/ARCHITECTURE.md#logging).
+
+## Testing and CI
+
+```bash
+npm test                                   # Vitest, whole unit and offline eval suite
+npx vitest run tests/evalMocked.test.js    # offline eval checks only
+npm run lint                               # oxlint
+npm run build                              # Vite build to dist/
+npm run test:e2e                           # Playwright (see below)
+OPENROUTER_API_KEY=... npm run eval:real   # real-model eval, on demand, costs API calls
+```
+
+- `npm run test:e2e` builds the app and starts `node server/index.js` with `AI_MOCK=1` and a sentinel key on a free port. Set `BASE_URL` to test a server that is already running. The config includes emulated iPhone 13 and Pixel 7 projects, not real devices. Browsers must be installed first (`npx playwright install chromium`).
+- `npm run eval:real` without a key prints `not run: no credentials` and writes nothing.
+
+CI (`.github/workflows/ci.yml`) runs on pushes and pull requests to `main`: Node 22, `npm ci`, `npm run lint`, `npm test`, `npm run build`, then uploads `dist/` as an artifact. It does not run Playwright or `eval:real`.
+
+## Game overview
+
+- Pure game engine (`src/engine.js`): habits, daily decay, mood bands, stages, unlocks, quiz.
+- Save and reducer (`src/store.js`) with an in-memory fallback if storage is blocked.
+- Three botanical 3D companions (Leafling, Mossy, Sunbud), each with four moods and four growth stages. Editable Blender sources are in `assets/blender/`.
+- Standalone model review at `/model-preview.html` on the dev server. It does not touch game saves.
+- Seven real-life habits plus a daily quiz (`src/data/habits.json`, `src/data/quiz.json`). Keys `1`–`7` complete habits, `A`/`B`/`C` answer the quiz, `P` pats the companion.
+- Shop, Friends and Explore screens for spending, switching companions and restoring the meadow, pond and grove.
+- Reward feedback respects the reduced-motion preference.
 
 ## Screenshots
 
@@ -15,127 +168,25 @@ Everything stays on your device (localStorage). No accounts, no tracking. The on
   <img src="docs/screenshots/daily-quiz.webp" alt="Garden journal with daily habits and quiz" width="200">
 </p>
 
-## Offline
+## Documentation
 
-- The game runs without a server. Game state is saved in `localStorage`, with an in-memory fallback if storage is blocked (`src/store.js`).
-- GreenLens needs the network and the `/api/eco-quest` endpoint. Without them it shows an error, and the rest of the game still works.
-- The Nunito font is self-hosted through `@fontsource/nunito` (`src/main.jsx`). No Google Fonts request.
-- Audio and 3D models ship with the app in `public/`.
-
-## Run it
-
-```bash
-npm install
-npm run dev      # http://localhost:5173 (includes /api/eco-quest via Vite)
-npm test         # full test suite, including the offline GreenLens eval checks
-npm run build
-```
-
-Production server (serves `dist/` and `/api/eco-quest`):
-
-```bash
-npm run build
-OPENROUTER_API_KEY=... QUEST_SIGNING_SECRET=... NODE_ENV=production node server/index.js
-```
-
-Or with Docker: `docker build -t sustain-a-pet . && docker run -p 8080:8080 -e OPENROUTER_API_KEY=... -e QUEST_SIGNING_SECRET=... sustain-a-pet`.
-
-## Deploy
-
-See [DEPLOY.md](DEPLOY.md) for DeployXA, Cloudflare Pages, Netlify, and Docker steps, cache notes, and the real-phone test checklist.
-
-GreenLens needs the Node server (Docker or `node server/index.js`). Static-only hosts such as Netlify and Cloudflare Pages serve the game but not `/api/eco-quest`. Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
-
-## What's built
-
-- Pure game engine (`src/engine.js`): habits, daily decay, mood bands, stages, unlocks, quiz.
-- Reducer + saving (`src/store.js`) with an in-memory fallback if storage is blocked.
-- Three Blender-authored botanical 3D pets (Leafling, Mossy, Sunbud): embedded albedo and normal textures, four moods, and four growth stages. Editable source and rebuild instructions are in `assets/blender/`.
-- Standalone model review: open `/model-preview.html` on the dev server to inspect every character, growth stage, health mood, and floating effect without touching game saves.
-- Responsive garden with a mushroom for each daily habit. Select a mushroom and your companion walks over; its checkbox appears when the companion arrives. The Today journal also has a direct habit checklist and the daily quiz.
-- Daily gifts and habits are shared across companions and capped once per day. The active companion receives habit and quiz XP, and each companion keeps its own growth progress. The Friends screen is where you adopt and switch companions.
-- Shop for care items and decorations, place or put away decorations, and restore the meadow before unlocking the pond and grove. Restoration changes the active garden scene.
-- Camera controls: use the on-screen zoom and reset buttons, or `+`/`-`, arrow keys and `0`. Keyboard shortcuts `1`–`7` complete habits, `A`/`B`/`C` answer the quiz, and `P` pats your companion.
-- Rewards include a tick bounce and leaf burst, quiz confetti, stage-up cutscene, happy dance and unlock toasts. Motion responds to the reduced-motion preference.
-
-## Practice and progress
-
-Open **Today** to collect the daily gift and review the seven real-life habits and daily quiz. The three-action and all-eight garden quests provide one-time daily bonuses. Use **Shop**, **Friends** and **Explore** to spend coins and leaves, care for or switch companions, visit areas and restore their landmarks.
-
-## GreenLens AI
-
-GreenLens turns a photo and/or a short note (up to 200 characters) into one small, safe, real-world green action. You earn 5–11 XP, plus coins and a leaf, once you confirm you did it. The server decides the reward and checks the completion.
-
-Full details, with the file for each claim:
-
-- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): data flow, endpoint, fallback, completion rules, timeouts, limits, known limitations.
-- [docs/MODEL_CONFIG.md](docs/MODEL_CONFIG.md): model chain, every environment variable, reward table, evaluation status.
+- [docs/DEPLOY.md](docs/DEPLOY.md): container deployment, health checks, cache notes, post-deploy checklist.
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): components, request flow, storage, logging, known limitations.
+- [docs/MODEL_CONFIG.md](docs/MODEL_CONFIG.md): model chain, environment variables, rewards, token and text limits, curated sources, eval status.
 - [docs/AI_DISCLOSURE.md](docs/AI_DISCLOSURE.md): what the AI does, what data it receives, how AI was used to build the app.
-
-Summary:
-
-- The client shrinks the photo to 1024 px JPEG and posts it, with the note and any saved town or region, to `/api/eco-quest`. Accepted images: JPEG, PNG or WebP, up to 3.5 MB.
-- The server asks an OpenRouter model for one quest as strict JSON. Model output is validated and cleaned in code. The model cannot set rewards or links.
-- Model chain (default): `nvidia/nemotron-3.5-super-vl:free`, then `google/gemma-4-31b-it:free`, then `google/gemma-4-26b-a4b-it:free`. `OPENROUTER_MODEL` sets the first model.
-- If the model times out or fails, the server returns a labelled prerecorded tip, not a live AI result.
-- Rewards are paid only after `POST /api/eco-quest` with `action: "complete"` confirms the quest. Each quest pays once per client. A client can complete 3 AI quests per UTC day.
-
-Setup:
-
-```bash
-cp .env.example .env   # then set OPENROUTER_API_KEY (and QUEST_SIGNING_SECRET for real deployments)
-npm run dev            # http://localhost:5173
-```
-
-- `OPENROUTER_API_KEY` (required for live quests): without it, `/api/eco-quest` returns `503 ai_unconfigured`. Habits and quests keep working.
-- Server-side only. Never prefix these with `VITE_` and never import them into client code. The key must not reach the client bundle. `.env` is git-ignored.
-- `node server/index.js` does not read `.env`. Pass variables in the process environment or with `docker run -e`.
-- Deployed hosts need `OPENROUTER_API_KEY` and `QUEST_SIGNING_SECRET` in their environment variables.
-
-Safety:
-
-- You must confirm each action ("Yes, I did it") before any reward.
-- Rewards come from a fixed table: XP 5–11, coins = XP + 5, one leaf (`src/rewards.js`).
-- 3 AI quest completions per client per UTC day (`MAX_AI_QUESTS_PER_DAY`). The server enforces this.
-- Each quest pays once. A second completion is rejected with `409 already_completed`.
-- Text in photos or notes is untrusted data and cannot override the system prompt.
-- The prompt and a small denylist try to keep quests away from medical, legal and dangerous advice. This is not a full safety check.
-- Limits to know: completion and rate-limit state is in memory per server process, and the client id is not authentication. See [docs/ARCHITECTURE.md#known-limitations](docs/ARCHITECTURE.md#known-limitations).
-
-## Tests and evaluation
-
-```bash
-npm test                                   # whole suite (offline)
-npx vitest run tests/evalMocked.test.js    # offline eval checks only
-OPENROUTER_API_KEY=... npm run eval:real   # real-model eval, on demand
-```
-
-- The mocked eval runs scripted model outputs through the real server pipeline. It checks validation, rewards, the one-question rule and fallback labels. It measures no real model.
-- `npm run eval:real` runs the eval cases against the live model. Without `OPENROUTER_API_KEY` it prints `not run: no credentials` and writes nothing. With a key, it writes `eval/results/latest.json` (git-ignored).
-- **Real-model eval status: not run.** No real-model results are published yet.
-
-## AI-use disclosure
-
-- **Runtime:** OpenRouter routes GreenLens requests to NVIDIA Nemotron or Google Gemma free models. The models read the photo and/or note and write one quest. Game rewards, links and completion are handled in code.
-- **Development:** code, tests and documentation were written with Claude (Anthropic) through Claude Code. Git history has 33 commits with Claude `Co-Authored-By` trailers. A Codex stash label appears in `plans/animation-audit.md`; its role is not recorded.
-- Full disclosure, including data sent to the provider: [docs/AI_DISCLOSURE.md](docs/AI_DISCLOSURE.md).
-
-_Team: expand this section with who prompted, reviewed and can explain each part._
+- [docs/OFFLINE.md](docs/OFFLINE.md): service worker, offline behaviour, update flow.
+- [docs/PROD_VALIDATION.md](docs/PROD_VALIDATION.md): dated record of the production server checks.
+- [eval/README.md](eval/README.md): GreenLens eval set and runners.
 
 ## Sources
 
-GreenLens recycling links come from a fixed list, not from the AI. Links appear only on recycling quests, and only for the regions listed in `src/recyclingSources.js`:
-
-- United States: EPA Recycling basics (https://www.epa.gov/recycle), Earth911 (https://earth911.com/)
-- United Kingdom: Recycle Now (https://www.recyclenow.com/), WRAP (https://wrap.ngo/)
-- Ontario, Canada: Recycling Council of Ontario (https://rco.on.ca/)
-- British Columbia, Canada: Recycle BC (https://recyclebc.ca/)
-- Australia: Recycling Near You, Planet Ark (https://recyclingnearyou.com.au/)
-- Ireland: MyWaste.ie (https://www.mywaste.ie/)
-
-Matching rules and the full list are in [docs/MODEL_CONFIG.md](docs/MODEL_CONFIG.md#curated-sources).
+GreenLens recycling links come from a fixed list in `src/recyclingSources.js`, not from the AI. They appear only on recycling quests, and only for the regions listed there: United States, United Kingdom, Ontario, British Columbia, Australia and Ireland. Full list and matching rules: [docs/MODEL_CONFIG.md#curated-sources](docs/MODEL_CONFIG.md#curated-sources).
 
 _TODO: list sources for the habit "why" lines and quiz facts._
+
+## Team
+
+_TODO: name who prompted, reviewed and can explain each part._
 
 ## License
 

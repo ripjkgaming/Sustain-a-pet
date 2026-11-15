@@ -67,7 +67,7 @@ The app does not control how OpenRouter or the routed model provider stores or u
 
 ## AI use in development
 
-Git history records AI assistance through `Co-Authored-By` trailers. A count of commits on `main` (`git log`) found 33 commits with such trailers: 22 Claude Sonnet 5.5, 8 Claude Haiku 5.5 and 3 Claude Opus 5.5. These trailers come from Anthropic's Claude Code workflow and name the model that did the work.
+Git history records AI assistance through `Co-Authored-By` trailers that name Claude models. To list them, run `git log -i --grep='Co-Authored-By'`. This document records no count, because the count changes with each commit. These trailers come from Anthropic's Claude Code workflow and name the model that did the work.
 
 - **Claude (Anthropic), via Claude Code:** wrote and edited application code, server code, tests, the eval set and these documents.
 - **OpenAI Codex:** the repository contains a git stash labelled `codex-preserve-local-work-before-atharvahuja13-update`, referenced in `plans/animation-audit.md`. The repository does not record Codex's role beyond that label.
