@@ -78,7 +78,7 @@ npm run dev            # http://localhost:5173
 ```
 
 - `OPENROUTER_API_KEY` (required): without it, `/api/eco-quest` returns `503 ai_unconfigured`. Habits and quests keep working.
-- `OPENROUTER_MODEL` (optional): defaults to the free vision model `google/gemma-4-31b-it:free`. Fallbacks, tried in order on 404, 429 or 5xx: `nvidia/nemotron-3.5-super-vl:free`, then `google/gemma-4-26b-a4b-it:free`.
+- `OPENROUTER_MODEL` (optional): defaults to the free vision model `nvidia/nemotron-3.5-super-vl:free`. Fallbacks, tried in order on 404, 429 or 5xx: `google/gemma-4-31b-it:free`, then `google/gemma-4-26b-a4b-it:free`.
 - Server-side only. Never prefix these with `VITE_` and never import them into client code. The key must not reach the client bundle. `.env` is git-ignored.
 - Deployed hosts need `OPENROUTER_API_KEY` in their environment variables.
 

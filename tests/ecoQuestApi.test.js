@@ -3,8 +3,8 @@ import handler, { generateQuest, modelChain, extractJson } from '../api/eco-ques
 
 const IMG = 'data:image/png;base64,iVBORw0KGgo='
 const KEY_ENV = { OPENROUTER_API_KEY: 'test-key' }
-const PRIMARY = 'google/gemma-4-31b-it:free'
-const FALLBACK_1 = 'nvidia/nemotron-3.5-super-vl:free'
+const PRIMARY = 'nvidia/nemotron-3.5-super-vl:free'
+const FALLBACK_1 = 'google/gemma-4-31b-it:free'
 const FALLBACK_2 = 'google/gemma-4-26b-a4b-it:free'
 const validRaw = {
   object: 'plastic water bottle',
@@ -235,7 +235,7 @@ describe('generateQuest', () => {
 })
 
 describe('modelChain', () => {
-  it('defaults to the free Gemma model followed by two fallbacks', () => {
+  it('defaults to the free Nemotron vision model followed by two Gemma fallbacks', () => {
     expect(modelChain({})).toEqual([PRIMARY, FALLBACK_1, FALLBACK_2])
   })
 

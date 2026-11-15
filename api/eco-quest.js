@@ -2,8 +2,8 @@ import { QUEST_SCHEMA, validateQuest } from '../src/ecoQuest.js'
 
 const OPENROUTER_URL = 'https://openrouter.ai/api/v1/chat/completions'
 // Free vision models on OpenRouter (checked via GET /api/v1/models). Override with OPENROUTER_MODEL.
-const MODEL_DEFAULT = 'google/gemma-4-31b-it:free'
-const MODEL_FALLBACKS = ['nvidia/nemotron-3.5-super-vl:free', 'google/gemma-4-26b-a4b-it:free']
+const MODEL_DEFAULT = 'nvidia/nemotron-3.5-super-vl:free'
+const MODEL_FALLBACKS = ['google/gemma-4-31b-it:free', 'google/gemma-4-26b-a4b-it:free']
 // Generic client identity for OpenRouter attribution headers (no project or personal name).
 const REFERER_HEADER = 'http://localhost'
 const TITLE_HEADER = 'eco-quest'
