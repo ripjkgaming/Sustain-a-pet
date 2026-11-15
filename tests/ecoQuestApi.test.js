@@ -54,6 +54,7 @@ describe('generateQuest', () => {
     expect(out.status).toBe(200)
     expect(out.body.quest.id).toMatch(/^ai-[0-9a-f]{8}$/)
     expect(out.body.model).toBe(PRIMARY)
+    expect(out.body).toMatchObject({ kind: 'quest', live: true, fallback: false, source: 'live' })
     expect(out.body.quest.xp).toBeGreaterThanOrEqual(5)
     expect(out.body.quest.xp).toBeLessThanOrEqual(15)
     expect(fetchImpl).toHaveBeenCalledTimes(1)
@@ -71,7 +72,8 @@ describe('generateQuest', () => {
     expect(payload.response_format.type).toBe('json_schema')
     expect(payload.response_format.json_schema.name).toBe('eco_quest')
     expect(payload.response_format.json_schema.strict).toBe(true)
-    expect(payload.response_format.json_schema.schema.required).toContain('xp')
+    expect(payload.response_format.json_schema.schema.required).toContain('clarifying_question')
+    expect(payload.response_format.json_schema.schema.properties).not.toHaveProperty('xp')
   })
 
   it('never sends the API key in the body or the response', async () => {
@@ -131,18 +133,18 @@ describe('generateQuest', () => {
     expect(fetchImpl).not.toHaveBeenCalled()
   })
 
-  it('returns 422 when the model output is not JSON', async () => {
+  it('falls back (labelled, not live) when the model output is not JSON', async () => {
     const fetchImpl = vi.fn(async () => jsonResponse(chatOk('not json')))
     const out = await generateQuest({ text: 'bottle', fetchImpl, env: KEY_ENV })
-    expect(out.status).toBe(422)
-    expect(out.body.error).toBe('invalid_model_output')
+    expect(out.status).toBe(200)
+    expect(out.body).toMatchObject({ live: false, fallback: true, source: 'prerecorded', fallback_reason: 'invalid_model_output' })
   })
 
-  it('returns 422 when the model JSON fails validateQuest', async () => {
+  it('falls back when the model JSON fails validateQuest', async () => {
     const fetchImpl = okFetch({ ...validRaw, object: undefined })
     const out = await generateQuest({ text: 'bottle', fetchImpl, env: KEY_ENV })
-    expect(out.status).toBe(422)
-    expect(out.body.error).toBe('invalid_model_output')
+    expect(out.status).toBe(200)
+    expect(out.body).toMatchObject({ live: false, fallback: true, fallback_reason: 'invalid_model_output' })
   })
 
   it('extracts JSON when the model wraps it in fences and prose', async () => {
@@ -192,7 +194,8 @@ describe('generateQuest', () => {
     const fetchImpl = vi.fn(async () => jsonResponse({ error: 'boom' }, false, 500))
     const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
     const out = await generateQuest({ text: 'bottle', fetchImpl, env: KEY_ENV })
-    expect(out.status).toBe(502)
+    expect(out.status).toBe(200)
+    expect(out.body.fallback).toBe(true)
     const lines = logSpy.mock.calls.map((args) => args.join(' '))
     expect(lines).toEqual([
       `[eco-quest] model=${PRIMARY} failed status=500`,
@@ -216,21 +219,21 @@ describe('generateQuest', () => {
   it('does not fall back on a non-retryable 4xx', async () => {
     const fetchImpl = vi.fn(async () => jsonResponse({ error: 'bad key' }, false, 401))
     const out = await generateQuest({ text: 'bottle', fetchImpl, env: KEY_ENV })
-    expect(out).toEqual({ status: 502, body: { error: 'upstream_failed' } })
+    expect(out.body).toMatchObject({ fallback: true, live: false, fallback_reason: 'upstream_failed' })
     expect(fetchImpl).toHaveBeenCalledTimes(1)
   })
 
   it('returns 502 after every model in the chain fails with a retryable status', async () => {
     const fetchImpl = vi.fn(async () => jsonResponse({ error: 'boom' }, false, 500))
     const out = await generateQuest({ text: 'bottle', fetchImpl, env: KEY_ENV })
-    expect(out).toEqual({ status: 502, body: { error: 'upstream_failed' } })
+    expect(out.body).toMatchObject({ fallback: true, live: false, fallback_reason: 'upstream_failed' })
     expect(fetchImpl).toHaveBeenCalledTimes(3)
   })
 
   it('returns 502 when fetch rejects', async () => {
     const fetchImpl = vi.fn(async () => { throw new Error('network down') })
     const out = await generateQuest({ text: 'bottle', fetchImpl, env: KEY_ENV })
-    expect(out.status).toBe(502)
+    expect(out.body).toMatchObject({ fallback: true, live: false })
   })
 })
 

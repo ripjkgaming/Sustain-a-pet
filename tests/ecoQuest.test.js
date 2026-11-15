@@ -15,7 +15,8 @@ const goodQuest = {
   confidence: 'high',
 }
 const addQuest = (state, quest, today = DAY) => gardenAction(state, { type: 'addAiQuest', quest }, today)
-const completeQ = (state, id, today = DAY) => gardenAction(state, { type: 'completeAiQuest', id }, today)
+const SERVER_REWARD = { xp: 12, coins: 17, leaves: 1 }
+const completeQ = (state, id, today = DAY, reward = SERVER_REWARD) => gardenAction(state, { type: 'completeAiQuest', id, reward }, today)
 const withGame = (state, game) => ({ ...state, game: { ...state.game, ...game } })
 const distinct = (i) => ({ ...goodQuest, title: `Quest ${i}`, action: `Action ${i}` })
 
@@ -27,10 +28,11 @@ describe('validateQuest', () => {
     expect(validateQuest({ ...goodQuest }).quest.id).toBe(v.quest.id)
     expect(validateQuest({ ...goodQuest, title: 'Other title' }).quest.id).not.toBe(v.quest.id)
   })
-  it('clamps xp to 5..15 and rounds', () => {
-    expect(validateQuest({ ...goodQuest, xp: 99 }).quest.xp).toBe(15)
-    expect(validateQuest({ ...goodQuest, xp: -3 }).quest.xp).toBe(5)
-    expect(validateQuest({ ...goodQuest, xp: 7.4 }).quest.xp).toBe(7)
+  it('ignores model-supplied xp and derives it from category and difficulty', () => {
+    expect(validateQuest({ ...goodQuest, xp: 99 }).quest.xp).toBe(5)
+    expect(validateQuest({ ...goodQuest, xp: 99, reward: { coins: 999 }, coins: 999 }).quest).not.toHaveProperty('coins')
+    expect(validateQuest({ ...goodQuest, category: 'repair', difficulty: 'hard' }).quest.xp).toBe(11)
+    expect(validateQuest({ ...goodQuest, category: 'nonsense', difficulty: 'nope' }).quest).toMatchObject({ category: 'other', difficulty: 'easy', xp: 5 })
   })
   it('truncates long strings to their field limits', () => {
     expect(validateQuest({ ...goodQuest, title: 'x'.repeat(200) }).quest.title).toHaveLength(80)
@@ -55,8 +57,6 @@ describe('validateQuest', () => {
     expect(validateQuest([])).toEqual({ ok: false, error: 'not-object' })
     expect(validateQuest('str')).toEqual({ ok: false, error: 'not-object' })
     expect(validateQuest({ ...goodQuest, title: 42 })).toEqual({ ok: false, error: 'bad-type:title' })
-    expect(validateQuest({ ...goodQuest, xp: '10' })).toEqual({ ok: false, error: 'bad-type:xp' })
-    expect(validateQuest({ ...goodQuest, xp: NaN })).toEqual({ ok: false, error: 'bad-type:xp' })
     expect(validateQuest({ ...goodQuest, confidence: 'maybe' })).toEqual({ ok: false, error: 'bad-type:confidence' })
     expect(validateQuest({ ...goodQuest, title: '   ' })).toEqual({ ok: false, error: 'empty:title' })
     expect(validateQuest({ ...goodQuest, why: undefined })).toEqual({ ok: false, error: 'empty:why' })
@@ -74,11 +74,10 @@ describe('validateQuest', () => {
 })
 
 describe('QUEST_SCHEMA and constants', () => {
-  it('describes xp range and omits id', () => {
+  it('lets the model choose buckets but never an id, reward or link', () => {
     expect(QUEST_SCHEMA.type).toBe('object')
-    expect(QUEST_SCHEMA.required).toContain('xp')
-    expect(QUEST_SCHEMA.properties).not.toHaveProperty('id')
-    expect(QUEST_SCHEMA.properties.xp).toMatchObject({ minimum: 5, maximum: 15 })
+    for (const field of ['id', 'xp', 'coins', 'reward', 'url', 'sources']) expect(QUEST_SCHEMA.properties).not.toHaveProperty(field)
+    expect(QUEST_SCHEMA.required).toEqual(expect.arrayContaining(['clarifying_question', 'category', 'difficulty', 'personalization_note']))
   })
   it('caps AI quest completions at 3 per day', () => {
     expect(MAX_AI_QUESTS_PER_DAY).toBe(3)
@@ -114,7 +113,7 @@ describe('addAiQuest', () => {
 describe('completeAiQuest', () => {
   it('pays exact rewards: coins xp+5, one leaf, lifetime xp, pet xp, health +5', () => {
     const base = { ...withGame(fresh(), { coins: 100, leaves: 5, lifetimeXp: 40 }), xp: 20, health: 50 }
-    const added = addQuest(base, { ...goodQuest, xp: 12 })
+    const added = addQuest(base, { ...goodQuest, xp: 12 }) // quest xp is not what pays: the server reward is
     const id = added.game.aiQuests[0].id
     const done = completeQ(added, id)
     expect(done.game.coins).toBe(117)
@@ -123,6 +122,14 @@ describe('completeAiQuest', () => {
     expect(done.xp).toBe(32)
     expect(done.health).toBe(55)
     expect(done.game.aiQuests[0].status).toBe('done')
+  })
+  it('pays the server reward, not the quest xp, and rejects a missing or absurd reward', () => {
+    const added = addQuest(fresh(), goodQuest)
+    const id = added.game.aiQuests[0].id
+    expect(completeQ(added, id, DAY, { xp: 15, coins: 20, leaves: 1 }).game.coins).toBe(added.game.coins + 20)
+    expect(completeQ(added, id, DAY, { xp: 9999, coins: 9999, leaves: 99 }).game.coins).toBe(added.game.coins + 20)
+    expect(gardenAction(added, { type: 'completeAiQuest', id }, DAY)).toBe(added)
+    expect(completeQ(added, id, DAY, 'rich')).toBe(added)
   })
   it('caps health at 100', () => {
     const base = { ...addQuest(fresh(), goodQuest), health: 98 }
@@ -178,8 +185,8 @@ describe('store reducer ai quest events', () => {
     const app1 = reduce(app0, { type: 'addAiQuest', quest: goodQuest })
     expect(app1.events.some(e => e.type === 'aiQuest')).toBe(false)
     const id = app1.real.game.aiQuests[0].id
-    const app2 = reduce(app1, { type: 'completeAiQuest', id })
-    expect(app2.events).toContainEqual({ type: 'aiQuest', xp: 10, title: 'Refill your bottle' })
-    expect(reduce(app2, { type: 'completeAiQuest', id })).toBe(app2)
+    const app2 = reduce(app1, { type: 'completeAiQuest', id, reward: SERVER_REWARD })
+    expect(app2.events).toContainEqual({ type: 'aiQuest', xp: 12, title: 'Refill your bottle' })
+    expect(reduce(app2, { type: 'completeAiQuest', id, reward: SERVER_REWARD })).toBe(app2)
   })
 })

@@ -1,5 +1,6 @@
 // The garden economy is pure and shared across companions; switching never resets daily limits.
-import { validateQuest, MAX_AI_QUESTS_PER_DAY } from './ecoQuest.js'
+import { validateQuest, pickServerFields, MAX_AI_QUESTS_PER_DAY } from './ecoQuest.js'
+import { clampReward } from './rewards.js'
 
 export const SHOP = [
   { id: 'dew', name: 'Morning dew', description: 'Restore 18 health to your active companion.', cost: 25, kind: 'care', health: 18, icon: '💧' },
@@ -112,9 +113,12 @@ export function gardenAction(state, action, today) {
       if (!v.ok) return state
       const list = g.aiQuests ?? []
       if (list.some(q => q.id === v.quest.id)) return state
-      return patch({ aiQuests: [...list, { ...v.quest, createdOn: today, status: 'open' }].slice(-20) })
+      return patch({ aiQuests: [...list, { ...v.quest, ...pickServerFields(action.quest), createdOn: today, status: 'open' }].slice(-20) })
     }
     case 'completeAiQuest': {
+      // The reward must be the one the server returned for this completion; the quest's own xp is never paid.
+      const reward = clampReward(action.reward)
+      if (!reward) return state
       if (today < state.lastOpenDate) return state
       const list = g.aiQuests ?? []
       const q = list.find(x => x.id === action.id)
@@ -124,13 +128,13 @@ export function gardenAction(state, action, today) {
       if (used >= MAX_AI_QUESTS_PER_DAY) return state
       return patch(
         {
-          coins: g.coins + q.xp + 5,
-          leaves: g.leaves + 1,
-          lifetimeXp: (g.lifetimeXp ?? 0) + q.xp,
-          aiQuests: list.map(x => x.id === q.id ? { ...x, status: 'done' } : x),
+          coins: g.coins + reward.coins,
+          leaves: g.leaves + reward.leaves,
+          lifetimeXp: (g.lifetimeXp ?? 0) + reward.xp,
+          aiQuests: list.map(x => x.id === q.id ? { ...x, status: 'done', xp: reward.xp, completedAt: today } : x),
           aiDaily: { date: today, count: used + 1 },
         },
-        { xp: state.xp + q.xp, health: Math.min(100, state.health + 5) },
+        { xp: state.xp + reward.xp, health: Math.min(100, state.health + 5) },
       )
     }
     default: return state

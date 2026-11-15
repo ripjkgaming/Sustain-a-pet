@@ -96,10 +96,12 @@ describe('/api/eco-quest entry points', () => {
     expect(await viaMiddleware(undefined, KEY_ENV, 'GET')).toEqual({ status: 405, body: { error: 'method_not_allowed' } })
   })
 
-  it('returns 502 upstream_failed through both when the model call fails', async () => {
+  it('returns a labelled prerecorded fallback through both when the model call fails', async () => {
     const down = vi.fn(async () => ({ ok: false, status: 401, json: async () => ({}) }))
     const [a, b] = await both({ text: 'my bottle' }, KEY_ENV, down)
-    expect(a).toEqual({ status: 502, body: { error: 'upstream_failed' } })
-    expect(b).toEqual(a)
+    expect(a.status).toBe(200)
+    expect(a.body).toMatchObject({ kind: 'quest', live: false, fallback: true, source: 'prerecorded', fallback_label: 'Prerecorded tip, not a live AI result' })
+    expect(b.status).toBe(200)
+    expect(b.body.fallback).toBe(true)
   })
 })

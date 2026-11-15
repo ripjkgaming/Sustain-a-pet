@@ -52,9 +52,9 @@ describe('requestEcoQuest', () => {
     expect(url).toBe(ENDPOINT)
     expect(init.method).toBe('POST')
     expect(init.headers['Content-Type']).toBe('application/json')
-    expect(JSON.parse(init.body)).toEqual({ image: IMG, text: 'bottle' })
+    expect(JSON.parse(init.body)).toMatchObject({ image: IMG, text: 'bottle', clientId: expect.stringMatching(/^[A-Za-z0-9_-]{8,64}$/) })
     expect(res.ok).toBe(true)
-    expect(res.quest.xp).toBe(15) // clamped by validateQuest
+    expect(res.quest.xp).toBe(5) // table reward; the model's xp: 40 is ignored
     expect(res.quest.id).toMatch(/^ai-[0-9a-f]{8}$/)
   })
   it('does not call fetch when there is nothing to send', async () => {

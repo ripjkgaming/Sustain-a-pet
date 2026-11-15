@@ -1,11 +1,13 @@
 // GreenLens client: shrink a photo, ask /api/eco-quest for one quest, explain failures kindly.
-import { MAX_AI_QUESTS_PER_DAY, validateQuest } from './ecoQuest.js'
+import { MAX_AI_QUESTS_PER_DAY, pickServerFields, validateQuest } from './ecoQuest.js'
+import { CLIENT_TIMEOUT_MS, FALLBACK_LABEL, MAX_HISTORY_ITEMS, MAX_LOCATION_CHARS, MAX_TEXT_CHARS } from './ecoQuestConfig.js'
+import { clampReward } from './rewards.js'
 
 export const ENDPOINT = '/api/eco-quest'
 export const MAX_EDGE = 1024
 export const JPEG_QUALITY = 0.82
-export const MAX_TEXT = 200
-const TIMEOUT_MS = 25000
+export const MAX_TEXT = MAX_TEXT_CHARS
+const CLIENT_ID_KEY = 'sustain-a-pet-client'
 
 /** Scale (width, height) so the longest edge is at most `max`. Never upscales. */
 export function fitWithin(width, height, max = MAX_EDGE) {
@@ -50,20 +52,107 @@ export async function downscaleImage(file, { max = MAX_EDGE, quality = JPEG_QUAL
   return canvas.toDataURL('image/jpeg', quality)
 }
 
+/** Stable random id for the server-side daily cap and duplicate checks. Falls back to a per-session id. */
+let sessionId = null
+export function getClientId() {
+  try {
+    const saved = window.localStorage.getItem(CLIENT_ID_KEY)
+    if (saved && /^[A-Za-z0-9_-]{8,64}$/.test(saved)) return saved
+  } catch { /* storage blocked */ }
+  if (!sessionId) {
+    const bytes = globalThis.crypto?.getRandomValues?.(new Uint8Array(16))
+    sessionId = bytes ? Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('') : `s${Date.now().toString(36)}${Math.random().toString(36).slice(2, 10)}`
+  }
+  try { window.localStorage.setItem(CLIENT_ID_KEY, sessionId) } catch { /* memory copy still works */ }
+  return sessionId
+}
+
+/** Up to five most recently completed AI quests, shaped for the endpoint's `history` field. */
+export function recentHistory(game, limit = MAX_HISTORY_ITEMS) {
+  return (game?.aiQuests ?? [])
+    .filter((q) => q.status === 'done')
+    .slice(-limit)
+    .map((q) => ({ title: q.title, category: q.category || 'other', completedAt: q.completedAt || q.createdOn || '' }))
+    .filter((item) => /^\d{4}-\d{2}-\d{2}/.test(item.completedAt))
+}
+
 /** Request body for the endpoint; drops empty parts. Returns null when there is nothing to send. */
-export function buildBody({ image, text } = {}) {
+export function buildBody({ image, text, clarification, history, location, clientId } = {}) {
   const body = {}
   if (typeof image === 'string' && image.startsWith('data:image/')) body.image = image
   const note = typeof text === 'string' ? text.trim().slice(0, MAX_TEXT) : ''
   if (note) body.text = note
-  return body.image || body.text ? body : null
+  if (!body.image && !body.text) return null
+  const answer = typeof clarification === 'string' ? clarification.trim().slice(0, MAX_TEXT) : ''
+  if (answer) body.clarification = answer
+  if (Array.isArray(history) && history.length) body.history = history.slice(-MAX_HISTORY_ITEMS)
+  const place = typeof location === 'string' ? location.trim().slice(0, MAX_LOCATION_CHARS) : ''
+  if (place) body.constraints = { location: place }
+  if (typeof clientId === 'string' && clientId) body.clientId = clientId
+  return body
 }
 
-const STATUS_CODES = { 400: 'bad_body', 413: 'payload_too_large', 422: 'invalid_model_output', 429: 'rate_limited', 502: 'upstream_failed', 503: 'ai_unconfigured' }
+const STATUS_CODES = { 400: 'bad_body', 403: 'invalid_token', 409: 'already_completed', 413: 'payload_too_large', 422: 'invalid_model_output', 429: 'rate_limited', 502: 'upstream_failed', 503: 'ai_unconfigured' }
 
-/** POST to the endpoint. Resolves { ok: true, quest } or { ok: false, code, status }; never throws. */
-export async function requestEcoQuest(input, { fetchImpl = globalThis.fetch, signal, timeoutMs = TIMEOUT_MS } = {}) {
-  const body = buildBody(input)
+function parseQuestReply(data, status) {
+  if (data?.kind === 'clarify') {
+    const question = typeof data.clarifying_question === 'string' ? data.clarifying_question.trim() : ''
+    if (!question) return { ok: false, code: 'invalid_model_output', status }
+    return { ok: true, kind: 'clarify', question, live: true }
+  }
+  const checked = validateQuest(data?.quest)
+  if (!checked.ok) return { ok: false, code: 'invalid_model_output', status }
+  const fallback = data.fallback === true
+  const extras = pickServerFields({ ...data.quest, live: !fallback && data.live === true, token: data.token })
+  const quest = { ...checked.quest, ...extras }
+  if (fallback) quest.fallback_label = FALLBACK_LABEL // fixed copy: canned tips are never presented as live
+  return {
+    ok: true, kind: 'quest', quest, live: quest.live, fallback, source: fallback ? 'prerecorded' : 'live',
+    fallbackLabel: fallback ? FALLBACK_LABEL : null, model: typeof data.model === 'string' ? data.model : null,
+  }
+}
+
+/**
+ * Ask the server to confirm a completion. Resolves { ok: true, reward, dailyUsed, dailyMax } or
+ * { ok: false, code, status } with code invalid_token | already_completed | daily_cap | ...
+ * Dispatch completeAiQuest with this server `reward` only; never with the quest's own xp.
+ */
+export async function completeEcoQuest(quest, { fetchImpl = globalThis.fetch, timeoutMs = CLIENT_TIMEOUT_MS } = {}) {
+  if (!quest?.token) return { ok: false, code: 'invalid_token', status: 0 }
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
+  try {
+    const res = await fetchImpl(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'complete', token: quest.token, clientId: getClientId() }),
+      signal: controller.signal,
+    })
+    let data = null
+    try { data = await res.json() } catch { /* non-JSON error page */ }
+    if (!res.ok) {
+      const code = typeof data?.error === 'string' && data.error ? data.error : STATUS_CODES[res.status] || 'upstream_failed'
+      return { ok: false, code, status: res.status }
+    }
+    const reward = clampReward(data?.reward)
+    if (!reward) return { ok: false, code: 'upstream_failed', status: res.status }
+    return { ok: true, reward, dailyUsed: data.dailyUsed ?? null, dailyMax: data.dailyMax ?? null }
+  } catch {
+    return { ok: false, code: controller.signal.aborted ? 'timeout' : 'network', status: 0 }
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
+/**
+ * POST to the endpoint. Never throws. Resolves one of:
+ *  { ok: true, kind: 'quest', quest, live, fallback, source, fallbackLabel, model }
+ *  { ok: true, kind: 'clarify', question, live: true }
+ *  { ok: false, code, status }
+ * Input: { image, text, clarification, history, location }. The client id is added here.
+ */
+export async function requestEcoQuest(input, { fetchImpl = globalThis.fetch, signal, timeoutMs = CLIENT_TIMEOUT_MS } = {}) {
+  const body = buildBody({ clientId: getClientId(), ...input })
   if (!body) return { ok: false, code: 'empty', status: 0 }
   const controller = new AbortController()
   const abort = () => controller.abort()
@@ -83,9 +172,7 @@ export async function requestEcoQuest(input, { fetchImpl = globalThis.fetch, sig
       const code = typeof data?.error === 'string' && data.error ? data.error : STATUS_CODES[res.status] || 'upstream_failed'
       return { ok: false, code, status: res.status }
     }
-    const checked = validateQuest(data?.quest)
-    if (!checked.ok) return { ok: false, code: 'invalid_model_output', status: res.status }
-    return { ok: true, quest: checked.quest }
+    return parseQuestReply(data, res.status)
   } catch {
     if (signal?.aborted) return { ok: false, code: 'aborted', status: 0 }
     if (timedOut) return { ok: false, code: 'timeout', status: 0 }
@@ -118,6 +205,12 @@ export function describeError(code) {
       return { title: 'You seem to be offline', body: 'GreenLens needs the internet to look around. The rest of your garden still works.', fallback: false, setup: false, retry: true }
     case 'timeout':
       return { title: 'That took too long', body: 'The lens got a little foggy. Try again, or describe it in words for a quicker answer.', fallback: true, setup: false, retry: true }
+    case 'already_completed':
+      return { title: 'Already counted', body: 'This quest has already earned its reward.', fallback: false, setup: false, retry: false }
+    case 'daily_cap':
+      return { title: 'Daily quest limit reached', body: 'You have earned the most AI quest rewards for today. Come back tomorrow.', fallback: false, setup: false, retry: false }
+    case 'invalid_token':
+      return { title: 'This quest expired', body: 'Ask GreenLens for a fresh quest to earn its reward.', fallback: true, setup: false, retry: false }
     case 'empty':
       return { title: 'Nothing to look at yet', body: 'Take a photo, or describe something near you.', fallback: true, setup: false, retry: false }
     default:
