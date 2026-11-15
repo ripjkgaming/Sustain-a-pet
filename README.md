@@ -1,3 +1,5 @@
+**Live:** <LIVE_URL_TODO>
+
 # Sustain-a-Pet
 
 A virtual pet that grows with small green habits in real life. Pick a companion, explore three garden areas, complete daily habits, answer a quiz, and use the shared garden economy to restore habitats and care for your friends.
@@ -13,6 +15,10 @@ npm test         # engine + store tests
 npm run build
 ```
 
+
+## Deploy
+
+See [DEPLOY.md](DEPLOY.md) for DeployXA, Cloudflare Pages, Netlify, and Docker steps, cache notes, and the real-phone test checklist.
 
 ## What's built
 
@@ -38,3 +44,7 @@ Written with Claude Code (Anthropic). _Team: expand this section with who prompt
 ## Sources
 
 _TODO: list sources for the habit "why" lines and quiz facts._
+
+## License
+
+MIT. See [LICENSE](LICENSE).
