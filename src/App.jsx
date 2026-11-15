@@ -96,6 +96,16 @@ export default function App() {
       if (e.type === 'quizCorrect') { bump('bounce', 'confetti'); powerUp(8) }
       if (e.type === 'stageUp') { bump('evolve'); powerUp(12); setTimeout(() => setEvolve({ stage: e.stage }), 900) }
       if (e.type === 'unlock') { bump('confetti'); powerUp(10); pushToast(unlockText(e.id)) }
+      if (e.type === 'aiQuest') {
+        // A real-world GreenLens quest: the pet powers up and the garden bursts with leaves and confetti.
+        bump('bounce', 'leaves', 'confetti')
+        powerUp(e.xp >= 12 ? 10 : 8)
+        const id = ++uid
+        setFloats((f) => [...f, { id, xp: e.xp, x: 40 + Math.random() * 20 }])
+        setTimeout(() => setFloats((f) => f.filter((x) => x.id !== id)), 1400)
+        pushToast(`🌍 ${e.title} · +${e.xp} XP`)
+        setLive(`GreenLens quest done: ${e.title}. ${name} gained ${e.xp} XP.`)
+      }
       if (e.type === 'allDone') { bump('dance', 'confetti'); powerUp(14); pushToast('All habits done today! 🌍') }
       if (e.type === 'mood') setLive(`${name} feels ${e.mood.toLowerCase()}`)
     }
@@ -107,7 +117,7 @@ export default function App() {
   useLayoutEffect(() => { kb.current = { pet, today, app, tutorial, evolve } })
   useEffect(() => {
     const onKey = (e) => {
-      if (e.target.closest?.('.garden-journal, .garden-dock, input:not([type=checkbox]), textarea, select') || e.metaKey || e.ctrlKey || e.altKey) return
+      if (e.target.closest?.('.garden-journal, .garden-dock, .gl-screen, input:not([type=checkbox]), textarea, select') || e.metaKey || e.ctrlKey || e.altKey) return
       const { pet: p, today: t, tutorial: guide, evolve: cutscene } = kb.current
       if (e.key === 'Escape') { setEvolve(null); return }
       if (!p || guide || cutscene) return
@@ -139,6 +149,14 @@ export default function App() {
   }
 
   useLayoutEffect(() => { petTapRef.current = petTap })
+
+  // Returning from a GreenLens win: replay the celebration where the garden can be seen.
+  const celebrateLens = (cheer) => {
+    bump('dance', 'confetti', 'leaves')
+    powerUp(6)
+    petCtl.current.hold?.(3)
+    if (cheer) pushToast(`+${cheer.xp} XP · +${cheer.xp + 5} coins · +1 leaf`)
+  }
 
   if (splash) return <Splash onDone={endSplash} />
   if (!app.real) return <Onboarding reduced={reduced} onHatch={(name, sprite) => { dispatch({ type: 'hatch', name, sprite }); tutorialStorage.set('in-progress'); setTutorial('in-progress') }} />
@@ -197,7 +215,7 @@ export default function App() {
       <div className="sr-only" aria-live="polite">{live}</div>
 
       <Vitals health={pet.health} xp={pet.xp} doneToday={done.length} totalHabits={habitList.length} />
-      <GardenJournal state={pet} today={today} dispatch={dispatch} />
+      <GardenJournal state={pet} today={today} dispatch={dispatch} onCelebrate={celebrateLens} />
       <p className="hint kbd-hint">Keys: 1–7 habits · A/B/C quiz</p>
     </main>
     </SpriteProvider>
