@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import {
   footfallsBetween, grainGainForRms, isWalking, LEAF_GRAIN_OFFSETS, playbackRateForSpeed,
 } from '../walkingAudio.js'
+import { sfx } from '../sfx.js'
 
 const SOURCE = '/audio/autumn-leaf-steps.m4a'
 const GRAIN_SECONDS = 0.32
@@ -121,7 +122,7 @@ export default function LeafFootsteps({ movement, enabled = true }) {
     }
 
     const unlock = (event) => {
-      if (!event.isTrusted || !enabledRef.current || document.hidden || !context) return
+      if (!event.isTrusted || !enabledRef.current || sfx.isMuted() || document.hidden || !context) return
       // resume() is invoked in the trusted event callback for WebKit activation.
       try {
         context.resume().then(() => {
@@ -143,10 +144,11 @@ export default function LeafFootsteps({ movement, enabled = true }) {
     const tick = () => {
       const state = movement?.current
       const speed = state?.speed ?? 0
-      if (!enabledRef.current || document.hidden) stopActive()
+      const audible = enabledRef.current && !sfx.isMuted()
+      if (!audible || document.hidden) stopActive()
       const stepCount = state?.stepCount ?? lastStepCount
       const count = footfallsBetween(lastStepCount, stepCount, {
-        enabled: enabledRef.current,
+        enabled: audible,
         visible: !document.hidden,
         moving: isWalking(speed),
         unlocked,
