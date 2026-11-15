@@ -1,0 +1,3 @@
+# Real-model eval output is machine-specific; never commit it.
+*
+!.gitignore
