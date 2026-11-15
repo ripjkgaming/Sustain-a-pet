@@ -1,0 +1,390 @@
+{
+  "fps": 30,
+  "sample_rate": 22050,
+  "voice": "en_US-lessac-medium.onnx",
+  "scenes": [
+    {
+      "id": "opening",
+      "audio": "assets/audio/vo-opening.wav",
+      "length_scale": 1.0,
+      "start_frame": 30,
+      "frames": 157,
+      "end": 6.2333,
+      "scene_end": 8,
+      "phrases": [
+        {
+          "text": "This is Sustain-a-Pet.",
+          "in_frame": 30,
+          "out_frame": 70,
+          "spoken_start": 1.0,
+          "spoken_end": 2.1125
+        },
+        {
+          "text": "Small, real-life habits care for a companion, and help a garden grow.",
+          "in_frame": 70,
+          "out_frame": 200,
+          "spoken_start": 2.3333,
+          "spoken_end": 6.2146
+        }
+      ]
+    },
+    {
+      "id": "daily-gift",
+      "audio": "assets/audio/vo-daily-gift.wav",
+      "length_scale": 1.0,
+      "start_frame": 252,
+      "frames": 105,
+      "end": 11.9,
+      "scene_end": 17,
+      "phrases": [
+        {
+          "text": "Each day starts with a gift.",
+          "in_frame": 252,
+          "out_frame": 304,
+          "spoken_start": 8.4,
+          "spoken_end": 9.9216
+        },
+        {
+          "text": "Collect today\u2019s coins and a leaf.",
+          "in_frame": 304,
+          "out_frame": 370,
+          "spoken_start": 10.1333,
+          "spoken_end": 11.8744
+        }
+      ]
+    },
+    {
+      "id": "garden-walk",
+      "audio": "assets/audio/vo-garden-walk.wav",
+      "length_scale": 1.0,
+      "start_frame": 522,
+      "frames": 81,
+      "end": 20.1,
+      "scene_end": 24,
+      "phrases": [
+        {
+          "text": "Tap a mushroom, and your companion walks over to it.",
+          "in_frame": 522,
+          "out_frame": 616,
+          "spoken_start": 17.4,
+          "spoken_end": 20.074
+        }
+      ]
+    },
+    {
+      "id": "first-habit",
+      "audio": "assets/audio/vo-first-habit.wav",
+      "length_scale": 1.0,
+      "start_frame": 732,
+      "frames": 168,
+      "end": 30.0,
+      "scene_end": 33,
+      "phrases": [
+        {
+          "text": "The Today list holds real habits,",
+          "in_frame": 732,
+          "out_frame": 793,
+          "spoken_start": 24.4,
+          "spoken_end": 26.201
+        },
+        {
+          "text": "like a meat-free meal or a short shower.",
+          "in_frame": 793,
+          "out_frame": 860,
+          "spoken_start": 26.4333,
+          "spoken_end": 28.4338
+        },
+        {
+          "text": "Tick one off once it\u2019s done.",
+          "in_frame": 860,
+          "out_frame": 913,
+          "spoken_start": 28.6667,
+          "spoken_end": 29.9787
+        }
+      ]
+    },
+    {
+      "id": "daily-quiz",
+      "audio": "assets/audio/vo-daily-quiz.wav",
+      "length_scale": 1.0,
+      "start_frame": 1002,
+      "frames": 50,
+      "end": 35.0667,
+      "scene_end": 38,
+      "phrases": [
+        {
+          "text": "A daily quiz adds a little learning.",
+          "in_frame": 1002,
+          "out_frame": 1066,
+          "spoken_start": 33.4,
+          "spoken_end": 35.0513
+        }
+      ]
+    },
+    {
+      "id": "habit-rewards",
+      "audio": "assets/audio/vo-habit-rewards.wav",
+      "length_scale": 1.0,
+      "start_frame": 1149,
+      "frames": 98,
+      "end": 41.5667,
+      "scene_end": 42,
+      "phrases": [
+        {
+          "text": "Habits earn coins and leaves.",
+          "in_frame": 1149,
+          "out_frame": 1208,
+          "spoken_start": 38.3,
+          "spoken_end": 40.0511
+        },
+        {
+          "text": "Quests add a little extra.",
+          "in_frame": 1208,
+          "out_frame": 1260,
+          "spoken_start": 40.2667,
+          "spoken_end": 41.5488
+        }
+      ]
+    },
+    {
+      "id": "garden-shop",
+      "audio": "assets/audio/vo-garden-shop.wav",
+      "length_scale": 1.0,
+      "start_frame": 1269,
+      "frames": 30,
+      "end": 43.3,
+      "scene_end": 46,
+      "phrases": [
+        {
+          "text": "Spend them in the shop,",
+          "in_frame": 1269,
+          "out_frame": 1312,
+          "spoken_start": 42.3,
+          "spoken_end": 43.2728
+        }
+      ]
+    },
+    {
+      "id": "care-supplies",
+      "audio": "assets/audio/vo-care-supplies.wav",
+      "length_scale": 1.0,
+      "start_frame": 1386,
+      "frames": 74,
+      "end": 48.6667,
+      "scene_end": 50,
+      "phrases": [
+        {
+          "text": "on care like morning dew or leaf compost.",
+          "in_frame": 1386,
+          "out_frame": 1473,
+          "spoken_start": 46.2,
+          "spoken_end": 48.6395
+        }
+      ]
+    },
+    {
+      "id": "new-friend",
+      "audio": "assets/audio/vo-new-friend.wav",
+      "length_scale": 1.0,
+      "start_frame": 1512,
+      "frames": 64,
+      "end": 52.5333,
+      "scene_end": 56,
+      "phrases": [
+        {
+          "text": "Coins can also adopt new friends.",
+          "in_frame": 1512,
+          "out_frame": 1589,
+          "spoken_start": 50.4,
+          "spoken_end": 52.5003
+        }
+      ]
+    },
+    {
+      "id": "mossy",
+      "audio": "assets/audio/vo-mossy.wav",
+      "length_scale": 1.0,
+      "start_frame": 1692,
+      "frames": 141,
+      "end": 61.1,
+      "scene_end": 64,
+      "phrases": [
+        {
+          "text": "Meet Mossy.",
+          "in_frame": 1692,
+          "out_frame": 1721,
+          "spoken_start": 56.4,
+          "spoken_end": 57.1434
+        },
+        {
+          "text": "Each friend grows at its own pace,",
+          "in_frame": 1721,
+          "out_frame": 1779,
+          "spoken_start": 57.3667,
+          "spoken_end": 59.0978
+        },
+        {
+          "text": "while habits count for the whole garden.",
+          "in_frame": 1779,
+          "out_frame": 1847,
+          "spoken_start": 59.3,
+          "spoken_end": 61.091
+        }
+      ]
+    },
+    {
+      "id": "meadow-restored",
+      "audio": "assets/audio/vo-meadow-restored.wav",
+      "length_scale": 1.0,
+      "start_frame": 1932,
+      "frames": 122,
+      "end": 68.4667,
+      "scene_end": 72,
+      "phrases": [
+        {
+          "text": "Restorations bring the garden back to life,",
+          "in_frame": 1932,
+          "out_frame": 2002,
+          "spoken_start": 64.4,
+          "spoken_end": 66.5102
+        },
+        {
+          "text": "starting with the meadow\u2019s flower bed.",
+          "in_frame": 2002,
+          "out_frame": 2067,
+          "spoken_start": 66.7333,
+          "spoken_end": 68.4445
+        }
+      ]
+    },
+    {
+      "id": "next-day",
+      "audio": "assets/audio/vo-next-day.wav",
+      "length_scale": 1.0,
+      "start_frame": 2172,
+      "frames": 155,
+      "end": 77.5667,
+      "scene_end": 80,
+      "phrases": [
+        {
+          "text": "Demo mode skips ahead a day to show progress over time.",
+          "in_frame": 2172,
+          "out_frame": 2280,
+          "spoken_start": 72.4,
+          "spoken_end": 75.7973
+        },
+        {
+          "text": "Your real pet is never touched.",
+          "in_frame": 2280,
+          "out_frame": 2341,
+          "spoken_start": 76.0,
+          "spoken_end": 77.5515
+        }
+      ]
+    },
+    {
+      "id": "willow-pond",
+      "audio": "assets/audio/vo-willow-pond.wav",
+      "length_scale": 1.0,
+      "start_frame": 2412,
+      "frames": 74,
+      "end": 82.8667,
+      "scene_end": 88,
+      "phrases": [
+        {
+          "text": "With the meadow restored, Willow Pond opens up.",
+          "in_frame": 2412,
+          "out_frame": 2499,
+          "spoken_start": 80.4,
+          "spoken_end": 82.8495
+        }
+      ]
+    },
+    {
+      "id": "footbridge",
+      "audio": "assets/audio/vo-footbridge.wav",
+      "length_scale": 1.0,
+      "start_frame": 2652,
+      "frames": 65,
+      "end": 90.5667,
+      "scene_end": 97,
+      "phrases": [
+        {
+          "text": "Mend the footbridge to connect its banks.",
+          "in_frame": 2652,
+          "out_frame": 2731,
+          "spoken_start": 88.4,
+          "spoken_end": 90.5601
+        }
+      ]
+    },
+    {
+      "id": "amber-grove",
+      "audio": "assets/audio/vo-amber-grove.wav",
+      "length_scale": 1.0,
+      "start_frame": 2922,
+      "frames": 107,
+      "end": 100.9667,
+      "scene_end": 105,
+      "phrases": [
+        {
+          "text": "Next, Amber Grove unlocks.",
+          "in_frame": 2922,
+          "out_frame": 2986,
+          "spoken_start": 97.4,
+          "spoken_end": 99.3107
+        },
+        {
+          "text": "A golden woodland clearing.",
+          "in_frame": 2986,
+          "out_frame": 3043,
+          "spoken_start": 99.5333,
+          "spoken_end": 100.9651
+        }
+      ]
+    },
+    {
+      "id": "wishing-tree",
+      "audio": "assets/audio/vo-wishing-tree.wav",
+      "length_scale": 1.0,
+      "start_frame": 3162,
+      "frames": 52,
+      "end": 107.1333,
+      "scene_end": 112,
+      "phrases": [
+        {
+          "text": "There, you can nurture a wishing tree.",
+          "in_frame": 3162,
+          "out_frame": 3228,
+          "spoken_start": 105.4,
+          "spoken_end": 107.1211
+        }
+      ]
+    },
+    {
+      "id": "closing",
+      "audio": "assets/audio/vo-closing.wav",
+      "length_scale": 1.0,
+      "start_frame": 3387,
+      "frames": 132,
+      "end": 117.3,
+      "scene_end": 120,
+      "phrases": [
+        {
+          "text": "Small habits, every day.",
+          "in_frame": 3387,
+          "out_frame": 3438,
+          "spoken_start": 112.9,
+          "spoken_end": 114.3817
+        },
+        {
+          "text": "Grow greener, together, with Sustain-a-Pet.",
+          "in_frame": 3438,
+          "out_frame": 3532,
+          "spoken_start": 114.6,
+          "spoken_end": 117.269
+        }
+      ]
+    }
+  ]
+}
