@@ -140,7 +140,7 @@ export default function App() {
   useLayoutEffect(() => { kb.current = { pet, today, app, tutorial, evolve } })
   useEffect(() => {
     const onKey = (e) => {
-      if (e.target.closest?.('.garden-journal, .garden-dock, .gl-screen, input:not([type=checkbox]), textarea, select') || e.metaKey || e.ctrlKey || e.altKey) return
+      if (e.target.closest?.('.garden-journal, .garden-dock, .gl-screen, .quest-screen, input:not([type=checkbox]), textarea, select') || e.metaKey || e.ctrlKey || e.altKey) return
       const { pet: p, today: t, tutorial: guide, evolve: cutscene } = kb.current
       if (e.key === 'Escape') { setEvolve(null); return }
       if (!p || guide || cutscene) return
