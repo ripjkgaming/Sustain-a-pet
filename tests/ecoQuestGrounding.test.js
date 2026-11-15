@@ -152,12 +152,13 @@ describe('untrusted model output: rewards', () => {
 
 describe('completion', () => {
   const issue = async (clientId = CID, obj = base) => (await gen({ clientId }, okFetch({ ...obj, title: `${obj.title} ${Math.random()}` }))).body.token
-  it('pays the table reward once per quest and rejects a duplicate', async () => {
+  it('pays the table reward once per quest and replays it on a same-client duplicate', async () => {
     const store = createCompletionStore()
     const token = await issue()
     const first = completeQuest({ token, clientId: CID, env: ENV, store })
     expect(first).toMatchObject({ status: 200, body: { ok: true, reward: rewardFor('reuse', 'easy'), dailyUsed: 1, dailyMax: 3 } })
-    expect(completeQuest({ token, clientId: CID, env: ENV, store })).toEqual({ status: 409, body: { error: 'already_completed' } })
+    expect(completeQuest({ token, clientId: CID, env: ENV, store })).toEqual(first)
+    expect(store.count(CID, first.body.day)).toBe(1)
   })
   it('enforces the daily cap of 3 per client per day and resets next day', async () => {
     const store = createCompletionStore()
@@ -198,7 +199,8 @@ describe('completion', () => {
     expect(r2.body.reward).toEqual(rewardFor('reuse', 'easy'))
     const r3 = res()
     await handler(mk({ action: 'complete', token: r1.body.token, clientId: 'handler-client-1' }, 3), r3, ENV)
-    expect(r3.statusCode).toBe(409)
+    expect(r3.statusCode).toBe(200)
+    expect(r3.body).toEqual(r2.body)
     vi.unstubAllGlobals()
   })
 })

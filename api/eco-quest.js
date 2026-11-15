@@ -328,19 +328,19 @@ export function completeQuest({ token, clientId, env = process.env, now = Date.n
 
   const day = utcDay(now)
   const key = `${clientId}|${payload.qid}|${utcDay(payload.iat)}`
-  if (store.has(key)) return { status: 409, body: { error: 'already_completed' } }
+  if (store.has(key)) {
+    // Key embeds clientId, so a hit is the same client retrying (e.g. the first response was lost): replay the original reward.
+    const replay = store.get?.(key)
+    if (replay) return { status: 200, body: { ok: true, questId: payload.qid, ...replay } }
+    return { status: 409, body: { error: 'already_completed' } }
+  }
   const used = store.count(clientId, day)
   if (used >= MAX_AI_QUESTS_PER_DAY) {
     return { status: 429, body: { error: 'daily_cap', dailyUsed: used, dailyMax: MAX_AI_QUESTS_PER_DAY } }
   }
-  store.record(key, payload.exp, clientId, day, now)
-  return {
-    status: 200,
-    body: {
-      ok: true, questId: payload.qid, reward: rewardFor(payload.cat, payload.diff),
-      dailyUsed: used + 1, dailyMax: MAX_AI_QUESTS_PER_DAY, day,
-    },
-  }
+  const replay = { reward: rewardFor(payload.cat, payload.diff), dailyUsed: used + 1, dailyMax: MAX_AI_QUESTS_PER_DAY, day }
+  store.record(key, payload.exp, clientId, day, now, replay)
+  return { status: 200, body: { ok: true, questId: payload.qid, ...replay } }
 }
 
 export default async function handler(req, res, env = process.env) {
