@@ -1,4 +1,6 @@
 // The garden economy is pure and shared across companions; switching never resets daily limits.
+import { validateQuest, MAX_AI_QUESTS_PER_DAY } from './ecoQuest.js'
+
 export const SHOP = [
   { id: 'dew', name: 'Morning dew', description: 'Restore 18 health to your active companion.', cost: 25, kind: 'care', health: 18, icon: '💧' },
   { id: 'compost', name: 'Leaf compost', description: 'Restore 35 health and nurture your companion with 8 XP.', cost: 45, kind: 'care', health: 35, xp: 8, icon: '🌱' },
@@ -104,6 +106,32 @@ export function gardenAction(state, action, today) {
       const q = questProgress(state, today).find(q => q.id === action.id)
       if (!q || !q.complete || q.claimed) return state
       return patch({ coins: g.coins + q.coins, leaves: g.leaves + q.leaves, tasks: { ...g.tasks, [today]: [...(g.tasks[today] ?? []), q.id] } })
+    }
+    case 'addAiQuest': {
+      const v = validateQuest(action.quest)
+      if (!v.ok) return state
+      const list = g.aiQuests ?? []
+      if (list.some(q => q.id === v.quest.id)) return state
+      return patch({ aiQuests: [...list, { ...v.quest, createdOn: today, status: 'open' }].slice(-20) })
+    }
+    case 'completeAiQuest': {
+      if (today < state.lastOpenDate) return state
+      const list = g.aiQuests ?? []
+      const q = list.find(x => x.id === action.id)
+      if (!q || q.status !== 'open') return state
+      const daily = g.aiDaily ?? { date: null, count: 0 }
+      const used = daily.date === today ? daily.count : 0
+      if (used >= MAX_AI_QUESTS_PER_DAY) return state
+      return patch(
+        {
+          coins: g.coins + q.xp + 5,
+          leaves: g.leaves + 1,
+          lifetimeXp: (g.lifetimeXp ?? 0) + q.xp,
+          aiQuests: list.map(x => x.id === q.id ? { ...x, status: 'done' } : x),
+          aiDaily: { date: today, count: used + 1 },
+        },
+        { xp: state.xp + q.xp, health: Math.min(100, state.health + 5) },
+      )
     }
     default: return state
   }

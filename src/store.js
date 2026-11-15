@@ -67,6 +67,8 @@ function diffEvents(before, after, today) {
     else if (after.game.inventory !== before.game.inventory) ev.push({ type: 'game', text: 'Your garden supplies are ready.' })
     else if (after.game.activeArea !== before.game.activeArea) ev.push({ type: 'game', text: 'Welcome to your next garden.' })
   }
+  const doneBefore = new Set((before.game?.aiQuests ?? []).filter(q => q.status === 'done').map(q => q.id))
+  for (const q of after.game?.aiQuests ?? []) if (q.status === 'done' && !doneBefore.has(q.id)) ev.push({ type: 'aiQuest', xp: q.xp, title: q.title })
   if (allHabitsDone(after, today) && !allHabitsDone(before, today)) ev.push({ type: 'allDone' })
   return ev
 }
@@ -103,6 +105,8 @@ export function reduce(app, action) {
     case 'visitArea':
     case 'restore':
     case 'claimQuest':
+    case 'addAiQuest':
+    case 'completeAiQuest':
       return withPet(app, (s, t) => gardenAction(s, action, t))
     case 'tick':
       return withPet(app, (s, t) => logHabit(s, action.id, t))
