@@ -15,6 +15,7 @@ import { usePrefersReducedMotion } from './components/pet3d/shared.js'
 import LeafFootsteps from './components/LeafFootsteps.jsx'
 import GardenJournal from './components/GardenJournal.jsx'
 import SceneBoundary from './components/SceneBoundary.jsx'
+import { sceneLayout } from './sceneLayout.js'
 
 const PetCanvas = lazy(() => import('./components/pet3d/PetCanvas.jsx'))
 const PetModel = lazy(() => import('./components/pet3d/PetModel.jsx'))
@@ -126,7 +127,8 @@ export default function App() {
   const petTapRef = useRef(() => {})
   // Keyboard: 1-7 tick habits, A/B/C answer the quiz, P pats the pet, Esc closes the cutscene.
   const kb = useRef()
-  useLayoutEffect(() => { petCtl.current.layout = { count: pet.game.areas.length, home: pet.game.areas.indexOf(pet.game.activeArea) } }, [pet.game.areas, pet.game.activeArea])
+  const game = pet?.game
+  useLayoutEffect(() => { petCtl.current.layout = sceneLayout(game) }, [game])
   useLayoutEffect(() => { kb.current = { pet, today, app, tutorial, evolve } })
   useEffect(() => {
     const onKey = (e) => {
