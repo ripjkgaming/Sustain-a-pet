@@ -27,7 +27,7 @@ function Wanderer({ ctl, mood, reduced, motion, children }) {
       follow(routeTo(s, t, count), true)
       s.hold = 0; s.parked = false; s.held = false
     }
-    c.hold = (sec) => { const s = st.current; s.goal = null; s.queue = []; s.hold = sec; s.parked = true; s.held = true; s.manual = false }
+    c.hold = (sec) => { const s = st.current; s.goal = null; s.queue = []; s.hold = sec; s.manual = false }
   }, [ctl, mood])
 
   useFrame((_, dt) => {
