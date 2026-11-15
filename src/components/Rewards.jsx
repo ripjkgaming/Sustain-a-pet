@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { STAGES } from '../engine.js'
 import { Mascot, StatTile } from './Duo.jsx'
 import accessories from '../data/accessories.json'
@@ -19,7 +20,7 @@ export default function Rewards({ floats, toasts, evolve, onCloseEvolve, petName
 function EvolveCutscene({ stage, name, xp, doneCount, total, onClose }) {
   const first = useRef(null)
   useEffect(() => { first.current?.focus() }, [])
-  return (
+  return createPortal(
     <div className="evolve complete-screen" role="dialog" aria-modal="true" aria-label="Your pet evolved">
       <div className="complete-hero"><span className="sparkle s1" /><span className="sparkle s2" /><span className="sparkle s3" /><Mascot size={200} className="complete-mascot" /></div>
       <h2 className="complete-title">{STAGES[stage]}!</h2>
@@ -30,7 +31,8 @@ function EvolveCutscene({ stage, name, xp, doneCount, total, onClose }) {
         <StatTile tone="blue" label="HABITS">{doneCount}/{total}</StatTile>
       </div>
       <button ref={first} type="button" className="duo-btn blue" onClick={onClose}>Claim XP</button>
-    </div>
+    </div>,
+    document.body,
   )
 }
 

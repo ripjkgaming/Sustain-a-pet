@@ -228,7 +228,7 @@ button, input { font-family: inherit; }
 .drawer-btns .small.gold { color: var(--d-orange); }
 
 /* ---------- Complete screen (stage-up) ---------- */
-.complete-screen { background: #fff; background-image: none; color: var(--d-ink); display: flex; flex-direction: column; align-items: stretch; justify-content: flex-end; gap: 12px; padding: 80px 20px 28px; text-align: center; cursor: default; position: absolute; inset: 0; z-index: 50; }
+.complete-screen { background: #fff; background-image: none; color: var(--d-ink); display: flex; flex-direction: column; align-items: stretch; justify-content: flex-end; gap: 12px; padding: 80px 20px 28px; text-align: center; cursor: default; position: fixed; inset: 0; z-index: 200; }
 .complete-hero { position: relative; flex: 1; display: grid; place-items: center; }
 .complete-mascot { animation: complete-bob 2.4s ease-in-out infinite; }
 @keyframes complete-bob { 50% { transform: translateY(-8px) rotate(-2deg); } }
@@ -244,7 +244,7 @@ button, input { font-family: inherit; }
 .tone-gold { --tc: var(--d-gold); } .tone-green { --tc: var(--d-green); } .tone-blue { --tc: var(--d-blue); }
 
 /* ---------- Streak screen ---------- */
-.streak-screen { position: absolute; inset: 0; z-index: 70; display: flex; flex-direction: column; align-items: center; padding: 110px 20px 30px; background: var(--d-orange); color: #fff; text-align: center; animation: duo-in 260ms var(--motion-out, ease) both; }
+.streak-screen { position: fixed; inset: 0; z-index: 210; display: flex; flex-direction: column; align-items: center; padding: 110px 20px 30px; background: var(--d-orange); color: #fff; text-align: center; animation: duo-in 260ms var(--motion-out, ease) both; }
 .streak-flame { display: grid; place-items: center; width: 210px; height: 210px; border-radius: 48% 52% 50% 50% / 58% 58% 42% 42%; background: #ffe600; box-shadow: 0 0 60px #fff3, inset 0 0 40px #fff9; animation: complete-bob 2.4s ease-in-out infinite; }
 .streak-num { margin-top: 18px; font-size: 7.5rem; line-height: 1; font-weight: 900; color: #ffe98a; }
 .streak-screen h2 { margin: 6px 0 0; font-size: 2.2rem; font-weight: 900; }
@@ -256,7 +256,7 @@ button, input { font-family: inherit; }
 .streak-actions { margin-top: auto; width: 100%; display: grid; gap: 6px; }
 
 /* ---------- Share sheet ---------- */
-.share-backdrop { position: absolute; inset: 0; z-index: 80; display: flex; flex-direction: column; justify-content: flex-end; background: #4d7a99d9; animation: duo-fade 200ms ease both; }
+.share-backdrop { position: fixed; inset: 0; z-index: 220; display: flex; flex-direction: column; justify-content: flex-end; background: #4d7a99d9; animation: duo-fade 200ms ease both; }
 .share-card-wrap { display: flex; flex-direction: column; justify-content: flex-end; gap: 22px; height: 100%; }
 .share-card { margin: auto 26px 0; padding: 22px 16px 18px; border-radius: 28px; text-align: center; color: var(--d-ink); background: linear-gradient(180deg, #2f6fe0 0%, #7fd0ff 38%, #ddf4ff 70%); }
 .share-card header { display: flex; justify-content: space-between; align-items: baseline; }
