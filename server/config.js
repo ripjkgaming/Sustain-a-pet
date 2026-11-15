@@ -11,6 +11,7 @@
 // - Client (45 s) is CLIENT_TIMEOUT_MS in src/ecoQuestConfig.js (used by src/greenLensClient.js) and must stay above SERVER_TIMEOUT_MS.
 // loadConfig() throws when the server and upstream values break this ordering.
 
+import { fileURLToPath } from 'node:url'
 import { CLIENT_TIMEOUT_MS } from '../src/ecoQuestConfig.js'
 
 export { CLIENT_TIMEOUT_MS }
@@ -43,7 +44,7 @@ export function loadConfig(env = process.env) {
     aiBaseUrl,
     port: int(env, 'PORT', 8080, { min: 0, max: 65535 }),
     host: env.HOST?.trim() || '0.0.0.0',
-    distDir: env.DIST_DIR?.trim() || new URL('../dist', import.meta.url).pathname,
+    distDir: env.DIST_DIR?.trim() || fileURLToPath(new URL('../dist', import.meta.url)),
     // Largest accepted request body. The client sends one JPEG scaled to 1024 px (usually under 1 MB),
     // and the handler accepts images up to 3.5 MB (4.7 MB as base64). 6 MB leaves room for JSON fields.
     maxBodyBytes: int(env, 'MAX_BODY_BYTES', 6 * 1024 * 1024, { min: 1024, max: 64 * 1024 * 1024 }),
