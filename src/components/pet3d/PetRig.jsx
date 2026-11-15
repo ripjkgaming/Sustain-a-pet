@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { damp, MOODS, STAGE_SCALE, stepSpring } from './shared.js'
@@ -34,8 +34,7 @@ export default function PetRig({ stage, mood, fx = {}, reduced, position = [0, 0
   const s = useRef({ y: 0, vy: 0, sc: STAGE_SCALE[stage] * 0.8, evolve: -1, dance: -1 })
   const haloMat = useRef()
   const aura = useRef(), ring = useRef(), ringMat = useRef(), wave = useRef(), waveMat = useRef(), orbs = useRef([])
-  const auraMat = useRef(null)
-  if (!auraMat.current) auraMat.current = auraMaterial()
+  const [auraMat] = useState(auraMaterial)
   const pw = useRef({ left: 0, p: 0, wave: -1 }) // power-up: seconds left, eased 0..1 strength, shockwave clock
 
   useChanged(fx.bounce, () => { if (!reduced) s.current.vy = 4.2 })
@@ -102,7 +101,7 @@ export default function PetRig({ stage, mood, fx = {}, reduced, position = [0, 0
     // emission on every surface and a light inside the body washed out the textures.
     ctl.current.glow = pwr
     const pulse = reduced ? 1 : 0.85 + Math.sin(t * 5) * 0.15
-    auraMat.current.uniforms.uOpacity.value = pwr * 0.24 * pulse
+    aura.current.material.uniforms.uOpacity.value = pwr * 0.24 * pulse
     aura.current.visible = pwr > 0.01
     aura.current.scale.setScalar(1 + (reduced ? 0 : Math.sin(t * 3) * 0.03))
     ring.current.visible = pwr > 0.01
@@ -142,7 +141,7 @@ export default function PetRig({ stage, mood, fx = {}, reduced, position = [0, 0
     <group position={position}>
       <group ref={body}>
         {children(ctl)}
-        <mesh ref={aura} position={[0, 1, 0]} visible={false} material={auraMat.current}><sphereGeometry args={[1.35, 40, 28]} /></mesh>
+        <mesh ref={aura} position={[0, 1, 0]} visible={false} material={auraMat}><sphereGeometry args={[1.35, 40, 28]} /></mesh>
       </group>
       {Array.from({ length: ORBS }, (_, i) => (
         <mesh key={i} ref={(el) => (orbs.current[i] = el)} visible={false}>

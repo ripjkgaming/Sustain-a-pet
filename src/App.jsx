@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import * as THREE from 'three'
 import { activeOf, todayOf, useApp } from './store.js'
 import { habitsDone, moodFor, stageIndex } from './engine.js'
@@ -83,6 +83,8 @@ export default function App() {
     if (!app.events.length) return
     const name = pet?.pet.name
     for (const e of app.events) {
+      // Drains the one-shot reward event queue from the reducer; each event must fire exactly once per nonce.
+      // oxlint-disable-next-line react/set-state-in-effect
       if (e.type === 'game') { pushToast(e.text); setLive(e.text) }
       if (e.type === 'tick') {
         bump('bounce', 'leaves')
@@ -102,7 +104,7 @@ export default function App() {
   const petTapRef = useRef(() => {})
   // Keyboard: 1-7 tick habits, A/B/C answer the quiz, P pats the pet, Esc closes the cutscene.
   const kb = useRef()
-  kb.current = { pet, today, app, tutorial, evolve }
+  useLayoutEffect(() => { kb.current = { pet, today, app, tutorial, evolve } })
   useEffect(() => {
     const onKey = (e) => {
       if (e.target.closest?.('.garden-journal, .garden-dock, input:not([type=checkbox]), textarea, select') || e.metaKey || e.ctrlKey || e.altKey) return
@@ -136,7 +138,7 @@ export default function App() {
 
   }
 
-  petTapRef.current = petTap
+  useLayoutEffect(() => { petTapRef.current = petTap })
 
   if (splash) return <Splash onDone={endSplash} />
   if (!app.real) return <Onboarding reduced={reduced} onHatch={(name, sprite) => { dispatch({ type: 'hatch', name, sprite }); tutorialStorage.set('in-progress'); setTutorial('in-progress') }} />
