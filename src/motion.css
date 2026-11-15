@@ -2,7 +2,6 @@
 :root {
   --ease-out: cubic-bezier(.23, 1, .32, 1);
   --ease-in-out: cubic-bezier(.77, 0, .175, 1);
-  --ease-drawer: cubic-bezier(.32, .72, 0, 1);
   --duration-press: 160ms;
   --duration-prompt: 200ms;
   --duration-progress: 250ms;
@@ -16,15 +15,12 @@
 .toast-positioned { position: absolute; left: 50%; top: 0; width: max-content; max-width: min(90vw, 430px); text-align: center; animation: none; transition: transform 250ms var(--ease-out), opacity 200ms var(--ease-out); }
 .toast-positioned.is-leaving { opacity: 0; }
 @starting-style { .toast-positioned { opacity: 0; } }
-.drawer-expansion { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 300ms var(--ease-drawer), opacity 200ms var(--ease-out); }
-.drawer-expansion.is-open { grid-template-rows: 1fr; opacity: 1; }
-.drawer-clip { min-height: 0; overflow: hidden; }
 .onboard { transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out); }
 .onboard.is-hatching { opacity: 0; transform: translateY(-8px); pointer-events: none; }
-.opts button, .drawer-head, .drawer-btns button, .primary { transition: transform var(--duration-press) var(--ease-out), background-color var(--duration-press) ease, filter var(--duration-press) ease; }
-.opts button:not(:disabled):active, .drawer-head:active, .drawer-btns button:not(:disabled):active, .primary:not(:disabled):active { transform: scale(.97); }
+.opts button, .primary { transition: transform var(--duration-press) var(--ease-out), background-color var(--duration-press) ease, filter var(--duration-press) ease; }
+.opts button:not(:disabled):active, .primary:not(:disabled):active { transform: scale(.97); }
 @media not all and (hover: hover) and (pointer: fine) {
-  .opts button:not(:disabled):hover, .drawer-btns button:hover, .radios label:hover, .primary:hover { transform: none; }
+  .opts button:not(:disabled):hover, .radios label:hover, .primary:hover { transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .mushroom-prompt, .why { animation: motion-fade 200ms ease; }
@@ -32,12 +28,10 @@
   .vfill, .bar .fill { transition: none; }
   .onboard { transition: opacity 200ms ease; }
   .onboard.is-hatching { transform: none; }
-  .drawer-expansion { transition: opacity 200ms ease; }
-  .opts button:not(:disabled):active, .drawer-head:active, .drawer-btns button:not(:disabled):active, .primary:not(:disabled):active { transform: none; }
+  .opts button:not(:disabled):active, .primary:not(:disabled):active { transform: none; }
   .float { animation: motion-fade 200ms ease; }
   .rays { animation: none; }
   .evolve, .evolve-text { animation: motion-fade 200ms ease; }
-  .drawer .chev { transition: none; }
-  .opts button:not(:disabled):hover, .drawer-btns button:hover, .radios label:hover, .primary:hover { transform: none; }
+  .opts button:not(:disabled):hover, .radios label:hover, .primary:hover { transform: none; }
 }
 @keyframes motion-fade { from { opacity: 0; } }

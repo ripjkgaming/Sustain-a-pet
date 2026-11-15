@@ -106,22 +106,10 @@ describe('garden economy and companion safety', () => {
     const future = rollover(state, addDays(DAY, 2))
     expect(act(future, 'claimQuest', 'three')).toBe(future)
   })
-  it('isolates demo currency, inventory, restoration, and companions from the real save', () => {
-    const real = rich()
-    let app = { real, demo: null, inDemo: false, offset: 0, events: [], nonce: 0, awayDays: 0 }
-    app = reduce(app, { type: 'enterDemo' })
-    for (const action of [{ type: 'buy', id: 'flowers' }, { type: 'adopt', id: 'mossy' }, { type: 'restore', id: 'meadow-bed' }, { type: 'claimDaily' }]) app = reduce(app, action)
-    expect(app.real).toBe(real)
-    expect(app.real.game.inventory).toEqual({})
-    expect(app.demo.game.projects).toEqual(['meadow-bed'])
-    expect(app.demo.game.pets).toHaveLength(2)
-    app = reduce(app, { type: 'exitDemo' })
-    expect(app.real.game.coins).toBe(1000)
-  })
 })
 
 
-describe('daily completion and demo focus regression', () => {
+describe('daily completion regression', () => {
   it('counts a wrong quiz attempt toward the all-eight quest without giving quiz XP', () => {
     let state = fresh()
     for (const { id } of habits.filter(h => h.id !== 'quiz')) state = logHabit(state, id, DAY)
@@ -129,14 +117,5 @@ describe('daily completion and demo focus regression', () => {
     expect(attempted.xp).toBe(state.xp)
     expect(questProgress(attempted, DAY)[1]).toMatchObject({ progress: 8, complete: true })
     expect(act(attempted, 'claimQuest', 'all').game.coins).toBe(attempted.game.coins + 60)
-  })
-  it('rolls only the demo save when returning to a future demo day', () => {
-    const real = rich()
-    let app = { real, demo: null, inDemo: false, offset: 0, events: [], nonce: 0, awayDays: 0 }
-    app = reduce(app, { type: 'enterDemo' })
-    app = reduce(app, { type: 'skipDay', days: 30 })
-    app = reduce(app, { type: 'open' })
-    expect(app.real).toBe(real)
-    expect(app.real.health).toBe(80)
   })
 })

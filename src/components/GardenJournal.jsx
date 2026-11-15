@@ -17,7 +17,7 @@ function CostButton({ cost, game, children, disabled, reason, ...props }) {
   return <div className="game-purchase"><button {...props} disabled={disabled || !!missing}>{children}<Price {...price} /></button>{(reason || missing) && <small>{reason || missing}</small>}</div>
 }
 
-export default function GardenJournal({ state, today, dispatch, inDemo }) {
+export default function GardenJournal({ state, today, dispatch }) {
   const [tab, setTab] = useState(null)
   const [streakView, setStreakView] = useState(false)
   const [sharing, setSharing] = useState(false)
@@ -61,7 +61,6 @@ export default function GardenJournal({ state, today, dispatch, inDemo }) {
             })}
             <QuizCard today={today} result={state.days[today]?.quiz} onAnswer={(choice, correct) => dispatch({ type: 'quiz', choice, correct })} />
           </details>
-          <div className="practice-garden"><p>{inDemo ? 'You’re in a practice garden. Your real garden is saved separately.' : 'Want to explore the possibilities? A practice garden has its own save and a time-skip control.'}</p><button className="game-small" onClick={() => { close(); dispatch({ type: inDemo ? 'exitDemo' : 'enterDemo' }) }}>{inDemo ? 'Back to my garden' : 'Try a practice garden'}</button></div>
         </>}
         {tab === 'shop'  && <><p className="journal-intro">Small comforts for your companion. Garden decorations stay with you in every place you explore.</p><div className="game-list">{values(SHOP).map((item) => {
           const owned = game.inventory[item.id] || 0

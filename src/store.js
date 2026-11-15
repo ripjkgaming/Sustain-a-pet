@@ -1,13 +1,12 @@
 // App state: useReducer over engine.js, persisted to localStorage (in-memory fallback).
 import { useEffect, useReducer } from 'react'
 import {
-  addDays, addXp, allHabitsDone, answerQuiz, createState, dateKey, daysBetween, logHabit, moodFor, rollover, stageIndex,
+  allHabitsDone, answerQuiz, createState, dateKey, daysBetween, logHabit, moodFor, rollover, stageIndex,
 } from './engine.js'
 
 import { gardenAction, migrateGame } from './game.js'
 
 const REAL_KEY = 'sustain-a-pet'
-const DEMO_KEY = 'sustain-a-pet-demo'
 
 const memory = {}
 const storage = {
@@ -38,23 +37,12 @@ const storage = {
 }
 
 const realToday = () => dateKey(new Date())
-export const todayOf = (app) => addDays(realToday(), app.inDemo ? app.offset : 0)
-export const activeOf = (app) => (app.inDemo ? app.demo : app.real)
+export const todayOf = () => realToday()
+export const activeOf = (app) => app.real
 
 function load() {
-  const inDemo = new URLSearchParams(window.location.search).get('demo') === '1'
-  const real = storage.get(REAL_KEY)
-  const demoSave = storage.get(DEMO_KEY)
-  const app = {
-    real: migrateGame(real),
-    demo: migrateGame(demoSave?.state),
-    offset: demoSave?.offset ?? 0,
-    inDemo: false,
-    events: [],
-    awayDays: 0,
-    nonce: 0,
-  }
-  return reduce(app, { type: inDemo ? 'enterDemo' : 'open' })
+  const app = { real: migrateGame(storage.get(REAL_KEY)), events: [], awayDays: 0, nonce: 0 }
+  return reduce(app, { type: 'open' })
 }
 
 /** Diff two pet states into reward events the UI can play. */
@@ -88,24 +76,22 @@ function withPet(app, update) {
   const before = activeOf(app)
   const after = update(before, today)
   if (after === before) return app
-  const next = app.inDemo ? { ...app, demo: after } : { ...app, real: after }
-  return { ...next, events: diffEvents(before, after, today), nonce: app.nonce + 1 }
+  return { ...app, real: after, events: diffEvents(before, after, today), nonce: app.nonce + 1 }
 }
 
 export function reduce(app, action) {
   switch (action.type) {
     case 'open': {
       // On open/focus: apply decay for days away; remember how long for the welcome-back line.
-      const key = app.inDemo ? 'demo' : 'real'
-      if (!app[key]) return app
+      if (!app.real) return app
       const today = todayOf(app)
-      const away = daysBetween(app[key].lastOpenDate, today)
-      const state = rollover(app[key], today)
-      if (state === app[key]) return app
-      return { ...app, [key]: state, awayDays: away, events: [], nonce: app.nonce + 1 }
+      const away = daysBetween(app.real.lastOpenDate, today)
+      const state = rollover(app.real, today)
+      if (state === app.real) return app
+      return { ...app, real: state, awayDays: away, events: [], nonce: app.nonce + 1 }
     }
     case 'hatch': {
-      const real = createState(action.name.trim().slice(0, 20), todayOf({ ...app, inDemo: false }), action.sprite)
+      const real = createState(action.name.trim().slice(0, 20), todayOf(app), action.sprite)
       return { ...app, real, awayDays: 0, events: [], nonce: app.nonce + 1 }
     }
     case 'claimDaily':
@@ -124,28 +110,6 @@ export function reduce(app, action) {
       return withPet(app, (s, t) => answerQuiz(s, action.choice, t, action.correct))
     case 'dismissAway':
       return { ...app, awayDays: 0 }
-    case 'enterDemo': {
-      const seed = app.demo ?? { ...(app.real ?? createState('Pip', realToday())), lastOpenDate: realToday() }
-      const demo = app.demo ? rollover(seed, addDays(realToday(), app.offset)) : seed
-      return { ...app, inDemo: true, demo, events: [], awayDays: 0, nonce: app.nonce + 1 }
-    }
-    case 'exitDemo':
-      return { ...app, inDemo: false, events: [], nonce: app.nonce + 1 }
-    case 'skipDay': {
-      if (!app.inDemo) return app
-      const offset = app.offset + (action.days ?? 1)
-      const today = addDays(realToday(), offset)
-      const before = app.demo
-      const demo = rollover(before, today)
-      return { ...app, offset, demo, awayDays: daysBetween(before.lastOpenDate, today), events: diffEvents(before, demo, today), nonce: app.nonce + 1 }
-    }
-    case 'addXp':
-      return app.inDemo ? withPet(app, (s) => addXp(s, action.amount)) : app
-    case 'resetDemo': {
-      storage.remove(DEMO_KEY)
-      const seed = { ...(app.real ?? createState('Pip', realToday())), lastOpenDate: realToday() }
-      return { ...app, demo: seed, offset: 0, events: [], awayDays: 0, nonce: app.nonce + 1 }
-    }
     default:
       return app
   }
@@ -157,9 +121,6 @@ export function useApp() {
   useEffect(() => {
     if (app.real) storage.set(REAL_KEY, app.real)
   }, [app.real])
-  useEffect(() => {
-    if (app.demo) storage.set(DEMO_KEY, { state: app.demo, offset: app.offset })
-  }, [app.demo, app.offset])
 
   // Apply decay when the tab comes back after midnight.
   useEffect(() => {

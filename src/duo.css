@@ -109,7 +109,6 @@ button, input { font-family: inherit; }
 .pill.mood-okay { background: #fff3c4; color: #a37900; }
 .pill.mood-wilting { background: #ffe5c2; color: #b86a00; }
 .pill.mood-sick { background: var(--d-red-l); color: var(--d-red-d); }
-.pill.demo { background: var(--d-gold); color: #6a4700; box-shadow: 0 2px 0 var(--d-gold-d); }
 .vitals { background: #fff; border: 2px solid var(--d-line); border-bottom-width: 5px; border-radius: 18px; box-shadow: none; }
 .vital + .vital { border-left: 2px solid var(--d-line); }
 .vital-label { font-weight: 900; color: var(--d-ink); }
@@ -143,11 +142,9 @@ button, input { font-family: inherit; }
 @media (max-width: 699px), (max-height: 519px) { .garden-dock { left: 0; right: 0; bottom: 0; } }
 .home > .vitals { bottom: 98px; }
 .home .world-guide { bottom: 186px; }
-.home .drawer { bottom: 186px; }
 @media (max-width: 699px), (max-height: 519px) {
   .home > .vitals { bottom: calc(86px + env(safe-area-inset-bottom)); }
   .home .world-guide { bottom: calc(162px + env(safe-area-inset-bottom)); }
-  .home .drawer { bottom: calc(162px + env(safe-area-inset-bottom)); }
   .garden-journal { bottom: calc(78px + env(safe-area-inset-bottom)); }
 }
 .garden-journal { left: 0; right: 0; bottom: 78px; border: 0; border-top: 2px solid var(--d-line); border-radius: 26px 26px 0 0; background: #fff; box-shadow: 0 -10px 40px #0000004d; color: var(--d-ink); max-height: calc(100% - 230px); }
@@ -187,8 +184,6 @@ button, input { font-family: inherit; }
 .journal-habit input { accent-color: var(--d-green); width: 22px; height: 22px; }
 .journal-habit small { color: var(--d-faint); font-weight: 700; }
 .journal-habit.complete { color: var(--d-green-d); }
-.practice-garden { border-top: 2px solid var(--d-line); }
-.practice-garden p { color: var(--d-muted); font-weight: 600; }
 
 /* Quiz as a "pick the answer" exercise */
 .journal-habits .card.quiz-ex, .quiz-ex.card { margin-top: 14px; padding: 14px; border: 2px solid var(--d-line); border-radius: 18px; background: #fff; box-shadow: none; display: grid; gap: 12px; }
@@ -218,14 +213,6 @@ button, input { font-family: inherit; }
 .mushroom-habit.is-done .mushroom-check { background: var(--d-green); }
 .mushroom-kicker { color: var(--d-green-d); font-weight: 900; }
 
-/* ---------- Demo drawer ---------- */
-.drawer { background: #fff; color: var(--d-ink); border: 2px solid var(--d-line); border-bottom-width: 5px; border-radius: 18px; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
-.d-title svg { color: var(--d-purple); }
-.d-title small { color: var(--d-muted); font-weight: 700; }
-.d-date { border-left: 2px solid var(--d-line); color: var(--d-muted); font-weight: 800; }
-.drawer-btns button { border: 2px solid var(--d-line); border-bottom-width: 4px; background: #fff; color: var(--d-blue); font-weight: 900; border-radius: 14px; }
-.drawer-btns .big { background: var(--d-green); border: 0; box-shadow: 0 4px 0 var(--d-green-d); color: #fff; }
-.drawer-btns .small.gold { color: var(--d-orange); }
 
 /* ---------- Complete screen (stage-up) ---------- */
 .complete-screen { background: #fff; background-image: none; color: var(--d-ink); display: flex; flex-direction: column; align-items: stretch; justify-content: flex-end; gap: 12px; padding: 80px 20px 28px; text-align: center; cursor: default; position: fixed; inset: 0; z-index: 200; }
@@ -273,7 +260,7 @@ button, input { font-family: inherit; }
 .share-targets { display: flex; gap: 22px; }
 .share-targets button { display: grid; gap: 8px; justify-items: center; border: 0; background: transparent; color: var(--d-muted); font-weight: 700; font-size: .85rem; }
 .share-targets i { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: var(--d-snow); color: var(--d-faint); font-style: normal; }
-.share-targets i.t-green { background: var(--d-green); box-shadow: inset 0 0 0 14px var(--d-green); } .share-targets i b { letter-spacing: .1em; }
+.share-targets i.t-green { background: var(--d-green); } .share-targets i b { letter-spacing: .1em; }
 .share-note { min-height: 1.2em; margin: 12px 0 0; color: var(--d-green-d); font-weight: 800; font-size: .85rem; }
 @keyframes duo-fade { from { opacity: 0; } }
 
@@ -283,3 +270,30 @@ button, input { font-family: inherit; }
   .complete-mascot, .streak-flame, .sparkle { animation: none; }
   .duo-bar-fill { transition: none; }
 }
+
+/* ---------- Fit: small phones, consistent rhythm (8px grid) ---------- */
+.onboard.duo-screen { min-height: 100dvh; padding-bottom: 0; }
+.onboard .duo-body { flex: 1 0 auto; overflow: visible; gap: 16px; }
+.onboard .stage-pick { flex: none; height: clamp(136px, 22dvh, 200px); min-height: 136px; }
+.onboard .duo-options { gap: 12px; }
+.duo-foot { position: sticky; bottom: 0; z-index: 2; margin: 0 -20px; padding: 12px 20px calc(18px + env(safe-area-inset-bottom)); background: var(--d-bg); box-shadow: 0 -10px 12px -6px var(--d-bg); }
+.streak-screen { overflow-y: auto; padding: clamp(56px, 12dvh, 110px) 20px calc(24px + env(safe-area-inset-bottom)); }
+.streak-flame { flex: none; width: clamp(120px, 26dvh, 210px); height: clamp(120px, 26dvh, 210px); }
+.streak-flame .mascot { width: 72%; height: 72%; }
+.streak-num { margin-top: 16px; font-size: clamp(4.5rem, 13dvh, 7.5rem); }
+.streak-screen h2 { font-size: clamp(1.6rem, 4.5dvh, 2.2rem); }
+.week-row { gap: 8px; margin-top: clamp(20px, 5dvh, 44px); }
+.week-day i { width: clamp(34px, 10.5vw, 40px); height: clamp(34px, 10.5vw, 40px); }
+.streak-actions { padding-top: 32px; gap: 12px; }
+.share-card-wrap { overflow-y: auto; gap: 24px; }
+.share-card { flex: none; margin: auto 24px 0; }
+.share-sheet { flex: none; }
+@media (max-height: 700px) {
+  .share-mascot { width: 72px; height: 72px; }
+  .share-card { padding: 16px; }
+  .share-card h3 { font-size: 1.15rem; margin-bottom: 10px; }
+  .share-grid div { padding: 8px 12px; }
+  .complete-screen { padding-top: 56px; }
+  .complete-mascot { width: 150px; height: 150px; }
+}
+.onboard.duo-screen { scroll-padding-bottom: 110px; }

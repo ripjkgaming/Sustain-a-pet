@@ -13,7 +13,6 @@ npm test         # engine + store tests
 npm run build
 ```
 
-Practice garden: open `/?demo=1`. It has its own saved copy; the Today journal explains that your real garden is saved separately and offers a **Back to my garden** button.
 
 ## What's built
 
@@ -29,9 +28,8 @@ Practice garden: open `/?demo=1`. It has its own saved copy; the Today journal e
 
 ## Practice and progress
 
-Open **Today** to collect the daily gift and review the seven real-life habits and daily quiz. The three-habit and all-eight garden quests provide one-time daily bonuses. Use **Shop**, **Friends** and **Explore** to spend coins and leaves, care for or switch companions, visit areas and restore their landmarks.
+Open **Today** to collect the daily gift and review the seven real-life habits and daily quiz. The three-action and all-eight garden quests provide one-time daily bonuses. Use **Shop**, **Friends** and **Explore** to spend coins and leaves, care for or switch companions, visit areas and restore their landmarks.
 
-The practice garden is useful for exploring the game without changing your real garden. Open it with `/?demo=1`; use **Back to my garden** to leave it.
 
 ## AI-use disclosure
 

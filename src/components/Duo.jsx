@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useId, useState } from 'react'
 
 const SPRITE_KEY = 'sustain-a-pet'
 const SpriteContext = createContext(null)
@@ -10,50 +10,94 @@ export function useSprite() {
   try { return JSON.parse(localStorage.getItem(SPRITE_KEY))?.pet?.sprite || 'leafling' } catch { return 'leafling' }
 }
 
-function Face({ y = 68, gap = 13, blush = true, shades = false }) {
+const INK = '#1d3b1f'
+
+function Face({ y = 68, gap = 13, size = 1, shades = false, ink = INK }) {
+  const rx = 6 * size, ry = 8 * size
+  const eye = (cx) => <g key={cx}>
+    <ellipse cx={cx} cy={y} rx={rx} ry={ry} fill="#1b1b24" />
+    <ellipse cx={cx} cy={y + ry * 0.45} rx={rx * 0.7} ry={ry * 0.45} fill="#4b5a8a" opacity=".55" />
+    <circle cx={cx + rx * 0.3} cy={y - ry * 0.4} r={rx * 0.42} fill="#fff" />
+    <circle cx={cx - rx * 0.35} cy={y + ry * 0.35} r={rx * 0.2} fill="#fff" opacity=".9" />
+  </g>
   return <g>
-    <ellipse cx={60 - gap} cy={y} rx="5" ry="7" fill="#2b2b2b" />
-    <ellipse cx={60 + gap} cy={y} rx="5" ry="7" fill="#2b2b2b" />
-    <circle cx={60 - gap + 1.8} cy={y - 2.6} r="2" fill="#fff" />
-    <circle cx={60 + gap + 1.8} cy={y - 2.6} r="2" fill="#fff" />
-    {blush && <><ellipse cx={60 - gap - 9} cy={y + 8} rx="5" ry="3" fill="#ff8fa3" opacity=".7" /><ellipse cx={60 + gap + 9} cy={y + 8} rx="5" ry="3" fill="#ff8fa3" opacity=".7" /></>}
-    <path d={`M${54} ${y + 9}q6 6 12 0`} fill="none" stroke="#2b2b2b" strokeWidth="2.6" strokeLinecap="round" />
-    {shades && <path d={`M${60 - gap - 14} ${y - 8}h${2 * gap + 28}l-6 18H${60 - gap - 8}z`} fill="#3a2a1a" opacity=".92" />}
+    {eye(60 - gap)}{eye(60 + gap)}
+    <path d={`M${60 - gap - 7} ${y - ry - 4}q7 -4 14 0M${60 + gap - 7} ${y - ry - 4}q7 -4 14 0`} fill="none" stroke={ink} strokeWidth="2.2" strokeLinecap="round" opacity=".75" />
+    <ellipse cx={60 - gap - 10} cy={y + 9} rx="5.5" ry="3.4" fill="#ff7a93" opacity=".6" />
+    <ellipse cx={60 + gap + 10} cy={y + 9} rx="5.5" ry="3.4" fill="#ff7a93" opacity=".6" />
+    <path d={`M${53} ${y + 8}q7 9 14 0z`} fill="#7a1f2e" stroke={ink} strokeWidth="2" strokeLinejoin="round" />
+    <path d={`M${56.5} ${y + 12.5}q3.5 3 7 0q-3.5 -2 -7 0z`} fill="#ff6f8a" />
+    {shades && <path d={`M${60 - gap - 15} ${y - 9}h${2 * gap + 30}l-6 20H${60 - gap - 9}z`} fill="#2b1d12" opacity=".94" />}
   </g>
 }
 
-function Leafling({ shades }) {
+function Defs({ id, stops }) {
+  return <defs>
+    {stops.map(([name, c0, c1, c2]) => <radialGradient key={name} id={`${id}-${name}`} cx="35%" cy="28%" r="80%">
+      <stop offset="0" stopColor={c0} /><stop offset=".55" stopColor={c1} /><stop offset="1" stopColor={c2} />
+    </radialGradient>)}
+  </defs>
+}
+
+function Leafling({ shades, id }) {
   return <>
-    <ellipse cx="60" cy="72" rx="40" ry="35" fill="#3f9e3a" />
-    <ellipse cx="60" cy="82" rx="30" ry="22" fill="#86d35f" />
-    <path d="M60 40c0-8 1-14 3-18" stroke="#2f7d32" strokeWidth="4" strokeLinecap="round" fill="none" />
-    <path d="M63 24c10-10 24-8 28-4-2 12-14 18-28 4z" fill="#2f7d32" />
-    <path d="M63 24c8-2 16-1 24-1" stroke="#7bd05a" strokeWidth="1.6" fill="none" strokeLinecap="round" />
-    <path d="M58 34c-9-8-22-7-26-3 2 11 14 17 26 3z" fill="#4caf3a" />
-    <Face shades={shades} />
+    <Defs id={id} stops={[['body', '#9bec6a', '#4fb83e', '#2a7d33'], ['belly', '#e6ffc2', '#b4eb86', '#86d05f'], ['leaf', '#8be25a', '#3fa63a', '#23702c']]} />
+    <ellipse cx="38" cy="107" rx="11" ry="6.5" fill="#2f8a35" stroke={INK} strokeWidth="2.4" />
+    <ellipse cx="82" cy="107" rx="11" ry="6.5" fill="#2f8a35" stroke={INK} strokeWidth="2.4" />
+    <path d="M22 76c-12-2-16 8-10 14 6-1 12-6 14-10z" fill={`url(#${id}-leaf)`} stroke={INK} strokeWidth="2.4" strokeLinejoin="round" />
+    <path d="M98 76c12-2 16 8 10 14-6-1-12-6-14-10z" fill={`url(#${id}-leaf)`} stroke={INK} strokeWidth="2.4" strokeLinejoin="round" />
+    <path d="M60 36c-26 0-42 18-42 40 0 20 16 32 42 32s42-12 42-32c0-22-16-40-42-40z" fill={`url(#${id}-body)`} stroke={INK} strokeWidth="2.8" strokeLinejoin="round" />
+    <ellipse cx="60" cy="88" rx="29" ry="19" fill={`url(#${id}-belly)`} opacity=".9" />
+    <path d="M30 56c6-10 16-15 26-16" fill="none" stroke="#e8ffc9" strokeWidth="3.4" strokeLinecap="round" opacity=".7" />
+    {[[30, 82], [90, 80], [38, 98], [84, 98]].map(([x, y]) => <circle key={`${x}${y}`} cx={x} cy={y} r="2" fill="#2a7d33" opacity=".5" />)}
+    <path d="M60 38c0-7 0-11 2-15" stroke={INK} strokeWidth="5.4" strokeLinecap="round" fill="none" />
+    <path d="M60 38c0-7 0-11 2-15" stroke="#3fa63a" strokeWidth="2.6" strokeLinecap="round" fill="none" />
+    <path d="M62 25c2-12 16-20 30-16 2 14-10 26-30 16z" fill={`url(#${id}-leaf)`} stroke={INK} strokeWidth="2.6" strokeLinejoin="round" />
+    <path d="M64 24c8-4 16-7 24-11" stroke="#d9ffb0" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+    <path d="M60 30c-4-12-16-18-30-14-1 14 10 24 30 14z" fill={`url(#${id}-leaf)`} stroke={INK} strokeWidth="2.6" strokeLinejoin="round" />
+    <path d="M57 29c-8-3-16-7-23-11" stroke="#d9ffb0" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+    <path d="M62 22c1-8 0-14-3-19 6 2 11 8 9 18z" fill="#58c643" stroke={INK} strokeWidth="2.2" strokeLinejoin="round" />
+    <Face y={72} shades={shades} />
   </>
 }
 
-function Mossy({ shades }) {
+function Mossy({ shades, id }) {
+  const bumps = 'M60 40c8-5 18-2 24 4 9 0 16 7 17 16 7 6 9 16 5 24 0 12-10 22-24 24-12 5-26 5-38 0-14-2-24-12-24-24-4-8-2-18 5-24 1-9 8-16 17-16 6-6 16-9 18-4z'
   return <>
-    <ellipse cx="60" cy="74" rx="42" ry="33" fill="#6c8f3c" />
-    {[[30,70],[44,92],[78,90],[92,72],[56,98],[72,56],[36,58]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r="5" fill="#8fb54e" />)}
-    <path d="M26 44a22 18 0 0144 0z" fill="#d9573b" />
-    <circle cx="38" cy="38" r="3.4" fill="#fff" /><circle cx="52" cy="34" r="2.6" fill="#fff" /><circle cx="60" cy="42" r="2.2" fill="#fff" />
-    <rect x="42" y="44" width="8" height="8" rx="3" fill="#f4e6cf" />
-    <path d="M70 44a15 12 0 0130 0z" fill="#e8825f" />
-    <circle cx="80" cy="38" r="2.4" fill="#fff" /><circle cx="91" cy="40" r="1.8" fill="#fff" />
-    <rect x="80" y="44" width="6" height="7" rx="2.5" fill="#f4e6cf" />
-    <Face y={74} shades={shades} />
+    <Defs id={id} stops={[['moss', '#b6d86a', '#6f9a3c', '#41692b'], ['cap', '#ff8a63', '#e0472f', '#a52a22'], ['cap2', '#ffc29a', '#f08a55', '#c4552e'], ['stem', '#fffaf0', '#f0e0c4', '#c9b08a']]} />
+    <ellipse cx="40" cy="108" rx="11" ry="6" fill="#4f7a2e" stroke={INK} strokeWidth="2.4" />
+    <ellipse cx="80" cy="108" rx="11" ry="6" fill="#4f7a2e" stroke={INK} strokeWidth="2.4" />
+    <path d={bumps} fill={`url(#${id}-moss)`} stroke={INK} strokeWidth="2.8" strokeLinejoin="round" />
+    {[[28, 78, 5], [44, 96, 6], [78, 98, 5], [94, 80, 6], [60, 104, 4], [96, 62, 4], [24, 62, 4], [70, 90, 3]].map(([x, y, r]) => <g key={`${x}${y}`}><circle cx={x} cy={y} r={r} fill="#a9d05a" opacity=".85" /><circle cx={x - r * 0.3} cy={y - r * 0.3} r={r * 0.4} fill="#e2f5a8" opacity=".8" /></g>)}
+    <path d="M20 62c3-8 9-13 17-15" fill="none" stroke="#e5f7b0" strokeWidth="3" strokeLinecap="round" opacity=".6" />
+    <rect x="34" y="42" width="11" height="12" rx="4" fill={`url(#${id}-stem)`} stroke={INK} strokeWidth="2.2" />
+    <path d="M17 44c0-15 11-24 24-24s24 9 24 24c0 3-3 4-6 3-6-2-12-2-18-2s-12 0-18 2c-3 1-6 0-6-3z" fill={`url(#${id}-cap)`} stroke={INK} strokeWidth="2.6" strokeLinejoin="round" />
+    <circle cx="30" cy="34" r="4" fill="#fff4e6" /><circle cx="46" cy="28" r="3" fill="#fff4e6" /><circle cx="52" cy="40" r="2.6" fill="#fff4e6" /><circle cx="24" cy="44" r="2.2" fill="#fff4e6" />
+    <path d="M24 30c4-6 10-9 16-9" fill="none" stroke="#ffd9c2" strokeWidth="2.4" strokeLinecap="round" opacity=".85" />
+    <rect x="78" y="46" width="8" height="9" rx="3" fill={`url(#${id}-stem)`} stroke={INK} strokeWidth="2" />
+    <path d="M68 48c0-10 8-17 17-17s17 7 17 17c0 2-2 3-4 2-4-1-8-1-13-1s-9 0-13 1c-2 1-4 0-4-2z" fill={`url(#${id}-cap2)`} stroke={INK} strokeWidth="2.4" strokeLinejoin="round" />
+    <circle cx="80" cy="41" r="2.8" fill="#fff4e6" /><circle cx="93" cy="43" r="2.2" fill="#fff4e6" />
+    <path d="M58 44c0-6 2-9 6-11 0 5-2 9-6 11z" fill="#58c643" stroke={INK} strokeWidth="1.8" strokeLinejoin="round" />
+    <Face y={76} shades={shades} />
   </>
 }
 
-function Sunbud({ shades }) {
+function Sunbud({ shades, id }) {
+  const ring = (n, r, rx, ry, cy, c, off = 0) => Array.from({ length: n }, (_, i) => <path key={`${r}${i}`} d={`M60 ${cy - r + ry}c-${rx} -${ry * 0.2} -${rx} -${ry * 1.7} 0 -${ry * 1.9}c${rx} ${ry * 0.2} ${rx} ${ry * 1.7} 0 ${ry * 1.9}z`} fill={c} stroke={INK} strokeWidth="2" strokeLinejoin="round" transform={`rotate(${off + (i * 360) / n} 60 ${cy})`} />)
   return <>
-    {Array.from({ length: 12 }, (_, i) => <ellipse key={i} cx="60" cy="22" rx="9" ry="17" fill={i % 2 ? '#ffb703' : '#ff9f1c'} transform={`rotate(${i * 30} 60 62)`} />)}
-    <circle cx="60" cy="62" r="29" fill="#d96a1c" />
-    <circle cx="60" cy="62" r="25" fill="#f08a24" />
-    <Face y={62} gap={10} shades={shades} />
+    <Defs id={id} stops={[['face', '#ffc36b', '#f08a24', '#b34e12'], ['pet', '#fff08a', '#ffc21f', '#f08c00'], ['pet2', '#ffd66b', '#ff9f1c', '#d96a00'], ['leaf', '#8be25a', '#3fa63a', '#23702c']]} />
+    <g transform="translate(60 62) scale(.84) translate(-60 -60)">
+    <ellipse cx="42" cy="108" rx="10" ry="6" fill="#3fa63a" stroke={INK} strokeWidth="2.4" />
+    <ellipse cx="78" cy="108" rx="10" ry="6" fill="#3fa63a" stroke={INK} strokeWidth="2.4" />
+    <path d="M16 90c-10-4-12 8-4 12 6 0 10-5 10-9z" fill={`url(#${id}-leaf)`} stroke={INK} strokeWidth="2.2" strokeLinejoin="round" />
+    <path d="M104 90c10-4 12 8 4 12-6 0-10-5-10-9z" fill={`url(#${id}-leaf)`} stroke={INK} strokeWidth="2.2" strokeLinejoin="round" />
+    {ring(14, 52, 8, 20, 58, `url(#${id}-pet2)`, 12)}
+    {ring(14, 48, 8.5, 20, 58, `url(#${id}-pet)`, 0)}
+    <circle cx="60" cy="58" r="33" fill={`url(#${id}-face)`} stroke={INK} strokeWidth="2.8" />
+    {Array.from({ length: 22 }, (_, i) => { const t = (i / 22) * Math.PI * 2; return <circle key={i} cx={60 + Math.cos(t) * 28.5} cy={58 + Math.sin(t) * 28.5} r="1.7" fill="#7a3a0c" opacity=".55" /> })}
+    <path d="M36 44c4-9 12-14 22-15" fill="none" stroke="#ffe9b8" strokeWidth="3.2" strokeLinecap="round" opacity=".75" />
+    <Face y={58} gap={11} size={0.95} shades={shades} ink="#5a2a08" />
+    </g>
   </>
 }
 
@@ -63,11 +107,12 @@ const ART = { leafling: Leafling, mossy: Mossy, sunbud: Sunbud }
 export function Mascot({ size = 96, className = '', body = true, shades = false, sprite }) {
   const chosen = useSprite()
   const Art = ART[sprite || chosen] || Leafling
+  const id = useId().replace(/:/g, '')
   return (
     <svg className={`mascot ${className}`} width={size} height={size} viewBox="0 0 120 120" aria-hidden="true" focusable="false">
       <ellipse cx="60" cy="112" rx="34" ry="6" fill="#0000001a" />
       {!body && <circle cx="60" cy="62" r="56" fill="#fff" />}
-      <Art shades={shades} />
+      <Art shades={shades} id={id} />
     </svg>
   )
 }
@@ -172,7 +217,7 @@ export function ShareSheet({ title, headline, stats, text, onClose }) {
           <div className="share-head"><button type="button" className="flow-icon" aria-label="Close" onClick={onClose}>
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19" /></svg></button><b>SHARE {title.toUpperCase()}</b></div>
           <div className="share-targets">
-            <button type="button" onClick={share}><i className="t-green" /><span>Share</span></button>
+            <button type="button" onClick={share}><i className="t-green"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 15V4m-4 4 4-4 4 4M5 13v6h14v-6" /></svg></i><span>Share</span></button>
             <button type="button" onClick={copy}><i><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 4v11m-5-5 5 5 5-5M5 20h14" /></svg></i><span>Copy text</span></button>
             <button type="button" onClick={share}><i><b>•••</b></i><span>More</span></button>
           </div>

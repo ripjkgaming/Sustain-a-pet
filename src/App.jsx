@@ -6,7 +6,6 @@ import habitList from './data/habits.json'
 import { questionFor } from './components/QuizCard.jsx'
 import Vitals from './components/Vitals.jsx'
 import Icon from './components/Icons.jsx'
-import DemoDrawer from './components/DemoDrawer.jsx'
 import { Splash, SpriteProvider } from './components/Duo.jsx'
 import Onboarding from './components/Onboarding.jsx'
 import Rewards, { unlockText } from './components/Rewards.jsx'
@@ -101,16 +100,15 @@ export default function App() {
   }, [app.nonce]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const petTapRef = useRef(() => {})
-  // Keyboard: 1-7 tick habits, A/B/C answer the quiz, P pats the pet, Shift+D toggles demo, Esc closes the cutscene.
+  // Keyboard: 1-7 tick habits, A/B/C answer the quiz, P pats the pet, Esc closes the cutscene.
   const kb = useRef()
   kb.current = { pet, today, app, tutorial, evolve }
   useEffect(() => {
     const onKey = (e) => {
       if (e.target.closest?.('.garden-journal, .garden-dock, input:not([type=checkbox]), textarea, select') || e.metaKey || e.ctrlKey || e.altKey) return
-      const { pet: p, today: t, app: a, tutorial: guide, evolve: cutscene } = kb.current
+      const { pet: p, today: t, tutorial: guide, evolve: cutscene } = kb.current
       if (e.key === 'Escape') { setEvolve(null); return }
       if (!p || guide || cutscene) return
-      if (e.key === 'D' && e.shiftKey) { dispatch({ type: a.inDemo ? 'exitDemo' : 'enterDemo' }); return }
       if (e.key === 'p' || e.key === 'P') { petTapRef.current(); return }
       if (e.key === '+' || e.key === '=') { camApi.current.zoom?.(0.8); return }
       if (e.key === '-' || e.key === '_') { camApi.current.zoom?.(1.25); return }
@@ -141,7 +139,7 @@ export default function App() {
   petTapRef.current = petTap
 
   if (splash) return <Splash onDone={endSplash} />
-  if (!app.real && !app.inDemo) return <Onboarding reduced={reduced} onHatch={(name, sprite) => { dispatch({ type: 'hatch', name, sprite }); tutorialStorage.set('in-progress'); setTutorial('in-progress') }} />
+  if (!app.real) return <Onboarding reduced={reduced} onHatch={(name, sprite) => { dispatch({ type: 'hatch', name, sprite }); tutorialStorage.set('in-progress'); setTutorial('in-progress') }} />
   if (!pet) return null
 
   const mood = moodFor(pet.health)
@@ -157,7 +155,6 @@ export default function App() {
           <p className="eyebrow"><Icon name="leaf" size={16} />Sustain-a-Pet</p>
           <div className="name-row">
             <h1>{pet.pet.name}</h1>
-            {app.inDemo && <span className="pill demo">Demo</span>}
           </div>
         </div>
         <div className="top-r">
@@ -166,14 +163,11 @@ export default function App() {
         </div>
       </header>
 
-      {app.awayDays >= 2 && !app.inDemo && (
+      {app.awayDays >= 2 && (
         <div className="banner" role="status">
           Welcome back! {pet.pet.name} missed you. Tick a habit and it will perk right up.
           <button onClick={() => dispatch({ type: 'dismissAway' })} aria-label="Dismiss">×</button>
         </div>
-      )}
-      {app.awayDays >= 2 && app.inDemo && (
-        <div className="banner" role="status">Welcome back! {pet.pet.name} missed you.<button onClick={() => dispatch({ type: 'dismissAway' })} aria-label="Dismiss">×</button></div>
       )}
 
       <section className={`pet-stage mood-${mood.toLowerCase()}`} aria-label={`${pet.pet.name}'s world`}>
@@ -201,12 +195,8 @@ export default function App() {
       <div className="sr-only" aria-live="polite">{live}</div>
 
       <Vitals health={pet.health} xp={pet.xp} doneToday={done.length} totalHabits={habitList.length} />
-      <GardenJournal inDemo={app.inDemo} state={pet} today={today} dispatch={dispatch} />
+      <GardenJournal state={pet} today={today} dispatch={dispatch} />
       <p className="hint kbd-hint">Keys: 1–7 habits · A/B/C quiz</p>
-      {app.inDemo && (
-        <DemoDrawer date={today} offset={app.offset} onSkip={(days) => dispatch({ type: 'skipDay', days })}
-          onXp={(amount) => dispatch({ type: 'addXp', amount })} onReset={() => dispatch({ type: 'resetDemo' })} onExit={() => dispatch({ type: 'exitDemo' })} />
-      )}
     </main>
     </SpriteProvider>
   )
