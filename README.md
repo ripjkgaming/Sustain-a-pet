@@ -4,7 +4,7 @@
 
 A virtual pet that grows with small green habits in real life. Pick a companion, explore three garden areas, complete daily habits, answer a quiz, and use the shared garden economy to restore habitats and care for your friends.
 
-Everything stays on your device (localStorage). No accounts, no tracking.
+Everything stays on your device (localStorage). No accounts, no tracking. The one exception is GreenLens, the optional AI feature described below, which sends a photo or note to an AI provider when you use it.
 
 ## Screenshots
 
@@ -17,7 +17,8 @@ Everything stays on your device (localStorage). No accounts, no tracking.
 
 ## Offline
 
-- No backend. Game state is saved in `localStorage`, with an in-memory fallback if storage is blocked (`src/store.js`).
+- The game runs without a server. Game state is saved in `localStorage`, with an in-memory fallback if storage is blocked (`src/store.js`).
+- GreenLens needs the network and the `/api/eco-quest` endpoint. Without them it shows an error, and the rest of the game still works.
 - The Nunito font is self-hosted through `@fontsource/nunito` (`src/main.jsx`). No Google Fonts request.
 - Audio and 3D models ship with the app in `public/`.
 
@@ -25,15 +26,25 @@ Everything stays on your device (localStorage). No accounts, no tracking.
 
 ```bash
 npm install
-npm run dev      # http://localhost:5173
-npm test         # engine + store tests
+npm run dev      # http://localhost:5173 (includes /api/eco-quest via Vite)
+npm test         # full test suite, including the offline GreenLens eval checks
 npm run build
 ```
 
+Production server (serves `dist/` and `/api/eco-quest`):
+
+```bash
+npm run build
+OPENROUTER_API_KEY=... QUEST_SIGNING_SECRET=... NODE_ENV=production node server/index.js
+```
+
+Or with Docker: `docker build -t sustain-a-pet . && docker run -p 8080:8080 -e OPENROUTER_API_KEY=... -e QUEST_SIGNING_SECRET=... sustain-a-pet`.
 
 ## Deploy
 
 See [DEPLOY.md](DEPLOY.md) for DeployXA, Cloudflare Pages, Netlify, and Docker steps, cache notes, and the real-phone test checklist.
+
+GreenLens needs the Node server (Docker or `node server/index.js`). Static-only hosts such as Netlify and Cloudflare Pages serve the game but not `/api/eco-quest`. Details: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## What's built
 
@@ -53,53 +64,76 @@ Open **Today** to collect the daily gift and review the seven real-life habits a
 
 ## GreenLens AI
 
-GreenLens turns a photo and/or a short note (up to 200 characters) into one small, safe, real-world green action. The action is worth 5–15 XP once you confirm you did it.
+GreenLens turns a photo and/or a short note (up to 200 characters) into one small, safe, real-world green action. You earn 5–11 XP, plus coins and a leaf, once you confirm you did it. The server decides the reward and checks the completion.
 
-Architecture:
+Full details, with the file for each claim:
 
-```
-client (GreenLens.jsx, greenLensClient.js)
-  -> /api/eco-quest (api/eco-quest.js)
-  -> OpenRouter chat completions, free vision model (json_schema response_format = QUEST_SCHEMA)
-  -> validateQuest (src/ecoQuest.js)
-  -> deterministic game engine (src/game.js, src/store.js)
-```
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): data flow, endpoint, fallback, completion rules, timeouts, limits, known limitations.
+- [docs/MODEL_CONFIG.md](docs/MODEL_CONFIG.md): model chain, every environment variable, reward table, evaluation status.
+- [docs/AI_DISCLOSURE.md](docs/AI_DISCLOSURE.md): what the AI does, what data it receives, how AI was used to build the app.
 
-- The client shrinks the photo to 1024 px (JPEG, quality 0.82) and posts it to `/api/eco-quest`. Accepted images: JPEG, PNG or WebP, up to 3.5 MB.
-- The endpoint validates input and applies a rate limit of 10 requests per minute. It then calls OpenRouter with a strict JSON-schema response. Free models are slow and flaky, so the upstream timeout is 30 seconds. On 404, 429 or 5xx the endpoint tries the fallback models in order.
-- `validateQuest` clamps XP, trims and strips HTML from text, and rejects denied (unsafe) actions. Model output is never trusted as-is.
-- The game engine alone changes state. The model cannot grant rewards.
+Summary:
+
+- The client shrinks the photo to 1024 px JPEG and posts it, with the note and any saved town or region, to `/api/eco-quest`. Accepted images: JPEG, PNG or WebP, up to 3.5 MB.
+- The server asks an OpenRouter model for one quest as strict JSON. Model output is validated and cleaned in code. The model cannot set rewards or links.
+- Model chain (default): `nvidia/nemotron-3.5-super-vl:free`, then `google/gemma-4-31b-it:free`, then `google/gemma-4-26b-a4b-it:free`. `OPENROUTER_MODEL` sets the first model.
+- If the model times out or fails, the server returns a labelled prerecorded tip, not a live AI result.
+- Rewards are paid only after `POST /api/eco-quest` with `action: "complete"` confirms the quest. Each quest pays once per client. A client can complete 3 AI quests per UTC day.
 
 Setup:
 
 ```bash
-cp .env.example .env   # then set OPENROUTER_API_KEY
+cp .env.example .env   # then set OPENROUTER_API_KEY (and QUEST_SIGNING_SECRET for real deployments)
 npm run dev            # http://localhost:5173
 ```
 
-- `OPENROUTER_API_KEY` (required): without it, `/api/eco-quest` returns `503 ai_unconfigured`. Habits and quests keep working.
-- `OPENROUTER_MODEL` (optional): defaults to the free vision model `nvidia/nemotron-3.5-super-vl:free`. Fallbacks, tried in order on 404, 429 or 5xx: `google/gemma-4-31b-it:free`, then `google/gemma-4-26b-a4b-it:free`.
+- `OPENROUTER_API_KEY` (required for live quests): without it, `/api/eco-quest` returns `503 ai_unconfigured`. Habits and quests keep working.
 - Server-side only. Never prefix these with `VITE_` and never import them into client code. The key must not reach the client bundle. `.env` is git-ignored.
-- Deployed hosts need `OPENROUTER_API_KEY` in their environment variables.
+- `node server/index.js` does not read `.env`. Pass variables in the process environment or with `docker run -e`.
+- Deployed hosts need `OPENROUTER_API_KEY` and `QUEST_SIGNING_SECRET` in their environment variables.
 
 Safety:
 
-- The user must confirm each action ("Yes, I did it") before any reward.
-- XP is capped at 5–15.
-- 3 AI quest completions per day (`MAX_AI_QUESTS_PER_DAY`).
-- Each quest completes once. Completing it again is a no-op.
+- You must confirm each action ("Yes, I did it") before any reward.
+- Rewards come from a fixed table: XP 5–11, coins = XP + 5, one leaf (`src/rewards.js`).
+- 3 AI quest completions per client per UTC day (`MAX_AI_QUESTS_PER_DAY`). The server enforces this.
+- Each quest pays once. A second completion is rejected with `409 already_completed`.
 - Text in photos or notes is untrusted data and cannot override the system prompt.
-- Quests must avoid medical, legal and dangerous advice; the prompt and denylist enforce this.
+- The prompt and a small denylist try to keep quests away from medical, legal and dangerous advice. This is not a full safety check.
+- Limits to know: completion and rate-limit state is in memory per server process, and the client id is not authentication. See [docs/ARCHITECTURE.md#known-limitations](docs/ARCHITECTURE.md#known-limitations).
+
+## Tests and evaluation
+
+```bash
+npm test                                   # whole suite (offline)
+npx vitest run tests/evalMocked.test.js    # offline eval checks only
+OPENROUTER_API_KEY=... npm run eval:real   # real-model eval, on demand
+```
+
+- The mocked eval runs scripted model outputs through the real server pipeline. It checks validation, rewards, the one-question rule and fallback labels. It measures no real model.
+- `npm run eval:real` runs the eval cases against the live model. Without `OPENROUTER_API_KEY` it prints `not run: no credentials` and writes nothing. With a key, it writes `eval/results/latest.json` (git-ignored).
+- **Real-model eval status: not run.** No real-model results are published yet.
 
 ## AI-use disclosure
 
-- **Claude Code (Anthropic):** development of code, tests and documentation.
-- **OpenRouter, free model `google/gemma-4-31b-it:free` (Google Gemma):** runtime. Reads the photo and/or note (vision) and generates quests through `/api/eco-quest`.
-- **OpenAI Codex:** named only in a git stash label in `plans/animation-audit.md`; its role is not documented.
+- **Runtime:** OpenRouter routes GreenLens requests to NVIDIA Nemotron or Google Gemma free models. The models read the photo and/or note and write one quest. Game rewards, links and completion are handled in code.
+- **Development:** code, tests and documentation were written with Claude (Anthropic) through Claude Code. Git history has 33 commits with Claude `Co-Authored-By` trailers. A Codex stash label appears in `plans/animation-audit.md`; its role is not recorded.
+- Full disclosure, including data sent to the provider: [docs/AI_DISCLOSURE.md](docs/AI_DISCLOSURE.md).
 
 _Team: expand this section with who prompted, reviewed and can explain each part._
 
 ## Sources
+
+GreenLens recycling links come from a fixed list, not from the AI. Links appear only on recycling quests, and only for the regions listed in `src/recyclingSources.js`:
+
+- United States: EPA Recycling basics (https://www.epa.gov/recycle), Earth911 (https://earth911.com/)
+- United Kingdom: Recycle Now (https://www.recyclenow.com/), WRAP (https://wrap.ngo/)
+- Ontario, Canada: Recycling Council of Ontario (https://rco.on.ca/)
+- British Columbia, Canada: Recycle BC (https://recyclebc.ca/)
+- Australia: Recycling Near You, Planet Ark (https://recyclingnearyou.com.au/)
+- Ireland: MyWaste.ie (https://www.mywaste.ie/)
+
+Matching rules and the full list are in [docs/MODEL_CONFIG.md](docs/MODEL_CONFIG.md#curated-sources).
 
 _TODO: list sources for the habit "why" lines and quiz facts._
 
