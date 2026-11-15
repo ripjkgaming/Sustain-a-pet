@@ -4,6 +4,8 @@ import {
   addDays, addXp, allHabitsDone, answerQuiz, createState, dateKey, daysBetween, logHabit, moodFor, rollover, stageIndex,
 } from './engine.js'
 
+import { gardenAction, migrateGame } from './game.js'
+
 const REAL_KEY = 'sustain-a-pet'
 const DEMO_KEY = 'sustain-a-pet-demo'
 
@@ -44,8 +46,8 @@ function load() {
   const real = storage.get(REAL_KEY)
   const demoSave = storage.get(DEMO_KEY)
   const app = {
-    real: real?.version === 1 ? real : null,
-    demo: demoSave?.state ?? null,
+    real: migrateGame(real),
+    demo: migrateGame(demoSave?.state),
     offset: demoSave?.offset ?? 0,
     inDemo: false,
     events: [],
@@ -69,6 +71,14 @@ function diffEvents(before, after, today) {
   if (stageIndex(after.xp) > stageIndex(before.xp)) ev.push({ type: 'stageUp', stage: stageIndex(after.xp) })
   for (const id of after.unlocked) if (!before.unlocked.includes(id)) ev.push({ type: 'unlock', id })
   if (moodFor(after.health) !== moodFor(before.health)) ev.push({ type: 'mood', mood: moodFor(after.health), from: moodFor(before.health) })
+  if (after.game !== before.game && after.game && before.game) {
+    const gain = after.game.coins - before.game.coins
+    if (gain > 0) ev.push({ type: 'game', text: `+${gain} coins · ${after.game.leaves - before.game.leaves > 0 ? `+${after.game.leaves - before.game.leaves} leaves` : 'Garden reward'}` })
+    else if (after.game.projects.length > before.game.projects.length) ev.push({ type: 'game', text: 'Restoration complete! Your garden is growing.' })
+    else if (after.game.pets.length > before.game.pets.length) ev.push({ type: 'game', text: 'A new companion has joined your garden!' })
+    else if (after.game.inventory !== before.game.inventory) ev.push({ type: 'game', text: 'Your garden supplies are ready.' })
+    else if (after.game.activeArea !== before.game.activeArea) ev.push({ type: 'game', text: 'Welcome to your next garden.' })
+  }
   if (allHabitsDone(after, today) && !allHabitsDone(before, today)) ev.push({ type: 'allDone' })
   return ev
 }
@@ -97,6 +107,16 @@ export function reduce(app, action) {
       const real = createState(action.name.trim().slice(0, 20), todayOf({ ...app, inDemo: false }), action.sprite)
       return { ...app, real, awayDays: 0, events: [], nonce: app.nonce + 1 }
     }
+    case 'claimDaily':
+    case 'buy':
+    case 'useItem':
+    case 'adopt':
+    case 'switchPet':
+    case 'unlockArea':
+    case 'visitArea':
+    case 'restore':
+    case 'claimQuest':
+      return withPet(app, (s, t) => gardenAction(s, action, t))
     case 'tick':
       return withPet(app, (s, t) => logHabit(s, action.id, t))
     case 'quiz':

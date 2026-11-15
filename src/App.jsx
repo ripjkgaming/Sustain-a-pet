@@ -11,6 +11,7 @@ import Onboarding from './components/Onboarding.jsx'
 import Rewards, { unlockText } from './components/Rewards.jsx'
 import { usePrefersReducedMotion } from './components/pet3d/shared.js'
 import LeafFootsteps from './components/LeafFootsteps.jsx'
+import GardenJournal from './components/GardenJournal.jsx'
 
 const PetCanvas = lazy(() => import('./components/pet3d/PetCanvas.jsx'))
 const PetModel = lazy(() => import('./components/pet3d/PetModel.jsx'))
@@ -74,6 +75,7 @@ export default function App() {
     if (!app.events.length) return
     const name = pet?.pet.name
     for (const e of app.events) {
+      if (e.type === 'game') { pushToast(e.text); setLive(e.text) }
       if (e.type === 'tick') {
         bump('bounce', 'leaves')
         powerUp(e.xp >= 15 ? 7 : 5)
@@ -95,7 +97,7 @@ export default function App() {
   kb.current = { pet, today, app }
   useEffect(() => {
     const onKey = (e) => {
-      if (e.target.closest?.('input:not([type=checkbox]), textarea, select') || e.metaKey || e.ctrlKey || e.altKey) return
+      if (e.target.closest?.('.garden-journal, .garden-dock, input:not([type=checkbox]), textarea, select') || e.metaKey || e.ctrlKey || e.altKey) return
       const { pet: p, today: t, app: a } = kb.current
       if (e.key === 'Escape') { setEvolve(null); return }
       if (!p) return
@@ -166,7 +168,7 @@ export default function App() {
       <section className={`pet-stage mood-${mood.toLowerCase()}`} aria-label={`${pet.pet.name}'s world`}>
         <Suspense fallback={<div className="loading">Waking up {pet.pet.name}…</div>}>
           <PetCanvas orbit api={camApi} follow={{ get current() { return petCtl.current.pos } }} stage={stage} camera={{ position: [0, 7.7, 8.4], fov: 48 }} target={[0, 0.7, 0]}>
-            <World ctl={petCtl} garden={garden} reduced={reduced} habits={habitList} done={done} today={today} quizResult={pet.days[today]?.quiz}
+            <World ctl={petCtl} area={pet.game.activeArea} decorations={pet.game.decorations} projects={pet.game.projects} garden={garden} reduced={reduced} habits={habitList} done={done} today={today} quizResult={pet.days[today]?.quiz}
               onHabit={(id) => dispatch({ type: 'tick', id })} onQuizAnswer={(choice, correct) => dispatch({ type: 'quiz', choice, correct })}
               onFlower={() => { bump('leaves'); powerUp(3.5) }} onShroom={() => bump('bounce')} />
             <PetModel sprite={pet.pet.sprite} stage={stage} mood={mood} fx={fx} reduced={reduced} ctl={petCtl} onPat={petTap} />
@@ -183,6 +185,7 @@ export default function App() {
       <div className="sr-only" aria-live="polite">{live}</div>
 
       <Vitals health={pet.health} xp={pet.xp} doneToday={done.length} totalHabits={habitList.length} />
+      <GardenJournal state={pet} today={today} dispatch={dispatch} />
       <p className="hint kbd-hint">Keys: 1–7 habits · A/B/C quiz</p>
       {app.inDemo && (
         <DemoDrawer date={today} offset={app.offset} onSkip={(days) => dispatch({ type: 'skipDay', days })}

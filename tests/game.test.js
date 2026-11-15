@@ -1,0 +1,120 @@
+import { describe, it, expect } from 'vitest'
+import { createState, logHabit, answerQuiz, rollover, addDays } from '../src/engine.js'
+import { gardenAction, migrateGame, dailyRewardFor, questProgress, PROJECTS } from '../src/game.js'
+import { reduce } from '../src/store.js'
+const DAY = '2026-11-15'
+const fresh = () => createState('Fern', DAY)
+const act = (s, type, id, today = DAY) => gardenAction(s, { type, id }, today)
+const rich = () => { const s = fresh(); return { ...s, game: { ...s.game, coins: 1000, leaves: 100, lifetimeXp: 600 } } }
+
+describe('save migration and daily rewards', () => {
+  it('keeps legacy identity, progress, achievements and dated logs without mutating the save', () => {
+    const old = { ...fresh(), xp: 350, counts: { walk: 20 }, unlocked: ['hat'], days: { [DAY]: { habits: ['walk'], xp: 15 } } }
+    delete old.game
+    const migrated = migrateGame(old)
+    expect(migrated.game.lifetimeXp).toBe(350)
+    expect(migrated.pet).toBe(old.pet)
+    expect(migrated.days).toBe(old.days)
+    expect(migrated.unlocked).toEqual(['hat'])
+    expect(old.game).toBeUndefined()
+    expect(migrateGame(migrated)).toBe(migrated)
+    expect(migrateGame({ version: 99 })).toBeNull()
+  })
+  it('claims once, grows a consecutive streak, resets after a gap and rejects backwards dates', () => {
+    const first = act(fresh(), 'claimDaily')
+    expect(first.game.coins).toBe(110)
+    expect(act(first, 'claimDaily')).toBe(first)
+    const second = act(first, 'claimDaily', undefined, addDays(DAY, 1))
+    expect(second.game.daily.streak).toBe(2)
+    expect(act(second, 'claimDaily')).toBe(second)
+    const afterGap = act(second, 'claimDaily', undefined, addDays(DAY, 4))
+    expect(afterGap.game.daily.streak).toBe(1)
+    expect(dailyRewardFor(rollover(fresh(), addDays(DAY, 3)), DAY).available).toBe(false)
+  })
+  it('awards a seventh day bonus and restarts reward cycle without losing streak', () => {
+    let state = fresh()
+    for (let i = 0; i < 7; i++) state = act(state, 'claimDaily', undefined, addDays(DAY, i))
+    expect(state.game.daily.streak).toBe(7)
+    expect(state.game.leaves).toBe(11)
+    expect(dailyRewardFor(state, addDays(DAY, 7))).toMatchObject({ day: 1, streak: 8, coins: 30 })
+  })
+})
+describe('garden economy and companion safety', () => {
+  it('awards habits once globally across companions and keeps individual care and XP', () => {
+    let state = act(rich(), 'adopt', 'mossy')
+    state = logHabit(state, 'walk', DAY)
+    const coins = state.game.coins
+    state = act(state, 'switchPet', 'mossy')
+    expect(state.xp).toBe(0)
+    expect(logHabit(state, 'walk', DAY)).toBe(state)
+    expect(state.game.coins).toBe(coins)
+    expect(act(state, 'switchPet', 'leafling').xp).toBe(15)
+    const quiz = answerQuiz(state, 0, DAY, 0)
+    expect(answerQuiz(act(quiz, 'switchPet', 'leafling'), 0, DAY, 0).game.coins).toBe(quiz.game.coins)
+  })
+  it('decays all owned companions across missed days and rejects clock rollback farming', () => {
+    const state = rollover(act(rich(), 'adopt', 'mossy'), addDays(DAY, 2))
+    expect(act(state, 'switchPet', 'mossy').health).toBe(60)
+    expect(logHabit(state, 'walk', DAY)).toBe(state)
+    expect(answerQuiz(state, 0, DAY, 0)).toBe(state)
+  })
+  it('validates purchases, consumes care only when useful and places/removes unique decorations', () => {
+    let state = rich()
+    expect(act(state, 'buy', 'nope')).toBe(state)
+    expect(act(fresh(), 'buy', 'bench').game.coins).toBe(80)
+    state = act(state, 'buy', 'dew')
+    expect(state.game.inventory.dew).toBe(1)
+    state = act(state, 'useItem', 'dew')
+    expect(state.health).toBe(98)
+    expect(state.game.inventory.dew).toBe(0)
+    expect(act(state, 'useItem', 'dew')).toBe(state)
+    state = act(state, 'buy', 'flowers')
+    expect(state.game.decorations).toEqual(['flowers'])
+    expect(act(state, 'buy', 'flowers')).toBe(state)
+    expect(act(state, 'useItem', 'flowers').game.decorations).toEqual([])
+    const full = { ...state, health: 100 }
+    expect(act(full, 'useItem', 'dew')).toBe(full)
+  })
+  it('requires XP, leaves, funds, area access and prerequisite restoration, each charged once', () => {
+    let state = rich()
+    expect(act(state, 'unlockArea', 'pond')).toBe(state)
+    expect(act(state, 'restore', 'pond-bridge')).toBe(state)
+    state = act(state, 'restore', 'meadow-bed')
+    expect(state.game.coins).toBe(960)
+    expect(state.game.leaves).toBe(97)
+    expect(act(state, 'restore', 'meadow-bed')).toBe(state)
+    state = act(state, 'unlockArea', 'pond')
+    expect(state.game.activeArea).toBe('pond')
+    expect(act(state, 'unlockArea', 'pond')).toBe(state)
+    expect(act(state, 'visitArea', 'not-real')).toBe(state)
+    expect(act({ ...state, game: { ...state.game, leaves: 0 } }, 'restore', 'pond-bridge').game.projects).toEqual(['meadow-bed'])
+    for (const project of PROJECTS.filter(p => p.area === 'pond')) state = act(state, 'restore', project.id)
+    state = act(state, 'unlockArea', 'grove')
+    expect(state.game.areas).toEqual(['meadow', 'pond', 'grove'])
+    expect(state.game.coins).toBeGreaterThanOrEqual(0)
+    expect(state.game.leaves).toBeGreaterThanOrEqual(0)
+  })
+  it('rewards completed quests once and blocks unearned or historical claims', () => {
+    let state = fresh()
+    expect(act(state, 'claimQuest', 'three')).toBe(state)
+    for (const id of ['walk', 'bottle', 'lights']) state = logHabit(state, id, DAY)
+    expect(questProgress(state, DAY)[0].complete).toBe(true)
+    const claimed = act(state, 'claimQuest', 'three')
+    expect(claimed.game.coins - state.game.coins).toBe(30)
+    expect(act(claimed, 'claimQuest', 'three')).toBe(claimed)
+    const future = rollover(state, addDays(DAY, 2))
+    expect(act(future, 'claimQuest', 'three')).toBe(future)
+  })
+  it('isolates demo currency, inventory, restoration, and companions from the real save', () => {
+    const real = rich()
+    let app = { real, demo: null, inDemo: false, offset: 0, events: [], nonce: 0, awayDays: 0 }
+    app = reduce(app, { type: 'enterDemo' })
+    for (const action of [{ type: 'buy', id: 'flowers' }, { type: 'adopt', id: 'mossy' }, { type: 'restore', id: 'meadow-bed' }, { type: 'claimDaily' }]) app = reduce(app, action)
+    expect(app.real).toBe(real)
+    expect(app.real.game.inventory).toEqual({})
+    expect(app.demo.game.projects).toEqual(['meadow-bed'])
+    expect(app.demo.game.pets).toHaveLength(2)
+    app = reduce(app, { type: 'exitDemo' })
+    expect(app.real.game.coins).toBe(1000)
+  })
+})

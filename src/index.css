@@ -252,3 +252,84 @@ button, label { transition: transform 0.18s cubic-bezier(.3,1.5,.5,1), box-shado
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
+/* The journal is a field notebook over the living garden. */
+:root { --motion-out: cubic-bezier(.23,1,.32,1); --motion-ui: 180ms; }
+.game-wallet { position: absolute; z-index: 5; top: 148px; right: 15px; display: flex; gap: 13px; align-items: center; padding: 8px 12px; border: 1px solid #f3edcf70; border-radius: 15px; background: #163422e8; color: #ffedb3; box-shadow: 0 3px 12px #09201533; }
+.game-wallet > span { display: flex; gap: 5px; align-items: center; font-size: .84rem; font-weight: 800; }
+.game-wallet b { color: #f4c34c; }
+.game-wallet small { color: #d3dfc5; font-size: .62rem; font-weight: 500; }
+.game-wallet > span + span { color: #d1e5bd; }
+.garden-dock { position: absolute; z-index: 16; left: 12px; right: 12px; bottom: 24px; display: grid; grid-template-columns: repeat(4, 1fr); border-radius: 23px; padding: 6px; border: 1px solid #ecf5dca1; background: #eff5e9f5; box-shadow: 0 6px 24px #061a1355, inset 0 1px 0 #fff; }
+.garden-dock button { position: relative; display: grid; justify-items: center; align-content: center; gap: 4px; min-height: 54px; border: 0; border-radius: 17px; background: transparent; color: #4c6951; font-size: .67rem; font-weight: 750; }
+.garden-dock button.selected { background: #244d33; color: #fff4cc; box-shadow: 0 2px 7px #0e2b2029; }
+.gift-ready { position: absolute; width: 7px; height: 7px; border: 1px solid #fff9d6; border-radius: 50%; top: 8px; left: calc(50% + 11px); background: #bf7c18; }
+.garden-journal { position: absolute; z-index: 15; left: 12px; right: 12px; bottom: 102px; max-height: calc(100% - 254px); display: flex; flex-direction: column; border-radius: 26px; border: 1px solid #fffbe1; color: #234b32; background: #f5f5eafa; box-shadow: 0 14px 50px #05180e66, inset 0 1px 0 #fff; overflow: hidden; animation: journal-open 200ms var(--motion-out) both; }
+.journal-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 16px 13px 19px; border-bottom: 1px solid #314c3021; gap: 7px; }
+.journal-kicker { color: #6a7c5c; font-size: .52rem; font-weight: 800; letter-spacing: .13em; }
+.journal-head h2 { font-size: 1.2rem; line-height: 1.2; margin: 4px 0 0; letter-spacing: -.025em; }
+.journal-close { border: 0; flex: none; border-radius: 50%; background: #294b3310; width: 38px; height: 38px; font-size: 1.6rem; line-height: 1; }
+.journal-body { min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 16px 19px 20px; scrollbar-width: thin; scrollbar-color: #8a9c7b transparent; }
+.journal-intro { margin: 0 0 15px; color: #63715c; font-size: .76rem; line-height: 1.55; }
+.journal-section-title { margin: 21px 0 8px; }
+.journal-section-title h3, .garden-journal h3 { font-size: .86rem; line-height: 1.3; margin: 0; }
+.journal-section-title > small { display: block; margin-top: 4px; font-size: .67rem; color: #6c7965; }
+.game-list { display: grid; }
+.shop-row, .companion-row, .quest-row, .restoration-row, .area-row { display: flex; gap: 10px; align-items: center; padding: 15px 0; border-bottom: 1px solid #30492b20; }
+.game-list > :last-child, .area-path > :last-child { border-bottom: 0; }
+.item-info { flex: 1; min-width: 0; }
+.item-info p, .quest-row p, .daily-gift p { margin: 4px 0 0; font-size: .7rem; line-height: 1.5; color: #66725d; }
+.item-illustration { display: grid; place-items: center; font-size: 1.7rem; width: 39px; flex: none; }
+.game-purchase { display: grid; flex: none; justify-items: stretch; gap: 4px; width: 86px; }
+.game-purchase button, .game-small { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 4px; min-height: 40px; padding: 7px 9px; border: 1px solid #7390655c; border-radius: 12px; background: #e1eacb; color: #2f572d; font-size: .68rem; font-weight: 800; }
+.game-purchase button { flex-direction: column; }
+.game-purchase small { color: #786943; font-size: .56rem; text-align: center; line-height: 1.4; }
+.garden-journal button:disabled { cursor: default; color: #77806d; background: #e8eadd; border-color: #d9decd; box-shadow: none; }
+.game-price { display: inline-flex; gap: 7px; align-items: center; white-space: nowrap; font-weight: 700; font-size: .67rem; }
+.game-price > span { display: inline-flex; align-items: center; gap: 3px; }
+.game-price i { color: #a87218; font-style: normal; }
+.inventory-use { border: 0; padding: 6px 0 0; min-height: 30px; background: transparent; color: #32693a; font-size: .65rem; font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+.companion-portrait { display: grid; place-items: center; flex: none; width: 53px; height: 58px; border-radius: 50% 50% 42% 42%; background: #dde8cb; font-size: 2rem; box-shadow: inset 0 -5px 10px #b1c29c33; }
+.companion-row.is-active .companion-portrait { background: #e9e3b5; }
+.active-friend { display: block; margin-top: 5px; font-size: .62rem; color: #46713c; font-weight: 750; }
+.area-number { align-self: stretch; width: 27px; flex: none; padding-top: 5px; color: #a2ac8c; font-family: Georgia, serif; font-size: 1.35rem; border-bottom: 1px dashed #a5b28b; }
+.area-row.is-active .area-number { color: #4a753e; }
+.restoration-symbol { color: #64884f; width: 28px; flex: none; }
+.daily-gift { display: flex; align-items: center; gap: 12px; }
+.daily-gift > svg { color: #789452; }
+.daily-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin: 18px 0 12px; }
+.daily-days > span { display: grid; gap: 8px; justify-items: center; padding: 9px 0; border: 1px solid #bcc8a36e; border-radius: 9px; color: #a1ab89; }
+.daily-days small { font-size: .51rem; white-space: nowrap; }
+.daily-days .collected { background: #dde8c9; color: #527c3d; border-color: #9db686; }
+.daily-days > span:last-child { border-color: #c8ab4d; color: #a78323; }
+.game-primary { display: flex; gap: 9px; align-items: center; justify-content: center; padding: 11px; border: 1px solid #325f31; border-radius: 13px; background: #356739; color: #fff8db; font-size: .74rem; font-weight: 800; min-height: 44px; }
+.daily-claim { width: 100%; }
+.game-primary .game-price i { color: #ffd86b; }
+.quest-row > div { flex: 1; min-width: 0; }
+.quest-row strong { font-size: .78rem; }
+.quest-row small { display: flex; gap: 6px; align-items: center; color: #6a785f; font-size: .62rem; }
+.quest-row .game-small { flex: none; min-width: 70px; }
+.quest-track { height: 4px; overflow: hidden; border-radius: 8px; background: #dfe5d2; margin: 8px 0 6px; }
+.quest-track > span { display: block; height: 100%; border-radius: inherit; background: #80a061; transition: width 200ms var(--motion-out); }
+.home > .vitals { bottom: 102px; }
+.home .world-guide { bottom: 192px; }
+.home .drawer { bottom: 192px; }
+.home .kbd-hint { position: absolute; z-index: 4; bottom: 5px; left: 0; right: 0; color: #e6efd9; font-size: .55rem; }
+@keyframes journal-open { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@media (max-width: 699px), (max-height: 519px) {
+  .game-wallet { top: 104px; right: 12px; padding: 7px 10px; }
+  .garden-dock { left: 10px; right: 10px; bottom: max(13px, env(safe-area-inset-bottom)); }
+  .garden-journal { left: 10px; right: 10px; bottom: calc(90px + env(safe-area-inset-bottom)); max-height: calc(100% - 239px - env(safe-area-inset-bottom)); }
+  .home > .vitals { bottom: calc(89px + env(safe-area-inset-bottom)); }
+  .home .world-guide { bottom: calc(165px + env(safe-area-inset-bottom)); }
+  .home .drawer { bottom: calc(165px + env(safe-area-inset-bottom)); }
+  .home .kbd-hint { display: none; }
+}
+@media (max-height: 620px) { .garden-journal { max-height: calc(100% - 185px); } .daily-days { margin-top: 10px; } }
+@media (hover: hover) and (pointer: fine) {
+  .garden-dock button:not(.selected):hover { background: #dbe6d2; }
+  .garden-journal button:not(:disabled):hover { filter: brightness(.96); }
+}
+@media (hover: none) { .radios label:hover, .primary:hover, .opts button:not(:disabled):hover, .drawer-btns button:hover { transform: none; filter: none; } }
+button, label { transition: transform var(--motion-ui) var(--motion-out), box-shadow var(--motion-ui) var(--motion-out), background var(--motion-ui) var(--motion-out), border-color var(--motion-ui) var(--motion-out), filter var(--motion-ui) var(--motion-out); }
+@media (prefers-reduced-motion: reduce) { .garden-journal { animation: none; } .quest-track > span { transition: none; } }

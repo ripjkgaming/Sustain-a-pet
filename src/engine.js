@@ -1,6 +1,7 @@
 // Pure game rules. No React, no storage, no clock: every function takes today as YYYY-MM-DD.
 import habits from './data/habits.json'
 import accessories from './data/accessories.json'
+import { createGame, awardGarden } from './game.js'
 
 export const START_HEALTH = 80
 export const MIN_HEALTH = 10
@@ -60,6 +61,7 @@ export function createState(name, today, sprite = 'leafling') {
     days: {},
     counts: {},
     unlocked: [],
+    game: createGame({ name, sprite }),
   }
 }
 
@@ -79,11 +81,12 @@ function award(state, today, habitId, xp, health, dayPatch = {}) {
     counts: { ...state.counts, [habitId]: (state.counts[habitId] ?? 0) + 1 },
   }
   next.unlocked = checkUnlocks(next)
-  return next
+  return awardGarden(next, xp)
 }
 
 /** Tick a habit once per day. Returns the same state object when refused. */
 export function logHabit(state, habitId, today) {
+  if (today < state.lastOpenDate) return state
   const habit = habitById(habitId)
   if (!habit || habitId === 'quiz') return state // quiz is ticked by answerQuiz
   if (dayOf(state, today).habits.includes(habitId)) return state
@@ -92,6 +95,7 @@ export function logHabit(state, habitId, today) {
 
 /** One quiz answer per day. Correct: +10 XP, +6 health. Wrong: recorded, no reward. */
 export function answerQuiz(state, choiceIndex, today, correctIndex) {
+  if (today < state.lastOpenDate || !Number.isInteger(choiceIndex) || !Number.isInteger(correctIndex) || choiceIndex < 0 || choiceIndex > 2 || correctIndex < 0 || correctIndex > 2) return state
   const day = dayOf(state, today)
   if (day.quiz) return state
   if (choiceIndex !== correctIndex) {
@@ -108,6 +112,7 @@ export function rollover(state, today) {
     ...state,
     health: Math.max(MIN_HEALTH, state.health - DECAY_PER_DAY * away),
     lastOpenDate: today,
+    ...(state.game ? { game: { ...state.game, pets: state.game.pets.map(p => ({ ...p, health: Math.max(MIN_HEALTH, (p.id === state.game.activePet ? state.health : p.health ?? START_HEALTH) - DECAY_PER_DAY * away) })) } } : {}),
   }
 }
 
