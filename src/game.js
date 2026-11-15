@@ -42,11 +42,12 @@ export function dailyRewardFor(state, today) {
   return { available, streak, day, coins: 25 + day * 5, leaves: day === 7 ? 5 : 1 }
 }
 export function questProgress(state, today) {
-  const done = state.days[today]?.habits.length ?? 0
+  const day = state.days[today]
+  const done = (day?.habits.length ?? 0) + (day?.quiz && !day.habits.includes('quiz') ? 1 : 0)
   const claimed = state.game.tasks[today] ?? []
   return [
     { id: 'three', name: 'Small steps, greener world', description: 'Complete 3 real-life habits today.', progress: Math.min(done, 3), target: 3, coins: 30, leaves: 2 },
-    { id: 'all', name: 'A garden full of good', description: 'Complete all 8 habits, including the quiz.', progress: done, target: 8, coins: 60, leaves: 4 },
+    { id: 'all', name: 'A garden full of good', description: 'Complete 7 habits and try today’s quiz. Learning counts too.', progress: done, target: 8, coins: 60, leaves: 4 },
   ].map(q => ({ ...q, claimed: claimed.includes(q.id), complete: q.progress >= q.target }))
 }
 export function awardGarden(state, xp) {
@@ -74,7 +75,7 @@ export function gardenAction(state, action, today) {
       if (!item || !g.inventory[item.id]) return state
       if (item.kind === 'decoration') return patch({ decorations: g.decorations.includes(item.id) ? g.decorations.filter(id => id !== item.id) : [...g.decorations, item.id] })
       if (state.health >= 100) return state
-      return patch({ inventory: { ...g.inventory, [item.id]: g.inventory[item.id] - 1 } }, { health: Math.min(100, state.health + item.health), xp: state.xp + (item.xp ?? 0) })
+      return patch({ inventory: { ...g.inventory, [item.id]: g.inventory[item.id] - 1 }, lifetimeXp: (g.lifetimeXp ?? 0) + (item.xp ?? 0) }, { health: Math.min(100, state.health + item.health), xp: state.xp + (item.xp ?? 0) })
     }
     case 'adopt': {
       const item = PET_CATALOG.find(i => i.id === action.id)

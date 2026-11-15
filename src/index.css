@@ -250,7 +250,7 @@ button, label { transition: transform 0.18s cubic-bezier(.3,1.5,.5,1), box-shado
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  html { scroll-behavior: auto; }
 }
 
 /* The journal is a field notebook over the living garden. */
@@ -310,7 +310,7 @@ button, label { transition: transform 0.18s cubic-bezier(.3,1.5,.5,1), box-shado
 .quest-row small { display: flex; gap: 6px; align-items: center; color: #6a785f; font-size: .62rem; }
 .quest-row .game-small { flex: none; min-width: 70px; }
 .quest-track { height: 4px; overflow: hidden; border-radius: 8px; background: #dfe5d2; margin: 8px 0 6px; }
-.quest-track > span { display: block; height: 100%; border-radius: inherit; background: #80a061; transition: width 200ms var(--motion-out); }
+.quest-track > span { display: block; height: 100%; border-radius: inherit; background: #80a061; width: 100%; transform-origin: left center; transition: transform 250ms var(--motion-out); }
 .home > .vitals { bottom: 102px; }
 .home .world-guide { bottom: 192px; }
 .home .drawer { bottom: 192px; }

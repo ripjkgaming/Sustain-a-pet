@@ -68,7 +68,7 @@ function diffEvents(before, after, today) {
   if (after.days[today]?.quiz && !before.days[today]?.quiz) {
     ev.push({ type: after.days[today].quiz === 'correct' ? 'quizCorrect' : 'quizWrong' })
   }
-  if (stageIndex(after.xp) > stageIndex(before.xp)) ev.push({ type: 'stageUp', stage: stageIndex(after.xp) })
+  if (after.game?.activePet === before.game?.activePet && stageIndex(after.xp) > stageIndex(before.xp)) ev.push({ type: 'stageUp', stage: stageIndex(after.xp) })
   for (const id of after.unlocked) if (!before.unlocked.includes(id)) ev.push({ type: 'unlock', id })
   if (moodFor(after.health) !== moodFor(before.health)) ev.push({ type: 'mood', mood: moodFor(after.health), from: moodFor(before.health) })
   if (after.game !== before.game && after.game && before.game) {
@@ -96,12 +96,13 @@ export function reduce(app, action) {
   switch (action.type) {
     case 'open': {
       // On open/focus: apply decay for days away; remember how long for the welcome-back line.
-      if (!app.real) return app
+      const key = app.inDemo ? 'demo' : 'real'
+      if (!app[key]) return app
       const today = todayOf(app)
-      const away = daysBetween(app.real.lastOpenDate, today)
-      const real = rollover(app.real, today)
-      if (real === app.real) return app
-      return { ...app, real, awayDays: away, events: [], nonce: app.nonce + 1 }
+      const away = daysBetween(app[key].lastOpenDate, today)
+      const state = rollover(app[key], today)
+      if (state === app[key]) return app
+      return { ...app, [key]: state, awayDays: away, events: [], nonce: app.nonce + 1 }
     }
     case 'hatch': {
       const real = createState(action.name.trim().slice(0, 20), todayOf({ ...app, inDemo: false }), action.sprite)
@@ -164,7 +165,8 @@ export function useApp() {
   useEffect(() => {
     const onVisible = () => document.visibilityState === 'visible' && dispatch({ type: 'open' })
     document.addEventListener('visibilitychange', onVisible)
-    return () => document.removeEventListener('visibilitychange', onVisible)
+    const timer = setInterval(onVisible, 30000)
+    return () => { document.removeEventListener('visibilitychange', onVisible); clearInterval(timer) }
   }, [])
 
   return [app, dispatch]

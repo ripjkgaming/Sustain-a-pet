@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { createState, logHabit, answerQuiz, rollover, addDays } from '../src/engine.js'
 import { gardenAction, migrateGame, dailyRewardFor, questProgress, PROJECTS } from '../src/game.js'
 import { reduce } from '../src/store.js'
+import habits from '../src/data/habits.json'
 const DAY = '2026-11-15'
 const fresh = () => createState('Fern', DAY)
 const act = (s, type, id, today = DAY) => gardenAction(s, { type, id }, today)
@@ -116,5 +117,26 @@ describe('garden economy and companion safety', () => {
     expect(app.demo.game.pets).toHaveLength(2)
     app = reduce(app, { type: 'exitDemo' })
     expect(app.real.game.coins).toBe(1000)
+  })
+})
+
+
+describe('daily completion and demo focus regression', () => {
+  it('counts a wrong quiz attempt toward the all-eight quest without giving quiz XP', () => {
+    let state = fresh()
+    for (const { id } of habits.filter(h => h.id !== 'quiz')) state = logHabit(state, id, DAY)
+    const attempted = answerQuiz(state, 0, DAY, 1)
+    expect(attempted.xp).toBe(state.xp)
+    expect(questProgress(attempted, DAY)[1]).toMatchObject({ progress: 8, complete: true })
+    expect(act(attempted, 'claimQuest', 'all').game.coins).toBe(attempted.game.coins + 60)
+  })
+  it('rolls only the demo save when returning to a future demo day', () => {
+    const real = rich()
+    let app = { real, demo: null, inDemo: false, offset: 0, events: [], nonce: 0, awayDays: 0 }
+    app = reduce(app, { type: 'enterDemo' })
+    app = reduce(app, { type: 'skipDay', days: 30 })
+    app = reduce(app, { type: 'open' })
+    expect(app.real).toBe(real)
+    expect(app.real.health).toBe(80)
   })
 })
