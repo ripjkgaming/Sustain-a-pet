@@ -7,6 +7,7 @@ import { ISLAND_R, SPACING, clampToWalkable, islandCenter } from './islands.js'
 import { AREAS } from '../../game.js'
 import River from './River.jsx'
 import Footbridge from './Footbridge.jsx'
+import RiverProps from './RiverProps.jsx'
 
 export const ISLAND = ISLAND_R // pet wander radius
 
@@ -151,6 +152,7 @@ export default function World({ ctl, garden = 3, area = 'meadow', unlocked = ['m
     <>
       <Atmosphere reduced={reduced} count={count} />
       <River count={count} reduced={reduced} />
+      <RiverProps count={count} hasNext={!!next} />
       <Ground count={count} onGo={(x, z) => { go(x, z) }} />
       {unlocked.map((id, i) => {
         const c = islandCenter(i)

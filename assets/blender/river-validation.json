@@ -1,0 +1,125 @@
+{
+  "prop-footbridge": {
+    "min": [
+      -0.6,
+      -0.08514,
+      -2.1
+    ],
+    "max": [
+      0.6,
+      1.0215,
+      2.1
+    ],
+    "size": [
+      1.2,
+      1.10664,
+      4.2
+    ],
+    "bytes": 112316,
+    "triangles": 4644,
+    "nodes": [
+      "beam_l",
+      "beam_r",
+      "plank_00",
+      "plank_01",
+      "plank_02",
+      "plank_03",
+      "plank_04",
+      "plank_05",
+      "plank_06",
+      "plank_07",
+      "plank_08",
+      "plank_09",
+      "plank_10",
+      "rails"
+    ],
+    "plank_pivots_z": [
+      1.91459,
+      1.52727,
+      1.14545,
+      0.76364,
+      0.38182,
+      -0.0,
+      -0.38182,
+      -0.76364,
+      -1.14545,
+      -1.52727,
+      -1.91459
+    ]
+  },
+  "river-bank": {
+    "min": [
+      -1.7,
+      -0.25,
+      -0.78
+    ],
+    "max": [
+      1.7,
+      0.252,
+      0.12
+    ],
+    "size": [
+      3.4,
+      0.502,
+      0.9
+    ],
+    "bytes": 28272,
+    "triangles": 746,
+    "nodes": [
+      "river-bank_earth",
+      "river-bank_grass",
+      "river-bank_moss",
+      "river-bank_rock"
+    ]
+  },
+  "prop-reeds": {
+    "min": [
+      -0.21778,
+      0.0,
+      -0.23516
+    ],
+    "max": [
+      0.221,
+      1.0,
+      0.22846
+    ],
+    "size": [
+      0.43878,
+      1.0,
+      0.46361
+    ],
+    "bytes": 11268,
+    "triangles": 436,
+    "nodes": [
+      "prop-reeds_bark",
+      "prop-reeds_grass",
+      "prop-reeds_leaf"
+    ]
+  },
+  "prop-river-stones": {
+    "min": [
+      -0.90825,
+      0.0,
+      -0.635
+    ],
+    "max": [
+      0.90825,
+      0.28798,
+      0.635
+    ],
+    "size": [
+      1.81651,
+      0.28798,
+      1.27
+    ],
+    "bytes": 14632,
+    "triangles": 400,
+    "nodes": [
+      "prop-river-stones_rock",
+      "prop-river-stones_stone-dark",
+      "prop-river-stones_stone-light"
+    ],
+    "rock_count": 5,
+    "minimum_footprint_gap": 0.1
+  }
+}
