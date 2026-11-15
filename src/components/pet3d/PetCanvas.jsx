@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { ContactShadows, Environment, Lightformer, OrbitControls } from '@react-three/drei'
+import { usePrefersReducedMotion } from './shared.js'
 import * as THREE from 'three'
 
 const { damp } = THREE.MathUtils
@@ -10,7 +11,8 @@ const DEFAULT_DIST = (stage) => 10.2 + stage * 0.35
  * Orbit camera that follows the pet. Drag to look around, wheel/pinch to zoom.
  * `api` receives { zoom(factor), rotate(radians), reset() } for buttons and keyboard.
  */
-function CameraRig({ api, follow, stage }) {
+function CameraRig({ api, follow, stage, reduced }) {
+  const interacting = useRef(false)
   const controls = useRef()
   const imp = useRef({ zoom: 0, rot: 0, fit: 0, reset: 0 })
   const stageRef = useRef(stage)
@@ -33,9 +35,10 @@ function CameraRig({ api, follow, stage }) {
     if (!c) return
     dt = Math.min(dt, 0.05)
     const i = imp.current, p = follow.current
+    if (interacting.current) { c.update(); return }
     // follow the pet: move target and camera together so the view stays put relative to the pet
-    const tx = damp(c.target.x, p.x, 3, dt), tz = damp(c.target.z, p.z, 3, dt)
-    const ty = damp(c.target.y, 0.7 + stageRef.current * 0.1, 3, dt)
+    const tx = reduced ? p.x : damp(c.target.x, p.x, 3, dt), tz = reduced ? p.z : damp(c.target.z, p.z, 3, dt)
+    const ty = reduced ? 0.7 + stageRef.current * 0.1 : damp(c.target.y, 0.7 + stageRef.current * 0.1, 3, dt)
     camera.position.x += tx - c.target.x; camera.position.z += tz - c.target.z; camera.position.y += ty - c.target.y
     c.target.set(tx, ty, tz)
 
@@ -43,46 +46,51 @@ function CameraRig({ api, follow, stage }) {
     let len = v.length()
     let az = Math.atan2(v.x, v.z)
     const horiz = Math.hypot(v.x, v.z), pol = Math.atan2(horiz, v.y)
-    if (i.zoom) { len *= Math.exp(-i.zoom * dt); i.zoom *= Math.exp(-5 * dt); if (Math.abs(i.zoom) < 0.01) i.zoom = 0 }
-    if (i.rot) { az += i.rot * dt; i.rot *= Math.exp(-5 * dt); if (Math.abs(i.rot) < 0.01) i.rot = 0 }
+    if (i.zoom) { len *= Math.exp(-i.zoom * (reduced ? 0.2 : dt)); i.zoom *= Math.exp(-5 * dt); if (Math.abs(i.zoom) < 0.01) i.zoom = 0 }
+    if (i.rot) { az += i.rot * (reduced ? 0.2 : dt); i.rot *= Math.exp(-5 * dt); if (Math.abs(i.rot) < 0.01) i.rot = 0 }
     if (i.fit > 0 || i.reset > 0) {
-      len = damp(len, DEFAULT_DIST(stageRef.current), 3, dt)
-      if (i.reset > 0) az = damp(az, 0, 3.5, dt)
-      i.fit -= dt; i.reset -= dt
+      len = reduced ? DEFAULT_DIST(stageRef.current) : damp(len, DEFAULT_DIST(stageRef.current), 3, dt)
+      if (i.reset > 0) az = reduced ? 0 : damp(az, 0, 3.5, dt)
+      if (reduced) { i.fit = 0; i.reset = 0 }
+      else { i.fit -= dt; i.reset -= dt }
     }
     len = THREE.MathUtils.clamp(len, 2.8, 12)
     const h = len * Math.sin(pol)
     camera.position.set(c.target.x + Math.sin(az) * h, c.target.y + len * Math.cos(pol), c.target.z + Math.cos(az) * h)
+    if (reduced) { i.zoom = 0; i.rot = 0 }
     c.update()
   })
   return (
-    <OrbitControls ref={controls} makeDefault enablePan={false} enableDamping dampingFactor={0.09}
+    <OrbitControls ref={controls} makeDefault enablePan={false} enableDamping={!reduced} dampingFactor={0.09}
+      onStart={() => { interacting.current = true; imp.current = { zoom: 0, rot: 0, fit: 0, reset: 0 } }} onEnd={() => { interacting.current = false }}
       minDistance={5.5} maxDistance={14} minPolarAngle={0.55} maxPolarAngle={1.5} rotateSpeed={0.65} zoomSpeed={0.7} />
   )
 }
 
-/** Canvas with soft clay-style lighting. Offline: reflections come from Lightformers, not a downloaded HDR. */
-export default function PetCanvas({ children, camera = { position: [0, 1.7, 7.2], fov: 34 }, target = [0, 1.35, 0], orbit, api, follow, stage = 0, className, ...rest }) {
+/** Canvas with soft botanical lighting. Offline: reflections come from Lightformers, not a downloaded HDR. */
+export default function PetCanvas({ children, camera = { position: [0, 1.7, 7.2], fov: 34 }, target = [0, 1.35, 0], orbit, api, follow, stage = 0, className, reduced: reducedProp, subdued3d = false, ...rest }) {
+  const preference = usePrefersReducedMotion()
+  const reduced = reducedProp ?? (preference || subdued3d)
   return (
     <Canvas
       className={className}
       dpr={[1, 2]}
       shadows={false}
       camera={camera}
-      gl={{ antialias: true, alpha: true, powerPreference: 'low-power' }}
+      gl={{ antialias: true, alpha: true, powerPreference: 'low-power', toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 0.95 }}
       onCreated={({ camera: c }) => c.lookAt(...target)}
       {...rest}
     >
-      <hemisphereLight args={['#fffbe8', '#7fb97a', 0.95]} />
-      <directionalLight position={[4, 5, 3]} intensity={1.8} color="#fff1cf" />
-      <directionalLight position={[-4, 2.5, -3]} intensity={1.0} color="#a9e7d0" />
+      <hemisphereLight args={['#fffbe8', '#7fb97a', 0.65]} />
+      <directionalLight position={[4, 5, 3]} intensity={1.5} color="#fff1cf" />
+      <directionalLight position={[-4, 2.5, -3]} intensity={0.6} color="#a9e7d0" />
       <Environment resolution={128}>
         <Lightformer form="rect" intensity={2.2} position={[0, 5, 3]} scale={[8, 3, 1]} color="#fff6e0" />
         <Lightformer form="rect" intensity={1.2} position={[-5, 1, 2]} scale={[3, 5, 1]} color="#cdeed8" />
         <Lightformer form="rect" intensity={1.4} position={[5, 3, -2]} scale={[3, 5, 1]} color="#fff0c0" />
       </Environment>
       {orbit && <fog attach="fog" args={['#9cc79d', 10, 21]} />}
-      {orbit && <CameraRig api={api} follow={follow} stage={stage} />}
+      {orbit && <CameraRig api={api} follow={follow} stage={stage} reduced={reduced} />}
       {children}
       <ContactShadows position={[0, 0.01, 0]} opacity={0.45} scale={10} blur={2.2} far={2} resolution={256} color="#173a22" />
     </Canvas>

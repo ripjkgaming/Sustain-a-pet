@@ -1,14 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
-import { Html, Sparkles, useTexture } from '@react-three/drei'
+import { Html, Sparkles, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import QuizCard from '../QuizCard.jsx'
-import { canvasTexture, damp, gummy, makeLeafGeometry, radialTexture, rng } from './shared.js'
+import { canvasTexture, damp, gummy, radialTexture, rng, stepSpring } from './shared.js'
 
 export const ISLAND = 3.4 // pet wander radius
 
-const tmp = new THREE.Object3D()
-const col = new THREE.Color()
 
 /* ---------- ground: soft mossy disc fading into the mist ---------- */
 function Ground({ onGo }) {
@@ -34,95 +32,6 @@ function Ground({ onGo }) {
   )
 }
 
-/* ---------- a dense, irregular carpet of autumn leaves ---------- */
-function AutumnLeaves() {
-  const atlas = useTexture('/textures/dry-leaves-atlas.png')
-  atlas.colorSpace = THREE.SRGBColorSpace
-  const refs = useRef([])
-  const batches = useMemo(() => {
-    const r = rng(21)
-    const clusters = Array.from({ length: 28 }, () => {
-      const a = r() * Math.PI * 2, d = Math.pow(r(), 0.74) * 7
-      return { x: Math.cos(a) * d, z: Math.sin(a) * d, spread: 0.24 + r() * 0.48 }
-    })
-    const out = Array.from({ length: 4 }, () => [])
-    for (let i = 0; i < 1700; i++) {
-      let x, z
-      if (i < 1300) {
-        // Broad coverage through the walkable center, with leaf litter extending to the edges.
-        const a = r() * Math.PI * 2, d = Math.sqrt(r()) * 4.75
-        x = Math.cos(a) * d; z = Math.sin(a) * d
-      } else {
-        const cluster = clusters[Math.floor(r() * clusters.length)]
-        // Looser, irregular drifts gather around the outside of the main scatter.
-        x = cluster.x + ((r() + r() + r() + r()) - 2) * cluster.spread
-        z = cluster.z + ((r() + r() + r() + r()) - 2) * cluster.spread
-      }
-      const variant = Math.floor(r() * 4)
-      out[variant].push({ x, z, y: 0.025 + r() * 0.025,
-        sx: 0.28 + r() * 0.27, sz: 0.27 + r() * 0.27,
-        yaw: r() * Math.PI * 2, curl: (r() - 0.5) * 0.16, lean: (r() - 0.5) * 0.12 })
-    }
-    return out
-  }, [])
-  const geometries = useMemo(() => Array.from({ length: 4 }, (_, variant) => {
-    const g = new THREE.PlaneGeometry(1, 1)
-    const uv = g.attributes.uv
-    for (let i = 0; i < uv.count; i++) {
-      const u = uv.getX(i), v = uv.getY(i)
-      uv.setXY(i, u * 0.5 + (variant % 2) * 0.5, v * 0.5 + (variant < 2 ? 0.5 : 0))
-    }
-    uv.needsUpdate = true
-    return g
-  }), [])
-  const attachRefs = useMemo(() => batches.map((leaves, variant) => (mesh) => {
-    refs.current[variant] = mesh
-    if (!mesh) return
-    leaves.forEach((b, i) => {
-      tmp.position.set(b.x, b.y, b.z)
-      tmp.rotation.set(-Math.PI / 2 + b.curl, b.yaw, b.lean, 'YXZ')
-      tmp.scale.set(b.sx, b.sz, 1)
-      tmp.updateMatrix()
-      mesh.setMatrixAt(i, tmp.matrix)
-    })
-    mesh.instanceMatrix.needsUpdate = true
-  }), [batches])
-  return (
-    <group>
-      {batches.map((leaves, i) => <instancedMesh key={i} ref={attachRefs[i]} args={[geometries[i], undefined, leaves.length]} frustumCulled={false}>
-        <meshStandardMaterial map={atlas} transparent alphaTest={0.3} depthWrite={false} side={THREE.DoubleSide} roughness={1} />
-      </instancedMesh>)}
-    </group>
-  )
-}
-
-/* ---------- ferns / saplings around the rim ---------- */
-function Ferns() {
-  const ref = useRef()
-  const leaf = useMemo(makeLeafGeometry, [])
-  const items = useMemo(() => {
-    const r = rng(33), out = []
-    for (let c = 0; c < 16; c++) {
-      const a = r() * Math.PI * 2, d = 3.9 + r() * 2.4
-      for (let k = 0; k < 5; k++) out.push({ x: Math.cos(a) * d, z: Math.sin(a) * d, s: 0.3 + r() * 0.35, ry: (k / 5) * 6.28 + r(), tilt: 1.0 + r() * 0.4, tone: r() })
-    }
-    return out
-  }, [])
-  useEffect(() => {
-    items.forEach((it, i) => ref.current.setColorAt(i, col.set('#4aa95e').lerp(new THREE.Color('#a4e585'), it.tone)))
-    ref.current.instanceColor.needsUpdate = true
-    items.forEach((it, i) => {
-      tmp.position.set(it.x, 0, it.z); tmp.rotation.set(it.tilt, it.ry, 0, 'YXZ'); tmp.scale.setScalar(it.s); tmp.updateMatrix(); ref.current.setMatrixAt(i, tmp.matrix)
-    })
-    ref.current.instanceMatrix.needsUpdate = true
-  }, [items])
-  return (
-    <instancedMesh ref={ref} args={[leaf, undefined, items.length]} frustumCulled={false}>
-      <meshStandardMaterial roughness={0.5} side={THREE.DoubleSide} />
-    </instancedMesh>
-  )
-}
-
 /* ---------- interactive flowers (the garden grows with your ticks) ---------- */
 const FLOWER_SPOTS = (() => {
   const r = rng(77)
@@ -138,14 +47,15 @@ function Flower({ spot, show, onPick, reduced }) {
   const petal = useMemo(() => gummy(spot.color, { roughness: 0.4 }), [spot.color])
   const core = useMemo(() => gummy('#ffcf33', { roughness: 0.4 }), [])
   useFrame((s, dt) => {
+    dt = Math.min(dt, 0.05)
     cur.current = damp(cur.current, show ? 1 : 0, 4, dt)
     g.current.scale.setScalar(Math.max(0.0001, cur.current) * spot.s)
     g.current.visible = cur.current > 0.01
     const w = wob.current
-    w.v += (-60 * w.a - 4 * w.v) * dt
-    w.a += w.v * dt
+    if (reduced) { w.a = 0; w.v = 0 }
+    else stepSpring(w, 'a', 'v', 60, 4, dt)
     g.current.rotation.z = w.a + (reduced ? 0 : Math.sin(s.clock.elapsedTime * 1.4 + spot.x) * 0.05)
-    head.current.rotation.y += dt * 0.4
+    if (!reduced) head.current.rotation.y += dt * 0.4
   })
   return (
     <group position={[spot.x, 0, spot.z]}>
@@ -185,8 +95,8 @@ function Mushroom({ spot, habit, done, quizResult, today, petPos, reduced, selec
     const nextNear = near ? distance < 1.8 : distance < 1.3
     if (nextNear !== near) setNear(nextNear)
     const s = sp.current
-    s.v += (-90 * s.y - 5 * s.v) * dt
-    s.y += s.v * dt
+    if (reduced) { s.y = 0; s.v = 0 }
+    else stepSpring(s, 'y', 'v', 90, 5, dt)
     g.current.scale.set(spot.s * (1 + s.y * 0.7), spot.s * (1 - s.y), spot.s * (1 + s.y * 0.7))
   })
   return (
@@ -219,19 +129,6 @@ function Mushroom({ spot, habit, done, quizResult, today, petPos, reduced, selec
       </>}
     </group>
   )
-}
-
-/* ---------- mossy rocks ---------- */
-function Rocks() {
-  const rocks = useMemo(() => [[-3.6, 0.8, 0.8], [3.8, -1.2, 0.6], [1.2, -3.8, 0.95], [-0.5, 4.2, 0.55]], [])
-  const stone = useMemo(() => gummy('#9aa59a', { roughness: 0.85, clearcoat: 0.1 }), [])
-  const moss = useMemo(() => gummy('#5fae55', { roughness: 0.9, clearcoat: 0.1 }), [])
-  return rocks.map(([x, z, s], i) => (
-    <group key={i} position={[x, 0, z]} scale={s} rotation={[0, i * 1.7, 0]}>
-      <mesh material={stone} position={[0, 0.22, 0]} scale={[1.2, 0.8, 1]}><icosahedronGeometry args={[0.4, 3]} /></mesh>
-      <mesh material={moss} position={[0, 0.46, 0]} scale={[0.95, 0.35, 0.8]}><sphereGeometry args={[0.32, 20, 14]} /></mesh>
-    </group>
-  ))
 }
 
 /* ---------- atmosphere: hazy trees, bokeh, sun shafts, fireflies ---------- */
@@ -287,7 +184,7 @@ function Atmosphere({ reduced }) {
 }
 
 /** The pet's world. Tap the ground to walk; a habit card rises when the pet reaches its mushroom. */
-export default function World({ ctl, garden = 3, reduced, habits = [], done = [], today, quizResult, onHabit, onQuizAnswer, onFlower, onShroom }) {
+export default function World({ ctl, garden = 3, area = 'meadow', decorations = [], projects = [], reduced, habits = [], done = [], today, quizResult, onHabit, onQuizAnswer, onFlower, onShroom }) {
   const [selectedId, setSelectedId] = useState(null)
   const go = (x, z) => {
     const r = Math.hypot(x, z)
@@ -298,9 +195,7 @@ export default function World({ ctl, garden = 3, reduced, habits = [], done = []
     <>
       <Atmosphere reduced={reduced} />
       <Ground onGo={(x, z) => { setSelectedId(null); go(x, z) }} />
-      <AutumnLeaves />
-      <Ferns />
-      <Rocks />
+      <AuthoredHabitat area={area} decorations={decorations} projects={projects} />
       {FLOWER_SPOTS.map((f, i) => (
         <Flower key={i} spot={f} show={i < garden} reduced={reduced} onPick={(s) => { setSelectedId(null); go(s.x * 0.82, s.z * 0.82); onFlower?.(s) }} />
       ))}
@@ -313,4 +208,22 @@ export default function World({ ctl, garden = 3, reduced, habits = [], done = []
       })}
     </>
   )
+}
+
+const PROP_ALIASES = { flowers: 'wildflowers', 'meadow-bed': 'wildflowers', 'meadow-fountain': 'birdbath', 'pond-bridge': 'bridge', 'pond-lilies': 'lilies', 'grove-tree': 'tree-nursery', 'grove-picnic': 'bench' }
+const PROJECT_AREA = { 'meadow-bed': 'meadow', 'meadow-fountain': 'meadow', 'pond-bridge': 'pond', 'pond-lilies': 'pond', 'grove-tree': 'grove', 'grove-picnic': 'grove' }
+const PROJECT_POSITION = { 'meadow-bed': [-3.5, 0, 3.8], 'meadow-fountain': [3.5, 0, 3.8], 'pond-bridge': [0, 0, -4.3], 'pond-lilies': [1, 0, -4.3], 'grove-tree': [-3.5, 0, 3.8], 'grove-picnic': [3.5, 0, 3.8] }
+const PROPS = new Set(['wildflowers', 'birdbath', 'lantern', 'compost', 'pond-cleanup', 'tree-nursery', 'pollinator-garden', 'bench', 'bridge', 'lilies'])
+function AuthoredAsset({ name, position = [0, 0, 0] }) {
+  const { scene } = useGLTF(`/models/${name}.glb`)
+  const copy = useMemo(() => scene.clone(true), [scene])
+  return <primitive object={copy} position={position} />
+}
+function AuthoredHabitat({ area, decorations, projects }) {
+  const key = ['meadow', 'pond', 'grove'].includes(area) ? area : 'meadow'
+  const ids = [...decorations, ...projects].map((item) => typeof item === 'string' ? item : item.id).filter((id) => !PROJECT_AREA[id] || PROJECT_AREA[id] === key)
+  return <group>
+    <AuthoredAsset name={`habitat-${key}`} />
+    {ids.map((id, i) => { const asset = PROP_ALIASES[id] || id; return PROPS.has(asset) ? <AuthoredAsset key={`${id}-${i}`} name={`prop-${asset}`} position={PROJECT_POSITION[id] || [-3.5 + (i % 4) * 2.3, 0, 4.2 + Math.floor(i / 4)]} /> : null })}
+  </group>
 }

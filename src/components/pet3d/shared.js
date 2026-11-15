@@ -1,3 +1,4 @@
+import { useSyncExternalStore } from 'react'
 import * as THREE from 'three'
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
 
@@ -88,6 +89,22 @@ export const radialTexture = (stops, size = 128) => canvasTexture(size, (ctx, n)
   ctx.fillRect(0, 0, n, n)
 })
 
+const reducedQuery = () => window.matchMedia('(prefers-reduced-motion: reduce)')
+const subscribeReduced = (notify) => {
+  const query = reducedQuery()
+  query.addEventListener('change', notify)
+  return () => query.removeEventListener('change', notify)
+}
 export function usePrefersReducedMotion() {
-  return typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  return useSyncExternalStore(subscribeReduced, () => reducedQuery().matches, () => false)
+}
+/** Semi-implicit spring with bounded 120Hz steps, including stalled frames. */
+export function stepSpring(state, position, velocity, stiffness, friction, delta) {
+  let left = Math.min(Math.max(delta, 0), 0.05)
+  while (left > 0) {
+    const dt = Math.min(left, 1 / 120)
+    state[velocity] += (-stiffness * state[position] - friction * state[velocity]) * dt
+    state[position] += state[velocity] * dt
+    left -= dt
+  }
 }

@@ -19,7 +19,8 @@ Demo mode: open `/?demo=1`, or tap the pet 5 times. It runs on its own saved cop
 
 - Pure game engine (`src/engine.js`): habits, daily decay, mood bands, stages, unlocks, quiz.
 - Reducer + saving (`src/store.js`) with an in-memory fallback if storage is blocked.
-- Three procedural 3D pets (Leafling, Mossy, Sunbud) in `src/components/pet3d/`: four moods, four stages, no model files.
+- Three Blender-authored botanical 3D pets (Leafling, Mossy, Sunbud): embedded albedo and normal textures, four moods, and four growth stages. Editable source and rebuild instructions are in `assets/blender/`.
+- Standalone model review: open `/model-preview.html` on the dev server to inspect every character, growth stage, health mood, and floating effect without touching game saves.
 - Full-screen responsive garden with a mushroom for each daily habit. Walk close to a mushroom to reveal its completion checkbox; completing it uses the same persisted XP and reward flow as before.
 - Rewards: tick bounce + leaf burst, quiz confetti, stage-up cutscene, happy dance, unlock toasts. All respect reduced motion.
 

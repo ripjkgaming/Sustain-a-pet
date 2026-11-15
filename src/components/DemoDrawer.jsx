@@ -10,7 +10,8 @@ export default function DemoDrawer({ date, offset, onSkip, onXp, onReset, onExit
         <span className="d-date"><Icon name="cal" size={20} />{date}{offset ? ` (+${offset}d)` : ''}</span>
         <Icon name="chev" size={18} className={`chev ${open ? 'open' : ''}`} />
       </button>
-      {open && (
+      <div className={`drawer-expansion ${open ? 'is-open' : ''}`} inert={!open}>
+        <div className="drawer-clip">
         <div className="drawer-btns">
           <button className="big" onClick={() => onSkip(1)}><Icon name="cal" size={22} />Skip 1 day</button>
           <button className="big" onClick={() => onSkip(3)}><Icon name="calr" size={22} />Skip 3 days</button>
@@ -18,7 +19,8 @@ export default function DemoDrawer({ date, offset, onSkip, onXp, onReset, onExit
           <button className="small" onClick={onReset}><Icon name="refresh" size={20} />Reset</button>
           <button className="small" onClick={onExit}><Icon name="exit" size={20} />Exit demo</button>
         </div>
-      )}
+        </div>
+      </div>
     </aside>
   )
 }

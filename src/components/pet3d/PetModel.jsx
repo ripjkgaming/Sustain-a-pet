@@ -3,12 +3,9 @@ import { useFrame, useThree } from '@react-three/fiber'
 import * as THREE from 'three'
 import PetRig from './PetRig.jsx'
 import Burst from './Burst.jsx'
-import Leafling from './Leafling.jsx'
-import Mossy from './Mossy.jsx'
-import Sunbud from './Sunbud.jsx'
+import BotanicalModel from './BotanicalModel.jsx'
 import { ISLAND } from './World.jsx'
 
-const BODIES = { leafling: Leafling, mossy: Mossy, sunbud: Sunbud }
 const SPEED = { Thriving: 1.1, Okay: 0.8, Wilting: 0.45, Sick: 0 }
 
 /**
@@ -70,7 +67,7 @@ const damp = THREE.MathUtils.damp
 
 /** One pet (no canvas): sprite model, shared motion rig and reward bursts. With `ctl` it roams the world. */
 export default function PetModel({ sprite = 'leafling', stage = 0, mood = 'Thriving', fx = {}, reduced = false, position, scale, ctl, onPat }) {
-  const Body = BODIES[sprite] ?? Leafling
+  const character = ['leafling', 'mossy', 'sunbud'].includes(sprite) ? sprite : 'leafling'
   const motion = useRef({ speed: 0, phase: 0 })
   const inner = (
     <>
@@ -80,7 +77,7 @@ export default function PetModel({ sprite = 'leafling', stage = 0, mood = 'Thriv
         onPointerOut={onPat ? () => (document.body.style.cursor = '') : undefined}
       >
         <PetRig stage={stage} mood={mood} fx={fx} reduced={reduced} scale={scale} motion={motion}>
-          {(c) => <Body ctl={c} stage={stage} mood={mood} reduced={reduced} />}
+          {(c) => <BotanicalModel sprite={character} ctl={c} stage={stage} mood={mood} reduced={reduced} />}
         </PetRig>
       </group>
       <Burst kind="leaves" burstKey={fx.leaves} reduced={reduced} origin={[0, 1.4, 0.4]} />

@@ -10,6 +10,12 @@ export default function Onboarding({ reduced, onHatch }) {
   const [sprite, setSprite] = useState('leafling')
   const [bounce, setBounce] = useState(0)
   const [touched, setTouched] = useState(false)
+  const [hatching, setHatching] = useState(false)
+  useEffect(() => {
+    if (!hatching) return
+    const timer = setTimeout(() => onHatch(name, sprite), 240)
+    return () => clearTimeout(timer)
+  }, [hatching, name, sprite, onHatch])
   const empty = name.trim().length === 0
   useEffect(() => {
     const onKey = (e) => {
@@ -23,7 +29,7 @@ export default function Onboarding({ reduced, onHatch }) {
   const pick = (k) => { setSprite(k); setBounce((b) => b + 1) }
 
   return (
-    <main className="onboard">
+    <main className={`onboard ${hatching ? 'is-hatching' : ''}`}>
       <span className="onboard-badge">A LITTLE FRIEND FOR A GREENER WORLD</span>
       <h1>Grow greener, together.</h1>
       <p className="onboard-lede">Choose your companion. Every earth-kind habit helps them thrive.</p>
@@ -51,12 +57,12 @@ export default function Onboarding({ reduced, onHatch }) {
         ))}
       </div>
       <p className="onboard-step">02 · Give your friend a name</p>
-      <form onSubmit={(e) => { e.preventDefault(); setTouched(true); if (!empty) onHatch(name, sprite) }}>
+      <form onSubmit={(e) => { e.preventDefault(); setTouched(true); if (!empty && !hatching) setHatching(true) }}>
         <label htmlFor="pet-name">Name your pet</label>
         <input id="pet-name" value={name} maxLength={20} autoComplete="off" placeholder="Pip" aria-invalid={touched && empty}
           aria-describedby="name-help" onChange={(e) => setName(e.target.value)} />
         <p id="name-help" className={touched && empty ? 'err' : 'muted'}>{touched && empty ? 'Give your pet a name first.' : `${name.length} / 20`}</p>
-        <button className="primary" type="submit">Hatch {SPRITES[sprite].label}</button>
+        <button className="primary" type="submit" disabled={hatching}>Hatch {SPRITES[sprite].label}</button>
       </form>
     </main>
   )

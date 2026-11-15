@@ -5,7 +5,7 @@ const Vital = ({ icon, label, value, title }) => (
   <div className="vital" title={title}>
     <div className="vital-label"><Icon name={icon} size={18} />{label}</div>
     <div className="vbar" role="progressbar" aria-label={label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={value}>
-      <div className="vfill" style={{ width: `${value}%` }} />
+      <div className="vfill" style={{ transform: `scaleX(${Math.max(0, Math.min(100, value)) / 100})` }} />
     </div>
     <div className="vital-num">{value} / 100</div>
   </div>

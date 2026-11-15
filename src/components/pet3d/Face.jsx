@@ -23,10 +23,10 @@ export default function Face({ mood, spread = 0.34, y = 0, z = 0.9, size = 1, re
 
   useFrame((state, dt) => {
     const c = cur.current
-    c.eye = damp(c.eye, target.eye, 7, dt)
-    c.mouth = damp(c.mouth, target.mouth, 7, dt)
-    c.sparkle = damp(c.sparkle, target.sparkle, 8, dt)
-    c.cheek = damp(c.cheek, target.cheek, 5, dt)
+    c.eye = reduced ? target.eye : damp(c.eye, target.eye, 7, dt)
+    c.mouth = reduced ? target.mouth : damp(c.mouth, target.mouth, 7, dt)
+    c.sparkle = reduced ? target.sparkle : damp(c.sparkle, target.sparkle, 8, dt)
+    c.cheek = reduced ? target.cheek : damp(c.cheek, target.cheek, 5, dt)
 
     const b = blink.current
     let lid = 1

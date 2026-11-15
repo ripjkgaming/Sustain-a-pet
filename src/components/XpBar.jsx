@@ -10,7 +10,7 @@ export default function XpBar({ xp }) {
         <span>{next ? `${xp} / ${next.at} XP to ${next.name}` : `${xp} XP · fully grown`}</span>
       </div>
       <div className="bar xp" role="progressbar" aria-label="XP to next stage" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(pct)}>
-        <div className="fill" style={{ width: `${pct}%` }} />
+        <div className="fill" style={{ transform: `scaleX(${Math.max(0, Math.min(100, pct)) / 100})` }} />
       </div>
     </div>
   )

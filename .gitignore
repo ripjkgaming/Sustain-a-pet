@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Blender backups and Python cache from asset generation
+assets/blender/*.blend1
+__pycache__/

@@ -1,0 +1,40 @@
+/* Motion follows the garden: immediate controls, soft continuity, rare celebration. */
+:root {
+  --ease-out: cubic-bezier(.23, 1, .32, 1);
+  --ease-in-out: cubic-bezier(.77, 0, .175, 1);
+  --ease-drawer: cubic-bezier(.32, .72, 0, 1);
+  --duration-press: 160ms;
+  --duration-prompt: 200ms;
+  --duration-progress: 250ms;
+}
+.mushroom-prompt { transform-origin: bottom center; animation: prompt-appear var(--duration-prompt) var(--ease-out); }
+@keyframes prompt-appear { from { opacity: 0; transform: translateY(4px) scale(.97); } }
+.why { animation: explanation-appear 200ms var(--ease-out); }
+@keyframes explanation-appear { from { opacity: 0; transform: translateY(4px); } }
+.vfill, .bar .fill { width: 100%; transform-origin: left center; transition: transform var(--duration-progress) var(--ease-out); }
+.toasts { display: block; }
+.toast-positioned { position: absolute; left: 50%; top: 0; width: max-content; max-width: min(90vw, 430px); text-align: center; animation: none; transition: transform 400ms ease, opacity 200ms var(--ease-out); }
+.toast-positioned.is-leaving { opacity: 0; }
+@starting-style { .toast-positioned { opacity: 0; } }
+.drawer-expansion { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows 300ms var(--ease-drawer), opacity 200ms var(--ease-out); }
+.drawer-expansion.is-open { grid-template-rows: 1fr; opacity: 1; }
+.drawer-clip { min-height: 0; overflow: hidden; }
+.onboard { transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out); }
+.onboard.is-hatching { opacity: 0; transform: translateY(-8px); pointer-events: none; }
+.opts button, .drawer-head, .drawer-btns button, .primary { transition: transform var(--duration-press) var(--ease-out), background-color var(--duration-press) ease, filter var(--duration-press) ease; }
+.opts button:not(:disabled):active, .drawer-head:active, .drawer-btns button:not(:disabled):active, .primary:not(:disabled):active { transform: scale(.97); }
+@media not all and (hover: hover) and (pointer: fine) {
+  .opts button:not(:disabled):hover, .drawer-btns button:hover, .radios label:hover, .primary:hover { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mushroom-prompt, .why { animation: motion-fade 200ms ease; }
+  .toast-positioned { transition: opacity 200ms ease; }
+  .vfill, .bar .fill { transition: none; }
+  .onboard { transition: opacity 200ms ease; }
+  .onboard.is-hatching { transform: none; }
+  .drawer-expansion { transition: opacity 200ms ease; }
+  .opts button:not(:disabled):active, .drawer-head:active, .drawer-btns button:not(:disabled):active, .primary:not(:disabled):active { transform: none; }
+  .float { animation: motion-fade 200ms ease; }
+  .rays { animation: none; }
+}
+@keyframes motion-fade { from { opacity: 0; } }
