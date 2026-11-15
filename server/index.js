@@ -229,7 +229,10 @@ export function createApp(config, { env = process.env, log = (line) => process.s
     }
     res.writeHead(200, { 'Content-Length': st.size })
     if (req.method === 'HEAD') return res.end()
-    createReadStream(filePath).on('error', () => res.destroy()).pipe(res)
+    const rs = createReadStream(filePath)
+    rs.on('error', () => res.destroy())
+    res.on('close', () => rs.destroy())
+    rs.pipe(res)
   }
 
   async function handleStatic(ctx, urlPath) {
