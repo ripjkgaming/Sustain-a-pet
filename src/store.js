@@ -37,7 +37,12 @@ const storage = {
 }
 
 const realToday = () => dateKey(new Date())
-export const todayOf = () => realToday()
+// Clamp to the saved day so a clock set backwards cannot freeze actions.
+export const todayOf = (app) => {
+  const saved = app?.real?.lastOpenDate
+  const now = realToday()
+  return saved && saved > now ? saved : now
+}
 export const activeOf = (app) => app.real
 
 function load() {
