@@ -1,3 +1,4 @@
+import { useId } from 'react'
 import quiz from '../data/quiz.json'
 import { daysBetween } from '../engine.js'
 
@@ -6,9 +7,10 @@ export const questionFor = (today) => quiz[((daysBetween('2026-01-01', today) % 
 
 export default function QuizCard({ today, result, onAnswer }) {
   const q = questionFor(today)
+  const headingId = useId()
   return (
-    <section className="card" aria-labelledby="quiz-h">
-      <h2 id="quiz-h">Daily quiz</h2>
+    <section className="card" aria-labelledby={headingId}>
+      <h2 id={headingId}>Daily quiz</h2>
       <p className="q">{q.q}</p>
       <div className="opts" role="group" aria-label="Answers">
         {q.options.map((o, i) => (

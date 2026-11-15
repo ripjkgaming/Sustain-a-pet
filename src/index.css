@@ -333,3 +333,25 @@ button, label { transition: transform 0.18s cubic-bezier(.3,1.5,.5,1), box-shado
 @media (hover: none) { .radios label:hover, .primary:hover, .opts button:not(:disabled):hover, .drawer-btns button:hover { transform: none; filter: none; } }
 button, label { transition: transform var(--motion-ui) var(--motion-out), box-shadow var(--motion-ui) var(--motion-out), background var(--motion-ui) var(--motion-out), border-color var(--motion-ui) var(--motion-out), filter var(--motion-ui) var(--motion-out); }
 @media (prefers-reduced-motion: reduce) { .garden-journal { animation: none; } .quest-track > span { transition: none; } }
+
+.journal-habits { margin-top: 18px; border-top: 1px solid #30492b20; padding-top: 16px; }
+.journal-habits summary { cursor: pointer; font-size: .85rem; font-weight: 800; padding: 4px 0 12px; }
+.journal-habits summary span { float: right; color: #6a785f; font-size: .7rem; }
+.journal-habit { display: flex; align-items: center; gap: 10px; padding: 11px 0; font-size: .78rem; cursor: pointer; }
+.journal-habit input { width: 20px; height: 20px; accent-color: #356739; flex: none; }
+.journal-habit small { display: block; margin-top: 3px; font-size: .62rem; color: #69785e; }
+.journal-habit.complete { color: #617454; }
+.journal-habits .card { padding: 12px; margin-top: 12px; border-radius: 15px; background: #e9ecd9; box-shadow: none; }
+.journal-habits .q { font-size: .83rem; }
+.journal-habits .opts button { font-size: .78rem; padding: 10px; min-height: 40px; }
+.practice-garden { margin-top: 20px; border-top: 1px solid #30492b20; padding-top: 12px; }
+.practice-garden p { font-size: .7rem; line-height: 1.5; color: #63715c; }
+.home .name-row h1 { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.home .name-row { min-width: 0; }
+
+.world-tools { position: absolute; z-index: 5; left: 14px; top: 148px; display: flex; gap: 4px; }
+.world-tools button { width: 30px; height: 32px; display: grid; place-items: center; padding: 0; border: 1px solid #f3edcf70; border-radius: 10px; background: #163422db; color: #f6edcb; font-size: 1.1rem; }
+@media (max-width: 699px), (max-height: 519px) { .world-tools { left: 12px; top: 104px; } }
+/* Match the compact in-game header, including its stronger shared selector. */
+.home header.top { padding: 12px 14px; min-height: 84px; }
+@media (max-width: 699px), (max-height: 519px) { .home header.top { padding: 10px 12px; min-height: 76px; } }

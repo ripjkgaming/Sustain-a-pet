@@ -122,5 +122,8 @@ export function addXp(state, amount) {
 }
 
 /** Which of today's habits are done, for the checklist. */
-export const habitsDone = (state, today) => dayOf(state, today).habits
+export const habitsDone = (state, today) => {
+  const day = dayOf(state, today)
+  return day.quiz && !day.habits.includes('quiz') ? [...day.habits, 'quiz'] : day.habits
+}
 export const allHabitsDone = (state, today) => habitsDone(state, today).length >= habits.length

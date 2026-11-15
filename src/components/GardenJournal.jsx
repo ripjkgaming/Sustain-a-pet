@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { SHOP, AREAS, PET_CATALOG, PROJECTS, dailyRewardFor, questProgress } from '../game.js'
 import Icon from './Icons.jsx'
+import habits from '../data/habits.json'
+import QuizCard from './QuizCard.jsx'
 
 const tabs = [ ['today', 'Today', 'cal'], ['shop', 'Shop', 'spark'], ['pets', 'Friends', 'heart'], ['map', 'Explore', 'layers'] ]
 const symbols = { leafling: '🌱', mossball: '🌿', bloom: '🌸', meadow: '🌼', woodland: '🌲', pond: '💧' }
@@ -14,7 +16,7 @@ function CostButton({ cost, game, children, disabled, reason, ...props }) {
   return <div className="game-purchase"><button {...props} disabled={disabled || !!missing}>{children}<Price {...price} /></button>{(reason || missing) && <small>{reason || missing}</small>}</div>
 }
 
-export default function GardenJournal({ state, today, dispatch }) {
+export default function GardenJournal({ state, today, dispatch, inDemo }) {
   const [tab, setTab] = useState(null)
   const closeRef = useRef(null)
   const openRef = useRef(null)
@@ -44,8 +46,21 @@ export default function GardenJournal({ state, today, dispatch }) {
           <button className="game-primary daily-claim" disabled={!reward.available} onClick={() => dispatch({ type: 'claimDaily' })}>{!reward.available ? 'Gift collected · come back tomorrow' : <>Collect today’s gift <Price coins={reward.coins} leaves={reward.leaves} /></>}</button>
           <div className="journal-section-title"><h3>Today’s little adventures</h3><small>Habits earn coins and leaves. Quests give a little extra.</small></div>
           <div className="game-list">{values(quests).map((quest) => <article className="quest-row" key={quest.id}><div><strong>{quest.name || quest.title}</strong><p>{quest.description}</p><div className="quest-track"><span style={{ transform: `scaleX(${Math.min(1, quest.progress / quest.target)})` }} /></div><small>{Math.min(quest.progress, quest.target)} / {quest.target} · <Price coins={quest.coins ?? quest.reward?.coins} leaves={quest.leaves ?? quest.reward?.leaves} /></small></div><button className="game-small" disabled={quest.claimed || !quest.complete} onClick={() => dispatch({ type: 'claimQuest', id: quest.id })}>{quest.claimed ? 'Collected' : quest.complete ? 'Collect' : 'Growing'}</button></article>)}</div>
+          <details className="journal-habits">
+            <summary>Your daily habits <span>{quests[1].progress} / 8</span></summary>
+            <p className="journal-intro">Check off what you did in real life. Your active friend receives the care and XP.</p>
+            {habits.filter(habit => habit.id !== 'quiz').map(habit => {
+              const complete = state.days[today]?.habits.includes(habit.id)
+              return <label className={`journal-habit ${complete ? 'complete' : ''}`} key={habit.id}>
+                <input type="checkbox" checked={!!complete} disabled={complete} onChange={() => dispatch({ type: 'tick', id: habit.id })} />
+                <span>{habit.label}<small>+{habit.xp} XP · +{habit.xp + 5} coins · +1 leaf</small></span>
+              </label>
+            })}
+            <QuizCard today={today} result={state.days[today]?.quiz} onAnswer={(choice, correct) => dispatch({ type: 'quiz', choice, correct })} />
+          </details>
+          <div className="practice-garden"><p>{inDemo ? 'You’re in a practice garden. Your real garden is saved separately.' : 'Want to explore the possibilities? A practice garden has its own save and a time-skip control.'}</p><button className="game-small" onClick={() => { close(); dispatch({ type: inDemo ? 'exitDemo' : 'enterDemo' }) }}>{inDemo ? 'Back to my garden' : 'Try a practice garden'}</button></div>
         </>}
-        {tab === 'shop' && <><p className="journal-intro">Small comforts for your companion. Garden decorations stay with you in every place you explore.</p><div className="game-list">{values(SHOP).map((item) => {
+        {tab === 'shop'  && <><p className="journal-intro">Small comforts for your companion. Garden decorations stay with you in every place you explore.</p><div className="game-list">{values(SHOP).map((item) => {
           const owned = game.inventory[item.id] || 0
           const decoration = item.type === 'decoration' || item.kind === 'decoration'
           const placed = game.decorations.includes(item.id)

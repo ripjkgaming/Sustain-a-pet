@@ -18,7 +18,7 @@ export const AREAS = [
 ]
 export const PROJECTS = [
   { id: 'meadow-bed', area: 'meadow', name: 'Replant the flower bed', description: 'Bring wildflowers back to the meadow.', cost: 40, leaves: 3, reward: 20, icon: '🌷' },
-  { id: 'meadow-fountain', area: 'meadow', name: 'Restore the spring', description: 'Uncover the old stone fountain.', cost: 70, leaves: 5, reward: 30, requires: 'meadow-bed', icon: '⛲' },
+  { id: 'meadow-fountain', area: 'meadow', name: 'Restore the stone birdbath', description: 'Bring fresh water back for the meadow birds.', cost: 70, leaves: 5, reward: 30, requires: 'meadow-bed', icon: '⛲' },
   { id: 'pond-bridge', area: 'pond', name: 'Mend the footbridge', description: 'Connect the banks with a tiny wooden crossing.', cost: 80, leaves: 5, reward: 35, icon: '🌉' },
   { id: 'pond-lilies', area: 'pond', name: 'Welcome the water lilies', description: 'Let blossoms settle on the quiet water.', cost: 100, leaves: 7, reward: 40, requires: 'pond-bridge', icon: '🪷' },
   { id: 'grove-tree', area: 'grove', name: 'Nurture the wishing tree', description: 'Help a young tree take root in the grove.', cost: 120, leaves: 8, reward: 50, icon: '🌳' },

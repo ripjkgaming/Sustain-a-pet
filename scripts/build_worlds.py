@@ -55,6 +55,9 @@ def export(name):
  print(name, len(bpy.data.objects),'objects', (OUT/(name+'.glb')).stat().st_size,'bytes')
 for area in ['meadow','pond','grove']:
  clear()
+ for key, color in {'grass': ((.43,.39,.18) if area=='grove' else (.28,.46,.17)), 'leaf': ((.57,.37,.10) if area=='grove' else (.20,.37,.105))}.items():
+  M[key].diffuse_color=(*color,1)
+  M[key].node_tree.nodes['Principled BSDF'].inputs['Base Color'].default_value=(*color,1)
  cyl('Layered island soil',(0,-.34,0),6.7,.66,'earth',64)
  cyl('Walkable moss meadow',(0,-.035,0),6.8,.09,'grass' if area!='pond' else 'moss',64)
  for i in range(27):

@@ -12,6 +12,7 @@ import Rewards, { unlockText } from './components/Rewards.jsx'
 import { usePrefersReducedMotion } from './components/pet3d/shared.js'
 import LeafFootsteps from './components/LeafFootsteps.jsx'
 import GardenJournal from './components/GardenJournal.jsx'
+import { AREAS } from './game.js'
 
 const PetCanvas = lazy(() => import('./components/pet3d/PetCanvas.jsx'))
 const PetModel = lazy(() => import('./components/pet3d/PetModel.jsx'))
@@ -126,7 +127,7 @@ export default function App() {
     bump('bounce', 'leaves')
     petCtl.current.hold?.(2.2)
     if (taps.current.length === 3) powerUp(6) // hidden: three quick pats charge the pet up
-    if (taps.current.length >= 5 && !app.inDemo) { taps.current = []; dispatch({ type: 'enterDemo' }) }
+
   }
 
   petTapRef.current = petTap
@@ -168,7 +169,7 @@ export default function App() {
       <section className={`pet-stage mood-${mood.toLowerCase()}`} aria-label={`${pet.pet.name}'s world`}>
         <Suspense fallback={<div className="loading">Waking up {pet.pet.name}…</div>}>
           <PetCanvas orbit api={camApi} follow={{ get current() { return petCtl.current.pos } }} stage={stage} camera={{ position: [0, 7.7, 8.4], fov: 48 }} target={[0, 0.7, 0]}>
-            <World ctl={petCtl} area={pet.game.activeArea} decorations={pet.game.decorations} projects={pet.game.projects} garden={garden} reduced={reduced} habits={habitList} done={done} today={today} quizResult={pet.days[today]?.quiz}
+            <World key={pet.game.activeArea} ctl={petCtl} area={pet.game.activeArea} decorations={pet.game.decorations} projects={pet.game.projects} garden={garden} reduced={reduced} habits={habitList} done={done} today={today} quizResult={pet.days[today]?.quiz}
               onHabit={(id) => dispatch({ type: 'tick', id })} onQuizAnswer={(choice, correct) => dispatch({ type: 'quiz', choice, correct })}
               onFlower={() => { bump('leaves'); powerUp(3.5) }} onShroom={() => bump('bounce')} />
             <PetModel sprite={pet.pet.sprite} stage={stage} mood={mood} fx={fx} reduced={reduced} ctl={petCtl} onPat={petTap} />
@@ -176,7 +177,12 @@ export default function App() {
         </Suspense>
         <div className="world-guide" aria-live="polite">
           <span className="world-guide-icon" aria-hidden="true">✧</span>
-          <span><strong>Garden quests <em>{done.length}/{habitList.length}</em></strong><small>{done.length === habitList.length ? 'Wonderful work. Your garden is thriving.' : 'Tap a mushroom, then complete its quest.'}</small></span>
+          <span><strong>{AREAS.find(area => area.id === pet.game.activeArea)?.name} <em>{done.length}/{habitList.length}</em></strong><small>{done.length === habitList.length ? 'Wonderful work. Your garden is thriving.' : 'Tap a mushroom, then complete its quest.'}</small></span>
+        </div>
+        <div className="world-tools" aria-label="Garden camera">
+          <button aria-label="Zoom out" onClick={() => camApi.current.zoom?.(1.25)}>−</button>
+          <button aria-label="Reset garden camera" onClick={() => camApi.current.reset?.()}><Icon name="refresh" size={16} /></button>
+          <button aria-label="Zoom in" onClick={() => camApi.current.zoom?.(.8)}>+</button>
         </div>
         <LeafFootsteps movement={petCtl} enabled />
         {tutorial === 'in-progress' && <QuickGuide onFinish={finishTutorial} />}
@@ -185,7 +191,7 @@ export default function App() {
       <div className="sr-only" aria-live="polite">{live}</div>
 
       <Vitals health={pet.health} xp={pet.xp} doneToday={done.length} totalHabits={habitList.length} />
-      <GardenJournal state={pet} today={today} dispatch={dispatch} />
+      <GardenJournal inDemo={app.inDemo} state={pet} today={today} dispatch={dispatch} />
       <p className="hint kbd-hint">Keys: 1–7 habits · A/B/C quiz</p>
       {app.inDemo && (
         <DemoDrawer date={today} offset={app.offset} onSkip={(days) => dispatch({ type: 'skipDay', days })}
