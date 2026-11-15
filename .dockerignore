@@ -2,4 +2,17 @@ node_modules
 dist
 artifacts
 demo-video
+test-results
+playwright-report
+qa
+plans
+assets
 .git
+.github
+.env
+.env.*
+!.env.example
+*.log
+docs
+e2e
+tests

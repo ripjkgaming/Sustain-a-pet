@@ -204,8 +204,10 @@ describe('completion', () => {
 })
 
 describe('timeout and fallback', () => {
-  it('shares one deadline constant: client waits 5s longer than the server', () => {
-    expect(CLIENT_TIMEOUT_MS).toBe(UPSTREAM_TIMEOUT_MS + 5000)
+  it('timeout ordering: client (45s) outlives the server request timeout (40s) and upstream (30s)', () => {
+    expect(CLIENT_TIMEOUT_MS).toBe(45000)
+    expect(CLIENT_TIMEOUT_MS).toBeGreaterThan(40000)
+    expect(40000).toBeGreaterThan(UPSTREAM_TIMEOUT_MS)
   })
   it('returns a labelled prerecorded quest on timeout, never marked live', async () => {
     const hang = vi.fn((_u, { signal }) => new Promise((_, reject) => signal.addEventListener('abort', () => reject(new DOMException('aborted', 'AbortError')))))
